@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "714366274742",
+    "project_id": "bakery-maharaj-2230d",
+    "storage_bucket": "bakery-maharaj-2230d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714366274742:android:b2519030bd4efe3f622a17",
+        "android_client_info": {
+          "package_name": "com.bakerymaharaj.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaghuxg0CcA1ANJjiFWS9AXMAab0v7Ldo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

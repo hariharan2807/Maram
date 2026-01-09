@@ -1,0 +1,67 @@
+{
+	"tailwindStyleBlock": {
+		"scope": "typescriptreact",
+		"prefix": "makestyle",
+		"body": [
+			" style={[tailwind('$1')$2]}"
+		],
+		"description": "tailwind Style Basic Block"
+	},
+
+	"BasicStyleView": {
+		"scope": "typescriptreact",
+		"prefix": "stView",
+		"body": [
+			"<View style={[tailwind('$1')$2]}>",
+			"   ",
+			"</View>"
+		],
+		"description": "Basic Local View"
+	},
+	"BasicStyleImage": {
+		"scope": "typescriptreact",
+		"prefix": "stImage",
+		"body": [
+			"<Image",
+			"resizeMode='contain'",
+			"style={[tailwind(''), {height: 300, width: 200}]}",
+			"source={assets_manifest.splash}",
+			"/>",
+				],
+		"description": "Basic Local Image"
+	},
+	"BasicStyleText": {
+		"scope": "typescriptreact",
+		"prefix": "stText",
+		"body": [
+			"<Text style={[tailwind('font-regular font-15')]}>${1}</Text>",
+		],
+		"description": "Basic Text"
+	},
+
+	"BasicStyleComponent": {
+		"scope": "typescriptreact",
+		"prefix": "stcomp",
+		"body": [
+		  "import React, { useState } from 'react';",
+		  "import { View, Text, StyleSheet } from 'react-native';",
+		  "import tailwind from '@tailwind';",
+		  "",
+		  "export default function ${1:ComponentName}() {",
+		  "  return (",
+		  "    <View style={[tailwind('bg-primary'), {  }]}>",
+		  "      <Text style={[tailwind('font-regular text-15')]}>${2:Text Here}</Text>",
+		  "    </View>",
+		  "  );",
+		  "}",
+		  "",
+		  "const styles = StyleSheet.create({",
+		  "  container: {",
+		  "    flex: 1,",
+		  "  },",
+		  "});"
+		],
+		"description": "Basic React Native Component with Tailwind"
+	  }
+}
+
