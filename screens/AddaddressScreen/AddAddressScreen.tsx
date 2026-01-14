@@ -146,27 +146,27 @@ export default function AddAddressScreen() {
 
   const submitAddress = async () => {
     if (title && address) {
-      setLoading(true);
-      const response = await get_Add_UserAddress({
-        user_id: ID,
-        address_name: title,
-        landmark: landmark,
-        address: address,
-        latitude: localLocation?.latitude,
-        longitude: localLocation?.longitude,
-      });
+      // setLoading(true);
+      // const response = await get_Add_UserAddress({
+      //   user_id: ID,
+      //   address_name: title,
+      //   landmark: landmark,
+      //   address: address,
+      //   latitude: localLocation?.latitude,
+      //   longitude: localLocation?.longitude,
+      // });
 
       setLoading(false);
-      if (response) {
+      // if (response) {
         const All_Address_List = await get_allAddressList1(ID);
         dispatch(saveAddresses(All_Address_List?.GTS));
 
         navigation.goBack();
-      } else {
-        setTimeout(() => {
-          errorBox('Address resident type is already exists in your account');
-        }, 1000);
-      }
+      // } else {
+      //   setTimeout(() => {
+      //     errorBox('Address resident type is already exists in your account');
+      //   }, 1000);
+      // }
     } else {
       errorBox('Title, Address all are Required');
     }

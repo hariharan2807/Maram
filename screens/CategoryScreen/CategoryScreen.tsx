@@ -72,6 +72,7 @@ export default function CategoryScreen() {
       },
     },
   );
+  console.log("ProductDataProductData",ProductData)
   useEffect(() => {
     setPage(0);
     setProducts([]);

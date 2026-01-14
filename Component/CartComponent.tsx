@@ -55,11 +55,11 @@ const CartComponent = (props: CartCompType) => {
     props.increment,
   ]);
   return (
-    <View style={tailwind(' my-1.5')}>
-      <View style={[tailwind('flex-row  rounded-2xl px-1 py-1')]}>
+    <View style={tailwind('')}>
+      <View style={[tailwind('flex-row  rounded-2xl  ')]}>
         <View>
           <Image
-            source={{ uri: props?.image }}
+            source={props?.image}
             style={[
               tailwind(''),
               {
@@ -73,89 +73,83 @@ const CartComponent = (props: CartCompType) => {
             defaultSource={assets_manifest?.banner_loading}
           />
         </View>
-        <View style={[tailwind('flex-1  px-2'), { justifyContent: 'center' }]}>
+        <View style={[tailwind('flex-1  '), { justifyContent: 'center' }]}>
           <Text style={tailwind('font-16 font-bold ')} numberOfLines={2}>
             {props?.product_name}
           </Text>
-          <View style={[tailwind('flex-row')]}>
-            <View style={[tailwind(''), { width: '50%' }]}>
-              <Text
-                style={tailwind('font-13 text-gray-500 py-2 font-bold ')}
-                numberOfLines={2}
-              >
-                {props?.quantity} X {props?.product_price}
+          <View style={[tailwind(''), { width: '50%' }]}>
+            <View style={[tailwind('flex-row items-center')]}>
+              <Text style={[tailwind(' font-bold font-15'),{color:"#F39F3E"}]}>
+                {' '}
+                ₹{props?.variation?.product_price}
               </Text>
               <Text
-                style={tailwind('font-14 text-gray-500 py-2 font-bold ')}
+                style={tailwind('font-14 mx-1 text-gray-500 py-2 font-bold ')}
                 numberOfLines={2}
-              >
-                {props?.variation?.product_variation}{' '}
-                {props?.variation?.product_unit}
+              > Per Day
+                {/* {props?.variation?.product_variation}{' '}
+                {props?.variation?.product_unit} */}
               </Text>
             </View>
-            <View style={[tailwind(' items-center'), { width: '50%' }]}>
-              <Text
+
+            <View
+              style={[
+                tailwind('flex-row  items-center '),
+                { borderRadius: 10 },
+              ]}
+            >
+              <TouchableOpacity
+                onPress={initiateDecrement}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 style={[
-                  tailwind('font-16 text-black py-2 mr-5 font-bold '),
-                  { marginLeft: 'auto' },
+                  {
+                    backgroundColor: '#80C659',
+                    width: '30%',
+                    height: 25,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderTopRightRadius: 10,
+                    borderBottomLeftRadius: 10,
+                  },
+                  tailwind(''),
                 ]}
-                numberOfLines={2}
               >
-                ₹ {props?.quantity * props?.product_price}
-              </Text>
+                <Text style={tailwind('font-bold font-20 text-white')}>−</Text>
+              </TouchableOpacity>
               <View
                 style={[
-                  tailwind('flex-row  py-1 px-2 items-center  bg-primary'),
-                  { width: '100%', borderRadius: 10, marginLeft: 'auto' },
+                  tailwind('flex-row items-center'),
+                  { justifyContent: 'center', width: '30%' },
                 ]}
               >
-                <TouchableOpacity
-                  onPress={initiateDecrement}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  style={[
-                    {
-                      width: '20%',
-                      // height: 30,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    },
-                    tailwind(''),
-                  ]}
+                <Text
+                  style={tailwind('font-bold text-base text-black text-center')}
                 >
-                  <Text style={tailwind('font-bold font-20 text-white')}>
-                    −
-                  </Text>
-                </TouchableOpacity>
-                <View style={[tailwind(''), { width: '60%' }]}>
-                  <Text
-                    style={tailwind(
-                      'font-bold text-base text-white text-center',
-                    )}
-                  >
-                    {props?.quantity}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={initiateIncrement}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  style={[
-                    {
-                      width: '20%',
-                      height: 30,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      // backgroundColor: '#FFFFFF',
-                    },
-                    tailwind(''),
-                  ]}
-                >
-                  <Text
-                    style={[tailwind('font-bold font-20 '), { color: 'white' }]}
-                  >
-                    +
-                  </Text>
-                </TouchableOpacity>
+                  {props?.quantity}
+                </Text>
               </View>
+              <TouchableOpacity
+                onPress={initiateIncrement}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={[
+                  {
+                    width: '30%',
+                    height: 25,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#80C659',
+                    borderTopLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                  },
+                  tailwind(''),
+                ]}
+              >
+                <Text
+                  style={[tailwind('font-bold font-20 '), { color: 'white' }]}
+                >
+                  +
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

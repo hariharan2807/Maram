@@ -30,7 +30,7 @@ export default function ImageViewer(props: PropTypes) {
         }}
       >
         <ImageBackground
-          source={{ uri: props?.image }}
+          source={props?.image}
           style={{
             width: '100%',
             height: 300,
@@ -41,7 +41,7 @@ export default function ImageViewer(props: PropTypes) {
           defaultSource={assets_manifest?.banner_loading}
         />
         <Image
-          source={{ uri: props?.image }}
+          source={props?.image }
           style={{
             width: '100%',
             height: 300,

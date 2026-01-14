@@ -139,6 +139,7 @@ export default function SearchScreen() {
   if (Response?.isLoading) {
     return <FullScreenLoading />;
   }
+  console.log("ResponseResponseResponse",Response?.data)
   return (
     <View style={[tailwind('h-full bg-secondary')]}>
       <Topbar title="Search" type={3} />

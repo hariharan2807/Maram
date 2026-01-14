@@ -61,7 +61,7 @@ export default function VariationSheetList(props: PropTypes) {
               <Image
                 style={[tailwind(''), { height: 25, width: 25 }]}
                 source={assets_manifest?.radio}
-                tintColor={'#45302B'}
+                tintColor={'#80C659'}
               />
             ) : (
               //  <Icon
@@ -79,7 +79,7 @@ export default function VariationSheetList(props: PropTypes) {
               <Image
                 style={[tailwind(''), { height: 25, width: 25 }]}
                 source={assets_manifest?.radio_button}
-                tintColor={'#45302B'}
+                tintColor={'#80C659'}
               />
             )}
 

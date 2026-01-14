@@ -32,6 +32,9 @@ import {
   PREORDER_TIME,
   PREORDER_DATE,
   DELIVERY_CHARGE,
+  SUBSCRIPTION_START_DATE,
+  CATEGORY_LIST,
+  CUSTOMIZED_DAY,
 } from '../actions/actionTypes';
 
 // import {NORMAL_DELIVERY} from '../../constants/API_constants';
@@ -72,6 +75,9 @@ const initialState = {
   user_id: null,
   pre_order_date: null,
   pre_order_time: null,
+  subscription_start_date: [],
+  category_list:null,
+  customized_dayss:[]
 };
 
 interface actionShape {
@@ -178,6 +184,22 @@ const User = (state = initialState, action: actionShape): any => {
       return {
         ...state,
         delivery_chargs: action.payload,
+      };
+    case SUBSCRIPTION_START_DATE:
+      return {
+        ...state,
+        subscription_start_date: action.payload,
+      };
+       case CUSTOMIZED_DAY:
+        // console.log("CUSTOMIZED_DAYCUSTOMIZED_DAYCUSTOMIZED_DAY",action.payload)
+      return {
+        ...state,
+        customized_dayss: action.payload,
+      };
+       case CATEGORY_LIST:
+      return {
+        ...state,
+        category_list: action.payload,
       };
 
     case UPDATE_TIP:

@@ -29,6 +29,7 @@ import AddAddressScreen from '../screens/AddaddressScreen';
 import CouponScreen from '../screens/CouponScreen';
 import OrderHistoryScreeen from '../screens/OrderHistoryScreeen';
 import CheckoutScreen from '../screens/CheckoutScreen';
+import { NewSubscription, Subscription } from '../screens/NewSubscription';
 const RootNavigator = createNativeStackNavigator();
 
 const StackConfig = { headerShown: false };
@@ -118,12 +119,18 @@ export default function RootNavigation() {
               name="OrderHistoryScreeen"
             />
 
-
-<RootNavigator.Screen
+            <RootNavigator.Screen
               component={CheckoutScreen}
               name="CheckoutScreen"
             />
-
+            <RootNavigator.Screen
+              component={NewSubscription}
+              name="NewSubscription"
+            />
+            <RootNavigator.Screen
+              component={Subscription}
+              name="Subscription"
+            />
           </RootNavigator.Navigator>
         </Host>
       </NavigationContainer>

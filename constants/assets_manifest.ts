@@ -68,7 +68,7 @@ export default {
   instagram: require('../assets/images/instagram.png'),
   tv: require('../assets/images/tv.png'),
   cart1: require('../assets/images/cart1.png'),
-  initiallogo: require('../assets/images/initiallogo.jpeg'),
+  initiallogo: require('../assets/images/initiallogo.png'),
   address: require('../assets/images/address.png'),
   my_order: require('../assets/images/my_order.png'),
   whatsapp: require('../assets/images/whatsapp.png'),
@@ -91,6 +91,12 @@ export default {
   ic_status_out_for_delivery: require('../assets/images/ic_status_out_for_delivery.png'),
   ic_status_prepared: require('../assets/images/ic_status_prepared.png'),
   verify1: require('../assets/images/verify1.png'),
-
+  background: require('../assets/images/background.png'),
+  milk: require('../assets/images/milk.png'),
+  milk1: require('../assets/images/milk1.png'),
+  SubSction: require('../assets/images/SubSction.png'),
+  Addon: require('../assets/images/Addon.png'),
+  leaves: require('../assets/images/leaves.png'),
+  No_Internet: require('../assets/images/No_Internet.png'),
   // ic_status_delivered.jpeg
 };

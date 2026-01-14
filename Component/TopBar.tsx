@@ -126,7 +126,7 @@ const Topbar = (props: TopbarType) => {
     );
   } else {
     return (
-      <View style={[tailwind('flex-row items-center bg-primary '), {}]}>
+      <View style={[tailwind('flex-row items-center bg-white '), {}]}>
         <TouchableOpacity
           style={[tailwind('ml-3')]}
           onPress={() => (navigation.canGoBack() ? navigation.goBack() : null)}
@@ -137,7 +137,7 @@ const Topbar = (props: TopbarType) => {
           <Text
             numberOfLines={1}
             style={[
-              tailwind(' py-4 text-white font-bold font-15 w-full'),
+              tailwind(' py-4 text-black font-bold font-15 w-full'),
               { textAlign: 'right' },
             ]}
           >

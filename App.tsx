@@ -66,7 +66,7 @@ function App() {
     }
   };
   const barStyle =
-    Platform.OS === 'android' ? 'light-content' : 'light-content';
+    Platform.OS === 'android' ? 'dark-content' : 'light-content';
 
   return (
     <>
@@ -134,8 +134,8 @@ function App() {
               <SafeAreaProvider>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                   {/* ✅ Use a single SafeAreaView for all platforms */}
-                  <SafeAreaView style={{ flex: 1, backgroundColor: '#45302B' }}>
-                    <StatusBar barStyle={barStyle} backgroundColor="#45302B" />
+                  <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+                    <StatusBar barStyle={barStyle} backgroundColor="white" />
                     <RootNavigation />
                   </SafeAreaView>
                 </GestureHandlerRootView>

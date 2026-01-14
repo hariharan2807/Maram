@@ -31,7 +31,8 @@ import {
   INT_PRODUCT,
   PREORDER_TIME,
   PREORDER_DATE,
-  DELIVERY_CHARGE,
+  DELIVERY_CHARGE,SUBSCRIPTION_START_DATE,
+  CATEGORY_LIST,CUSTOMIZED_DAY,
 } from './actionTypes';
 // import {getAllAddressRemote} from '../../remote/userRemote';
 // import {
@@ -91,6 +92,11 @@ export const updatePreOrder = (payload: boolean) => ({
   type: UPDATE_PRE_ORDER,
   payload,
 });
+export const Customized_days = (payload: any[]) => ({
+  type: CUSTOMIZED_DAY,
+  payload,
+});
+
 
 export const resetCartSessionAction = () => ({
   type: RESET_CART_SESSION,
@@ -192,6 +198,15 @@ export const updateDelivery_charge = (payload: any) => ({
   type: DELIVERY_CHARGE,
   payload,
 });
+export const updateSubscription_start_date = (payload: []) => ({
+  type: SUBSCRIPTION_START_DATE,
+  payload,
+});
+export const updateCategory_List = (payload: any) => ({
+  type: CATEGORY_LIST,
+  payload,
+});
+
 // export const incrementAction = (payload: any) => {
 //   return async (dispatch: any, getState: any) => {
 //     try {
@@ -298,7 +313,7 @@ export const incrementAction = payload => {
       
         // normal items → match by product_id only
         index = cart.findIndex(
-          item => item.product_id === payload.product_id && item.type !== 2,
+          item => item.product_id === payload.product_id && item.desigin_type !== 2,
         );
       
     }

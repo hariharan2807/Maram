@@ -23,6 +23,7 @@
     "react-content-loader": "^7.1.1",
     "react-native": "0.83.0",
     "react-native-auto-scrolling": "^3.0.2",
+    "react-native-calendars": "^1.1307.0",
     "react-native-element-dropdown": "^2.12.4",
     "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.20.0",

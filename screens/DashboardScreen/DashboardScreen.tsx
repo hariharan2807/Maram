@@ -14,6 +14,7 @@ import {
   Dimensions,
   SafeAreaView,
   Animated,
+  ImageBackground,
 } from 'react-native';
 import tailwind from '@tailwind';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +25,14 @@ import {
 } from '@actions/appActions';
 import assets_manifest from '@assets';
 import Swiper from 'react-native-swiper';
-import { NotificationIcon, SearchIcon, ViewAllIcon } from '../../assets/icons';
+import {
+  CategoryIcon,
+  LockIcon,
+  NotificationIcon,
+  SearchIcon,
+  Subscription,
+  ViewAllIcon,
+} from '../../assets/icons';
 import {
   FullScreenLoading,
   FullScreenLoading1,
@@ -70,73 +78,208 @@ import {
   getLocationCoords,
   isBranchOpen,
 } from '../../workers/utils';
+import { HomeTitle } from '../../screens/Component';
 
 export default function DashboardScreen() {
   const isReady = useIsScreenReady();
   const CartState = useSelector((state: any) => state.user.cart);
   const ID = useSelector((state: any) => state.user.user_id);
   const Branch = useSelector((state: any) => state.app.branch);
-
-  // console.log('BranchBranchBranchBranchBranch', Branch);
   const dispatch = useDispatch();
   const [permission, setPermission] = useState(false);
-
   const [index, setIndex] = useState(0);
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleData, setVisibleData] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
-
   const [notification, setNotification] = useState([]);
   const [getdata, setGetdata] = useState([]);
   const { width } = Dimensions.get('window');
   const Profile = useSelector((state: any) => state.user.userInfo);
   const Banner = useQuery(['getBannerRemote'], getBanner);
-  const Bottom_Banner = useQuery(['getBottomBanner'], getBottomBanner);
-
-  const blinkOpacity = useRef(new Animated.Value(1)).current;
-
-  const Category = useQuery(['getCategory', ID ? ID : ''], getCategory);
-  const BestSelling = useQuery(
-    ['get_best_selling_product', ID ? ID : ''],
-    get_best_selling_product,
-  );
-  const Recommnded = useQuery(
-    ['get_Recommenedproduct', ID ? ID : ''],
-    get_Recommenedproduct,
-  );
-  const Offer_Product = useQuery(
-    ['get_Offerproduct', ID ? ID : ''],
-    get_Offerproduct,
-  );
-  const All_Address_List = useQuery(
-    ['get_allAddressList', ID ? ID : ''],
-    get_allAddressList,
-    {
-      enabled: !!ID,
-    },
-  );
-  // console.log(
-  //   'Offer_ProductOffer_ProductOffer_Product',
-  //   All_Address_List?.data,
-  // );
-  const Live_Order = useQuery(
-    ['get_Live_Order', ID ? ID : ''],
-    get_Live_Order,
-    {
-      enabled: !!ID,
-    },
-  );
-  // console.log('Live_OrderLive_Order', Live_Order?.data);
-  const AppControll = useQuery(['getAppControllRemote'], getAppControll);
   const url = {
     instagram: 'https://www.instagram.com/bakerymaharaj',
     facebook: 'https://www.facebook.com/BakeryMaharaj"',
     youtube: 'https://www.youtube.com/@BakeryMaharaj',
     tv: 'https://bakerymaharaj.com/',
   };
-  // console.log("AppControllAppControllAppControll",AppControll)
+  const DailyData = [
+    {
+      name: 'Farm Fresh Natural Milk',
+      image: assets_manifest?.milk1,
+      des: '2 Litres',
+    },
+    {
+      name: 'Curd',
+      image: assets_manifest?.milk,
+      des: '250 ml',
+    },
+  ];
+  const Category = [
+    {
+      image: assets_manifest?.SubSction,
+    },
+    {
+      image: assets_manifest?.Addon,
+    },
+  ];
+  const ProductData = [
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '84',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '0.5 ',
+          product_unit: 'Litre',
+          product_price: 25,
+          mrp_price: 30.5,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 1,
+    },
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '84',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '0.5 ',
+          product_unit: 'Litre',
+          product_price: 25,
+          mrp_price: 30.5,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 0,
+    },
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '84',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '500 ',
+          product_unit: 'ml',
+          product_price: 45,
+          mrp_price: 60.5,
+        },
+        {
+          product_price_id: '729',
+          product_variation: '250 ',
+          product_unit: 'ml',
+          product_price: 30,
+          mrp_price: 40.0,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 0,
+    },
+  ];
+  const ProductData1 = [
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '100',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '0.5 ',
+          product_unit: 'Litre',
+          product_price: 25,
+          mrp_price: 30.5,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 1,
+    },
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '101',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '0.5 ',
+          product_unit: 'Litre',
+          product_price: 25,
+          mrp_price: 30.5,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 1,
+    },
+    {
+      category_name: 'Farm Fresh Natural Milk',
+      eggless: '0',
+      is_favourite: 0,
+      product_id: '110',
+      product_image: assets_manifest?.milk1,
+      product_name: 'Farm Fresh Natural Milk',
+      product_offer: '0',
+      product_percentage: '0',
+      product_price: [
+        {
+          product_price_id: '729',
+          product_variation: '500 ',
+          product_unit: 'ml',
+          product_price: 45,
+          mrp_price: 60.5,
+        },
+        {
+          product_price_id: '739',
+          product_variation: '250 ',
+          product_unit: 'ml',
+          product_price: 30,
+          mrp_price: 40.0,
+        },
+      ],
+      product_recommended: '0',
+      product_type: '1',
+      timeslot: '0',
+      subscribe: 0,
+    },
+  ];
   const swiperRef = useRef(null);
   const openAppSettings = () => {
     Alert.alert(
@@ -158,29 +301,29 @@ export default function DashboardScreen() {
       { cancelable: false },
     );
   };
-  
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-  
+
       const requestPermission = async () => {
         const permission = await acquireGPSPermission();
-  
+
         if (!isActive) return;
-  
+
         if (permission?.status) {
           setPermission(true);
-  
+
           const locationCoords = await getLocationCoords();
-  
+
           if (locationCoords) {
             dispatch(saveLocationAction(locationCoords));
-  
+
             const CheckBranch = await get_CheckBranch({
               latitude: locationCoords.latitude,
               longitude: locationCoords.longitude,
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
@@ -189,94 +332,35 @@ export default function DashboardScreen() {
               latitude: '0.0',
               longitude: '0.0',
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
           }
         } else {
           setPermission(false);
-          
+
           // 🚨 If permanently denied → open App Settings
           // if (permission?.isBlocked || permission?.neverAskAgain) {
-            openAppSettings();
+          openAppSettings();
           // }
         }
       };
-  
+
       requestPermission();
-  
+
       return () => {
         isActive = false;
       };
     }, []),
   );
-  
-
-  useFocusEffect(
-    useCallback(() => {
-      (async () => {
-        if (ID) {
-          const Response = await getGetUser1({
-            user_id: ID,
-          });
-          if (
-            Response?.status &&
-            Response?.GTS?.user_email &&
-            Response?.GTS?.user_name
-          ) {
-            dispatch(saveUser(Response?.GTS));
-          }
-        }
-
-        BestSelling?.refetch();
-        Recommnded?.refetch();
-        Offer_Product?.refetch();
-        let recentNotification = await getNotification();
-        if (recentNotification) {
-          let notify = recentNotification.reverse();
-          setNotification(notify);
-        }
-      })();
-    }, []),
-  );
-  useEffect(() => {
-    if (AppControll?.data?.status) {
-      // console.log('AppControllAppControll', AppControll?.data?.GTS);
-      dispatch(saveAppcontrollAction(AppControll?.data?.GTS));
-    }
-    if (All_Address_List?.data?.status === 'success') {
-      dispatch(saveAddresses(All_Address_List?.data?.GTS));
-    }
-  }, [AppControll?.data, All_Address_List?.data]);
-  useEffect(() => {
-    const getdatass = notification.filter((ite: any) => ite?.status == false);
-    if (getdatass) {
-      setGetdata(getdatass);
-    }
-  }, [notification]);
-  useEffect(() => {
-    const blinkAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(blinkOpacity, {
-          toValue: 0.3,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(blinkOpacity, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-
-    blinkAnimation.start();
-    return () => blinkAnimation.stop();
-  }, [blinkOpacity]);
-
   const increment = useCallback((payload: any) => {
-    dispatch(incrementAction(payload));
+    if (payload?.desigin_type == 4) {
+      dispatch(incrementAction(payload));
+      navigation?.navigate('NewSubscription');
+    } else {
+      dispatch(incrementAction(payload));
+    }
   }, []);
   const decrement = useCallback((payload: any) => {
     dispatch(decrementAction(payload));
@@ -285,13 +369,6 @@ export default function DashboardScreen() {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-      All_Address_List?.refetch();
-      AppControll?.refetch();
-      Banner?.refetch();
-      Offer_Product?.refetch();
-      Recommnded?.refetch();
-      BestSelling?.refetch();
-      Category?.refetch();
     }, 5000);
   }, []);
 
@@ -299,72 +376,46 @@ export default function DashboardScreen() {
   if (Banner?.isLoading) {
     return <FullScreenLoading1 />;
   }
-  if (Category?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (BestSelling?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (Recommnded?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (Offer_Product?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (All_Address_List?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (Live_Order?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
-  if (Bottom_Banner?.isLoading) {
-    return <FullScreenLoading1 />;
-  }
   return (
-    <View style={[tailwind('flex-1 bg-secondary'), {}]}>
+    <View style={[tailwind('flex-1'), {}]}>
       <View
         style={[
-          tailwind('flex-row  bg-primary py-3 px-3 '),
-          { justifyContent: 'space-between' },
+          tailwind('flex-row items-center py-3 px-4'),
+          {
+            backgroundColor: 'white',
+            borderBottomWidth: 1,
+            borderBottomColor: '#f0f0f0',
+          },
         ]}
       >
-        {/* Logo/Image on the left */}
         <Image
           source={assets_manifest?.homeimage}
           resizeMode="contain"
-          style={{ height: 30, width: 100 }}
+          style={{ height: 40, width: 100 }}
         />
-
-        {/* Notification Bell on the right */}
+        <View style={tailwind('flex-1')} />
         {getdata?.length ? (
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => navigation.navigate('NotificationScreen')}
             style={{ position: 'relative' }}
           >
-            {/* Notification Icon */}
-            <NotificationIcon color={'white'} size={25} />
-
-            {/* Badge Count */}
+            <NotificationIcon color={'#333'} size={24} />
             <View
               style={[
                 tailwind(
-                  'absolute -top-2 -right-2 rounded-full items-center justify-center',
+                  'absolute -top-1 -right-1 rounded-full items-center justify-center',
                 ),
                 {
-                  backgroundColor: 'white',
-                  width: 20,
-                  height: 20,
-                  minWidth: 20,
+                  backgroundColor: '#EF4444',
+                  width: 18,
+                  height: 18,
+                  borderWidth: 1.5,
+                  borderColor: 'white',
                 },
               ]}
             >
-              <Text
-                style={[
-                  tailwind('font-bold text-xs'),
-                  { color: '#3b82f6' }, // Use your primary color here
-                ]}
-              >
+              <Text style={[tailwind('font-bold text-xs'), { color: 'white' }]}>
                 {getdata?.length > 9 ? '9+' : getdata?.length}
               </Text>
             </View>
@@ -374,582 +425,270 @@ export default function DashboardScreen() {
             activeOpacity={0.7}
             onPress={() => navigation.navigate('NotificationScreen')}
           >
-            <NotificationIcon color={'white'} size={25} />
+            <NotificationIcon color={'#666'} size={24} />
           </TouchableOpacity>
         )}
       </View>
+
       <ScrollView
-        contentContainerStyle={{}}
+        style={{ backgroundColor: '#FAFAFA' }}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['green']}
+            colors={['#F39F3E']}
+            tintColor="#F39F3E"
           />
         }
       >
-        <View style={tailwind('mb-3 py-3  relative')}>
-          <LinearGradient
-            colors={['#45302B', '#45302B', '#FFF9D8', '#FFF9D8']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={tailwind('absolute inset-0 ')}
-          />
-          {Banner?.data?.GTS ? (
-            <View style={tailwind('relative')}>
-              {/* Gradient Background Layer */}
-
-              {/* Banner Content on Top */}
-              <View style={tailwind('relative z-10 p-1 ')}>
-                <Swiper
-                  style={tailwind('h-40')}
-                  index={index}
-                  showsPagination={true}
-                  loop={true}
-                  autoplay={true}
-                  autoplayTimeout={4000}
-                  paginationStyle={[tailwind(''), { bottom: -20 }]}
-                  dot={
-                    <View
-                      style={tailwind(
-                        'w-1.5 h-1.5 rounded-full bg-gray-400 mx-1',
-                      )}
-                    />
-                  }
-                  activeDot={
-                    <View
-                      style={tailwind(
-                        'w-1.5 h-1.5 rounded-full bg-primary mx-1',
-                      )}
-                    />
-                  }
-                >
-                  {Banner?.data?.GTS?.map((items: any, index: any) => {
-                    //  console.log("itemsitemsitems",items)
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        style={tailwind('mx-1')}
-                        disabled={items?.category_id ? false : true}
-                        onPress={() => {
-                          navigation?.navigate('CategoryScreen', {
-                            id: items?.category_id,
-                          });
-                        }}
-                      >
-                        <Image
-                          // source={assets_manifest?.banner_loading}
-                          source={{ uri: items?.banner_image }}
-                          style={[
-                            tailwind('w-full h-40'),
-                            {
-                              borderRadius: 12, // Slightly less than 15 to show gradient border
-                              resizeMode: 'cover',
-                            },
-                          ]}
-                          defaultSource={assets_manifest?.banner_loading}
-                        />
-                      </TouchableOpacity>
-                    );
-                  })}
-                </Swiper>
-              </View>
-            </View>
-          ) : null}
-        </View>
-        {Category?.data?.GTS?.length && (
-          <View style={[tailwind('mx-3 my-3')]}>
-            <Text style={[tailwind('text-primary font-16 font-bold')]}>
-              Explore our Menu
-            </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={tailwind('')}
+        <ImageBackground
+          style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+          source={assets_manifest?.background}
+        >
+          <View style={tailwind('px-4 py-5')}>
+            <TouchableOpacity
+              style={[
+                tailwind(
+                  'flex-row items-center white-shadow px-4 py-3 rounded-full',
+                ),
+                {
+                  backgroundColor: 'white',
+                  // shadowColor: '#000',
+                  // shadowOffset: { width: 0, height: 1 },
+                  // shadowOpacity: 0.05,
+                  // shadowRadius: 2,
+                  // elevation: 2,
+                },
+              ]}
+              activeOpacity={0.8}
             >
-              {Category?.data?.GTS.map(category => (
-                <TouchableOpacity
-                  key={category.category_id}
-                  style={[tailwind('mr-4 items-center'), { width: 70 }]}
-                  activeOpacity={0.7}
-                  onPress={() => {
-                    navigation?.navigate('CategoryScreen', {
-                      id: category?.category_id,
-                    });
-                  }}
-                >
-                  {/* Category Image Container */}
-                  <View
-                    style={tailwind(
-                      'rounded-full mt-2 items-center justify-center',
-                    )}
-                  >
-                    {category?.category_image && (
-                      <Image
-                        source={{ uri: category?.category_image }}
-                        defaultSource={assets_manifest?.banner_loading}
-                        style={[
-                          tailwind(' rounded-full'),
-                          {
-                            borderWidth: 2,
-                            width: 70,
-                            height: 70,
-                            borderColor: '#fbbf24', // Tailwind's yellow-500
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.1,
-                            shadowRadius: 3,
-                            elevation: 3,
-                          },
-                        ]}
-                        resizeMode="cover"
-                      />
-                    )}
-                  </View>
-
-                  {/* Category Name */}
-                  <Text
-                    style={[
-                      tailwind(
-                        'font-14 mt-1 font-bold  text-center text-black',
-                      ),
-                      // { fontWeight: 'bold' },
-                    ]}
-                  >
-                    {category?.category_name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        )}
-
-        {Offer_Product?.data?.GTS?.length && (
-          <View>
-            <View
-              style={tailwind(
-                'flex-row items-center mt-5 justify-between mb-4 px-4',
-              )}
-            >
-              {/* Left Side: Image + Text */}
-              <View style={tailwind('flex-row items-center')}>
-                <Image
-                  style={{ height: 18, width: 18 }}
-                  // tintColor={'black'}
-                  source={assets_manifest?.offer}
-                />
-                <Text style={tailwind('font-15 font-bold text-primary ml-2')}>
-                  Offers
-                </Text>
-              </View>
-
-              {/* Right Side: View All */}
-              <TouchableOpacity
-                style={[tailwind('flex-row items-center')]}
-                onPress={() =>
-                  navigation.navigate('ViewAllScreen', {
-                    data: Offer_Product?.data?.GTS,
-                    title: 'Offers Products',
-                  })
-                }
-                activeOpacity={0.7}
+              <SearchIcon color="#666" />
+              <Text
+                style={[tailwind('ml-3 text-gray-500 text-sm'), { flex: 1 }]}
               >
-                <Text style={tailwind('text-gray-500 font-12  font-bold mr-1')}>
-                  View All
-                </Text>
-                <ViewAllIcon />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView
-              style={[tailwind('mx-3')]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              {Offer_Product?.data?.GTS?.length
-                ? Offer_Product?.data?.GTS?.map((items: any, index: any) => {
-                    // console.log('ite', items);
-                    return (
-                      <ProductCart
-                        type={1}
-                        desigin_type={2}
-                        id={items?.product_id}
-                        img={items?.product_image}
-                        name={items?.product_name}
-                        key={`${items?.product_id}-${index}`}
-                        increment={increment}
-                        decrement={decrement}
-                        product_price={items?.product_price}
-                        is_favourite={items?.is_favourite}
-                        product_type={items?.product_type === '0'}
-                        refreshData={Recommnded}
-                        isOpen={isOpen}
-                        product_percentage={items?.product_percentage}
-                        product_offer={items?.product_offer}
-                      />
-                    );
-                  })
-                : null}
-            </ScrollView>
+                Search Your Products
+              </Text>
+            </TouchableOpacity>
           </View>
-        )}
-        {Bottom_Banner?.data?.GTS ? (
-          <View style={tailwind('relative mt-5')}>
-            {/* Gradient Background Layer */}
-
-            {/* Banner Content on Top */}
-            <View style={tailwind('relative z-10 p-1 ')}>
+          {Banner?.data?.GTS?.length > 0 && (
+            <View style={tailwind('mb-4 px-4')}>
               <Swiper
-                style={tailwind('h-40')}
+                style={tailwind('h-48')}
                 index={index}
                 showsPagination={true}
                 loop={true}
                 autoplay={true}
                 autoplayTimeout={4000}
-                paginationStyle={[tailwind(''), { bottom: -20 }]}
+                paginationStyle={{ bottom: 10 }}
                 dot={
                   <View
-                    style={tailwind(
-                      'w-1.5 h-1.5 rounded-full bg-gray-400 mx-1',
-                    )}
+                    style={tailwind('w-2 h-2 rounded-full bg-gray-300 mx-1')}
                   />
                 }
                 activeDot={
                   <View
-                    style={tailwind('w-1.5 h-1.5 rounded-full bg-primary mx-1')}
+                    style={tailwind('w-6 h-2 rounded-full bg-primary mx-1')}
                   />
                 }
               >
-                {Bottom_Banner?.data?.GTS?.map((items: any, index: any) => {
-                  //  console.log("itemsitemsitems",items)
-                  return (
-                    <TouchableOpacity
-                      key={index}
-                      style={tailwind('mx-1')}
-                      disabled={items?.category_id ? false : true}
-                      onPress={() => {
-                        navigation?.navigate('CategoryScreen', {
-                          id: items?.category_id,
-                        });
-                      }}
-                    >
-                      <Image
-                        // source={assets_manifest?.banner_loading}
-                        source={{ uri: items?.banner_image }}
-                        style={[
-                          tailwind('w-full h-40'),
-                          {
-                            borderRadius: 12, // Slightly less than 15 to show gradient border
-                            resizeMode: 'cover',
-                          },
-                        ]}
-                        defaultSource={assets_manifest?.banner_loading}
-                      />
-                    </TouchableOpacity>
-                  );
-                })}
+                {Banner.data.GTS.map((items, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={0.9}
+                    disabled={!items?.category_id}
+                    onPress={() => {
+                      navigation?.navigate('CategoryScreen', {
+                        id: items?.category_id,
+                      });
+                    }}
+                    style={[tailwind(''), { padding: 5 }]}
+                  >
+                    <Image
+                      source={{ uri: items?.banner_image }}
+                      style={[
+                        tailwind('w-full  h-full'),
+                        {
+                          borderRadius: 12,
+                          resizeMode: 'cover',
+                        },
+                      ]}
+                      defaultSource={assets_manifest?.banner_loading}
+                    />
+                  </TouchableOpacity>
+                ))}
               </Swiper>
             </View>
-          </View>
-        ) : null}
-        {BestSelling?.data?.GTS?.length && (
-          <View
-            style={tailwind(
-              'flex-row items-center mt-10 justify-between mb-4 px-4',
-            )}
-          >
-            <View style={tailwind('flex-row items-center')}>
-              <Image
-                style={{ height: 20, width: 20 }}
-                tintColor={'black'}
-                source={assets_manifest?.ic_recomend}
-              />
-              <Text style={tailwind('font-15 font-bold text-black ml-2')}>
-                Best Selling
-              </Text>
+          )}
+          {DailyData?.length > 0 && (
+            <View style={tailwind('px-4 mb-4')}>
+              <View
+                style={[
+                  tailwind('rounded-xl p-4'),
+                  {
+                    backgroundColor: 'white',
+                    borderWidth: 1,
+                    borderColor: '#F39F3E',
+                  },
+                ]}
+              >
+                <View
+                  style={tailwind('flex-row items-center justify-between mb-4')}
+                >
+                  <View>
+                    <Text style={tailwind('text-lg font-bold text-gray-900')}>
+                      Your Next Day Delivery
+                    </Text>
+                    {/* <Text style={tailwind('text-sm text-gray-500 mt-1')}>
+                Order by 8 PM, delivered tomorrow
+              </Text> */}
+                  </View>
+                  <View style={tailwind('items-end')}>
+                    <Text style={tailwind('text-base font-bold text-primary')}>
+                      25 Oct | Mon
+                    </Text>
+                    {/* <Text style={tailwind('text-sm text-gray-600')}>Monday</Text> */}
+                  </View>
+                </View>
+
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={tailwind('pb-1')}
+                >
+                  {DailyData.map((items, index) => (
+                    <ProductCart
+                      key={index}
+                      name={items?.name}
+                      img={items?.image}
+                      des={items?.des}
+                      desigin_type={3}
+                      style={tailwind('mr-3')}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
             </View>
-
-            {/* Right Side: View All */}
-            <TouchableOpacity
-              style={[tailwind('flex-row items-center')]}
-              onPress={() =>
-                navigation.navigate('ViewAllScreen', {
-                  data: BestSelling?.data?.GTS,
-                  title: 'Best Selling Products',
-                })
-              }
-              activeOpacity={0.7}
-            >
-              <Text style={tailwind('text-gray-500 font-12 font-bold mr-1')}>
-                View All
-              </Text>
-              <ViewAllIcon />
-            </TouchableOpacity>
-          </View>
-        )}
-        {BestSelling?.data?.GTS?.length
-          ? BestSelling?.data?.GTS?.map((items: any, index: any) => {
-              // console.log("item=-=-==-",items)
-              return (
-                <ProductCart
-                  type={1}
-                  desigin_type={1}
-                  id={items?.product_id}
-                  img={items?.product_image}
-                  name={items?.product_name}
-                  key={`${items?.product_id}_${index}`}
-                  increment={increment}
-                  decrement={decrement}
-                  product_price={items?.product_price}
-                  is_favourite={items?.is_favourite}
-                  product_type={items?.product_type === '0'}
-                  refreshData={BestSelling}
-                  isOpen={isOpen}
-                  product_offer={items?.product_offer}
-                  product_percentage={items?.product_percentage}
-                />
-              );
-            })
-          : null}
-
-        {Recommnded?.data?.GTS?.length && (
-          <View
-            style={tailwind(
-              'flex-row items-center mt-10 justify-between mb-4 px-4',
-            )}
-          >
-            {/* Left Side: Image + Text */}
-            <View style={tailwind('flex-row items-center')}>
-              <Image
-                style={{ height: 20, width: 20 }}
-                tintColor={'black'}
-                source={assets_manifest?.ic_recomend}
+          )}
+          {Category?.length > 0 && (
+            <View style={tailwind('')}>
+              <HomeTitle
+                Image={<CategoryIcon />}
+                title="Shop by Category"
+                viewAll={false}
+                des={''}
+                type={1}
+                des_color={'black'}
               />
-              <Text style={tailwind('font-15 font-bold text-black ml-2')}>
-                Recommended
-              </Text>
+              <View
+                style={tailwind(
+                  'flex-row px-4 py-1 flex-wrap justify-between ',
+                )}
+              >
+                {Category.map((items, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      tailwind('rounded-xl'),
+                      {
+                        width: '50%',
+                      },
+                    ]}
+                    activeOpacity={0.8}
+                    onPress={() => {}}
+                  >
+                    <Image
+                      style={[
+                        tailwind(' mb-3'),
+                        { resizeMode: 'contain', width: '100%', height: 200 },
+                      ]}
+                      source={items?.image}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-
-            {/* Right Side: View All */}
-            <TouchableOpacity
-              style={[tailwind('flex-row items-center')]}
-              onPress={() =>
-                navigation.navigate('ViewAllScreen', {
-                  data: Recommnded?.data?.GTS,
-                  title: 'Recommended Products',
-                })
-              }
-              activeOpacity={0.7}
-            >
-              <Text style={tailwind('text-gray-500  font-12  font-bold mr-1')}>
-                View All
-              </Text>
-              <ViewAllIcon />
-            </TouchableOpacity>
-          </View>
-        )}
-        {Recommnded?.data?.GTS?.length
-          ? Recommnded?.data?.GTS?.map((items: any, index: any) => {
-              // console.log('ite', items);
-              return (
-                <ProductCart
-                  type={1}
-                  desigin_type={1}
-                  id={items?.product_id}
-                  img={items?.product_image}
-                  name={items?.product_name}
-                  key={`${items?.product_id}-${index}`}
-                  increment={increment}
-                  decrement={decrement}
-                  product_price={items?.product_price}
-                  is_favourite={items?.is_favourite}
-                  product_type={items?.product_type === '0'}
-                  refreshData={Recommnded}
-                  isOpen={isOpen}
-                  product_percentage={items?.product_percentage}
-                  product_offer={items?.product_offer}
-
-                />
-              );
-            })
-          : null}
-        <View style={[tailwind(' items-center')]}>
-          <Image
-            source={assets_manifest?.homeimage}
-            resizeMode="contain"
-            style={{ height: 150, width: 150 }}
-          />
-        </View>
-        <View
-          style={[
-            tailwind('py-5 px-4'),
-            {
-              borderTopLeftRadius: 25,
-              borderTopRightRadius: 25,
-              backgroundColor: '#f2eeed',
-            },
-          ]}
-        >
-          <View
-            style={[
-              tailwind('flex-row items-center  '),
-              { justifyContent: 'space-between' },
-            ]}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(url?.instagram);
-              }}
-              style={[
-                tailwind('flex-row items-center border px-4 py-3 rounded-lg'),
-                { width: '48%', borderWidth: 3, justifyContent: 'center' },
-              ]}
-              activeOpacity={0.7}
-            >
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={assets_manifest?.instagram}
+          )}
+          {ProductData?.length > 0 && (
+            <View>
+              <HomeTitle
+                Image={<Subscription />}
+                title="Subscription Product"
+                viewAll={true}
+                des={'Subscribe & get everyday delivery'}
+                type={2}
+                des_color={'#F39F3E'}
               />
-              <Text style={tailwind('ml-2 text-center font-bold')}>
-                Instagram
-              </Text>
-            </TouchableOpacity>
-
-            {/* <View style={[tailwind('h-6 w-0.5 bg-gray-300')]} /> */}
-
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(url?.facebook);
-              }}
-              style={[
-                tailwind('flex-row items-center border px-4 py-3 rounded-lg'),
-                { width: '48%', borderWidth: 3, justifyContent: 'center' },
-              ]}
-              activeOpacity={0.7}
-            >
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={assets_manifest?.facebook}
+              <ScrollView
+                horizontal={true}
+                style={[tailwind(' py-3')]}
+                showsHorizontalScrollIndicator={false}
+              >
+                {ProductData?.map((items: any, index: any) => {
+                  return (
+                    <ProductCart
+                      key={index}
+                      id={items?.product_id}
+                      key={`${items?.product_id}_${index}`}
+                      increment={increment}
+                      decrement={decrement}
+                      name={items?.product_name}
+                      img={items?.product_image}
+                      product_price={items?.product_price}
+                      des={items?.des}
+                      desigin_type={4}
+                      type={1}
+                      subscribe={items?.subscribe === 1}
+                      style={tailwind('mr-3')}
+                      navigation={navigation}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
+          {ProductData1?.length > 0 && (
+            <View style={[tailwind('my-3')]}>
+              <HomeTitle
+                Image={<LockIcon />}
+                title="Add On Products"
+                viewAll={true}
+                des={'Order before 4 pm & get delivered next day'}
+                type={2}
+                des_color={'#80C659'}
               />
-              <Text style={tailwind('ml-2 text-center font-bold')}>
-                Facebook
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={[
-              tailwind('flex-row items-center  mt-5'),
-              { justifyContent: 'space-between' },
-            ]}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(url?.youtube);
-              }}
-              style={[
-                tailwind('flex-row items-center border px-4 py-3 rounded-lg'),
-                { width: '48%', borderWidth: 3, justifyContent: 'center' },
-              ]}
-              activeOpacity={0.7}
-            >
-              <Image
-                style={{ height: 20, width: 20, borderRadius: 50 }}
-                resizeMode="cover"
-                source={assets_manifest?.youtube}
-              />
-              <Text style={tailwind('ml-2 text-center font-bold')}>Videos</Text>
-            </TouchableOpacity>
-
-            {/* <View style={[tailwind('h-6 w-0.5 bg-gray-300')]} /> */}
-
-            <TouchableOpacity
-              onPress={
-                () => {
-                  navigation?.navigate('WebViewScreen', {
-                    title: '',
-                    url: url?.tv,
-                  });
-                }
-                // openLink(AppControll?.privacy_policy)
-              }
-              style={[
-                tailwind('flex-row items-center border px-4 py-3 rounded-lg'),
-                { width: '48%', borderWidth: 3, justifyContent: 'center' },
-              ]}
-              activeOpacity={0.7}
-            >
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={assets_manifest?.tv}
-              />
-              <Text style={tailwind('ml-2 text-center font-bold')}>Media</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={[tailwind('h-10')]} />
-        </View>
-
-        {/* {ProductList?.data?.data?.length
-          ? ProductList?.data?.data?.map((items: any, index: any) => {
-              return (
-                <ProductCart
-                  type={1}
-                  id={items?.product_id}
-                  img={items?.product_image}
-                  name={items?.product_name}
-                  key={index}
-                  increment={increment}
-                  decrement={decrement}
-                />
-              );
-            })
-          : null}
-        <View style={[tailwind('h-40')]} /> */}
+              <ScrollView
+                // horizontal={true}
+                style={[tailwind(' py-3')]}
+                // showsHorizontalScrollIndicator={false}
+              >
+                {ProductData1?.map((items: any, index: any) => {
+                  return (
+                    <ProductCart
+                      key={index}
+                      id={items?.product_id}
+                      key={`${items?.product_id}_${index}`}
+                      increment={increment}
+                      decrement={decrement}
+                      name={items?.product_name}
+                      img={items?.product_image}
+                      product_price={items?.product_price}
+                      des={items?.des}
+                      desigin_type={5}
+                      type={1}
+                      subscribe={items?.subscribe === 1}
+                      style={tailwind('mr-3')}
+                      navigation={navigation}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
+        </ImageBackground>
+        {/* <View style={tailwind('h-24')} /> */}
       </ScrollView>
-
-      {Live_Order?.data?.status === 'success' && (
-        <View
-          style={[tailwind(' mx-4 mb-4'), { position: 'absolute', bottom: 0 }]}
-        >
-          <Animated.View
-            style={[
-              tailwind(
-                'flex-row justify-between bg-primary rounded-xl items-center px-4 py-3 w-full',
-              ),
-              {
-                opacity: blinkOpacity,
-              },
-            ]}
-          >
-            <View style={[tailwind('flex-1 ')]}>
-              <Text style={tailwind('font-bold text-white font-14')}>
-                Your Order's has been Processing there
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation?.navigate('OrderListScreen', {
-                  text: 'Active Orders',
-                });
-              }}
-              activeOpacity={0.7}
-              style={[
-                tailwind(' flex-row rounded-xl px-4 py-2'),
-                { backgroundColor: '#fccd00' },
-              ]}
-            >
-              <Text style={tailwind('mr-1 text-black font-14 font-bold')}>
-                VIEW
-              </Text>
-              <Image
-                style={[tailwind(''), { height: 15, width: 15 }]}
-                source={assets_manifest?.location}
-                tintColor={'black'}
-              />
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
-      )}
     </View>
+    // </ImageBackground>
   );
 }

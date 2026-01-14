@@ -118,7 +118,7 @@ export default function QuantityActions(props: PropTypes) {
                 `flex-row items-center justify-between rounded-lg px-2 py-0.5`,
               ),
               {
-                backgroundColor: '#45302B',
+                // backgroundColor: '#45302B',
                 width: props?.desigin_type === 1 ? '100%' : '80%',
                 marginLeft: 'auto',
               },
@@ -128,24 +128,40 @@ export default function QuantityActions(props: PropTypes) {
               activeOpacity={0.8}
               onPress={props.initiateDecrement}
               style={[
-                tailwind('px-2 rounded-xl'),
-                // { borderColor: '#24661E', borderWidth: 1 },
-              ]}
+                  {
+                    backgroundColor: '#80C659',
+                    width: '30%',
+                    height: 25,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderTopRightRadius: 10,
+                    borderBottomLeftRadius: 10,
+                  },
+                  tailwind(''),
+                ]}
             >
               <Text style={[tailwind('font-bold text-lg text-white'), {}]}>
                 −
               </Text>
             </TouchableOpacity>
-            <Text style={[tailwind('font-bold text-base'), { color: 'white' }]}>
+            <Text style={[tailwind('font-bold text-base'), { color: 'black' }]}>
               {props.quantity}
             </Text>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={props.initiateIncrement}
               style={[
-                tailwind('px-2 rounded-xl'),
-                // { borderColor: '#24661E', borderWidth: 1 },
-              ]}
+                  {
+                    width: '30%',
+                    height: 25,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#80C659',
+                    borderTopLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                  },
+                  tailwind(''),
+                ]}
             >
               <Text style={[tailwind('font-bold text-lg'), { color: 'white' }]}>
                 +
@@ -157,9 +173,9 @@ export default function QuantityActions(props: PropTypes) {
             activeOpacity={0.8}
             onPress={props.initiateIncrement}
             style={[
-              tailwind('py-1 rounded-lg border'),
+              tailwind('py-1.5 rounded-full '),
               {
-                backgroundColor: 'white',
+                backgroundColor: '#80C659',
                 width: props?.desigin_type === 1 ? '100%' : '80%',
                 alignItems: 'center',
                 marginLeft: 'auto',
@@ -168,7 +184,7 @@ export default function QuantityActions(props: PropTypes) {
           >
             <Text
               style={[
-                tailwind(' text-primary text-sm font-bold'),
+                tailwind(' text-white text-sm font-bold'),
                 // { fontWeight: 'bold' },
               ]}
             >

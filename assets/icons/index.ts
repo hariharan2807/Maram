@@ -43,9 +43,30 @@ import ViewAllIcon from './SvgIcons/ViewAllIcon';
 import GiftBoxIcon from './SvgIcons/GiftBoxIcon';
 import Location from './SvgIcons/Location';
 import CallIcon from './SvgIcons/CallIcon';
+import CategoryIcon from './SvgIcons/Category';
+import Subscription from './SvgIcons/Subscription';
+import CalenderIcon from './SvgIcons/CallenderIcon';
+import TickIcon from './SvgIcons/TickIcon';
+import CalenderIcon1 from './SvgIcons/CalenderIcon1';
+import LocationICon1 from './SvgIcons/locationICon';
+import EditIcon1 from './SvgIcons/EditIcon1';
+import LockIcon from './SvgIcons/LockIcon';
+import SubscriptionIcon from './SvgIcons/SubscriptionIcon';
+import CheckIcon from './SvgIcons/CheckIcon';
 export {
   AddressIcon,
-  Location,CallIcon,
+  LockIcon,
+  CheckIcon,
+  SubscriptionIcon,
+  Subscription,
+  CalenderIcon1,
+  Location,
+  LocationICon1,
+  EditIcon1,
+  TickIcon,
+  CallIcon,
+  CategoryIcon,
+  CalenderIcon,
   GiftBoxIcon,
   SearchIcons,
   ViewAllIcon,

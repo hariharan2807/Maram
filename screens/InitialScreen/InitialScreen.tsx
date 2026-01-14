@@ -90,7 +90,7 @@ export default function InitialScreen() {
         const ID = await getUser_id();
         if (ID) {
           dispatch(saveuseridAction(ID));
-  
+
           const Response = await getGetUser1({
             user_id: ID,
           });
@@ -119,7 +119,7 @@ export default function InitialScreen() {
       };
       initializeApp();
     }, 5000); // 5000 milliseconds = 5 seconds
-  
+
     // Cleanup the timer
     return () => clearTimeout(timer);
   }, []);

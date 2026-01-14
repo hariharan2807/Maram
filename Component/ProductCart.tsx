@@ -2,17 +2,18 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import tailwind from '@tailwind';
 import QuantityActions from './QuantityActions';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { errorBox, infoBox } from '../workers/utils';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import ImageViewer from './ImageViewer';
 import assets_manifest from '@assets';
 import AutoScrolling from 'react-native-auto-scrolling';
-import { incrementAction } from '@actions/userActions';
+import { incrementAction, updateCart } from '@actions/userActions';
 import VariationSheetList from './VariationSheetList';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { get_AddFav } from '@remote/userRemote';
+import GlobalDialogModal from './GlobalDialogModal';
 interface Prototype {
   img: any;
   name: string;
@@ -27,19 +28,18 @@ interface Prototype {
   isopen: boolean;
   desigin_type: number;
   product_offer: any;
+  subscribe: any;
+  navigation: any;
 }
 export const ProductCart = (props: Prototype) => {
+  const dispatch = useDispatch();
   let [svar, setSvar] = useState(
     props.product_price?.length ? props.product_price[0] : [],
   );
   const [isFavoriteLocal, setIsFavoriteLocal] = useState(
     props?.is_favourite || 0,
   );
-  // console.log(
-  //   'product_offerproduct_offer123',
-  //   props?.name,
-  //   props?.product_offer,
-  // );
+  let [modal, setModal] = useState(false);
   const ID = useSelector((state: any) => state.user.user_id);
 
   const CartState = useSelector((state: any) => state.user.cart);
@@ -90,7 +90,7 @@ export const ProductCart = (props: Prototype) => {
       setIsFavoriteLocal(isFavoriteLocal);
       console.log('Favorite toggle error:', error);
     }
-  }, [props.id, isFavoriteLocal, ID, props?.refreshData]); // ✅ Correct useCallback
+  }, [props.id, isFavoriteLocal, ID, props?.refreshData]);
   const quantity = useSelector(state => {
     try {
       // Use optional chaining to avoid errors if svar is null/undefined
@@ -116,13 +116,25 @@ export const ProductCart = (props: Prototype) => {
       return 0;
     }
   });
-  // console.log('CartStateCartStateCartStateCartStateCartState', CartState);
   const initiateDecrement = useCallback(() => {
     let uuid = `${props.id}_${svar?.product_price_id}`;
 
     props.decrement({ uuid });
   }, [props.id, props?.type, svar, svar?.product_price_id]);
-
+  const InitialVaration = () => {
+    let isShopIdMismatch = false;
+    if (CartState?.length === 0) {
+      initiateIncrement();
+    }
+    CartState.forEach(item => {
+      if (item.desigin_type === props?.desigin_type) {
+        initiateIncrement();
+      } else {
+        isShopIdMismatch = true;
+        setModal(true);
+      }
+    });
+  };
   const initiateIncrement = useCallback(() => {
     (async () => {
       let uuid = `${props.id}_${svar?.product_price_id}`;
@@ -136,6 +148,7 @@ export const ProductCart = (props: Prototype) => {
         type: props?.type,
         mismatch_id: props?.type === 2 ? props?.mismatch_id : '0',
         image: props?.img,
+        desigin_type: props?.desigin_type,
       };
 
       previeousUid.current = uuid;
@@ -151,27 +164,39 @@ export const ProductCart = (props: Prototype) => {
     svar?.product_price_id,
   ]);
   const Variation = () => {
-    // Check if product has multiple variations
+    ImageOnlyView?.current?.close();
+
+    // MULTIPLE VARIATIONS
     if (props?.product_price?.length > 1) {
-      ImageOnlyView?.current?.close();
-      // Generate UUID for current variation
       const currentUuid = `${props.id}_${svar?.product_price_id}`;
 
-      // Check if this exact variation is already in cart
       const isAlreadyInCart = CartState.some(item => item.uuid === currentUuid);
 
       if (isAlreadyInCart) {
-        // Variation is already in cart, just open modal to change variation
         RepeatRef?.current?.open();
       } else {
-        // New variation, open modal to select variation
         imageLargerRef?.current?.open();
       }
+      return;
+    }
+
+    // SINGLE VARIATION
+    if (CartState.length === 0) {
+      initiateIncrement();
+      return;
+    }
+
+    const hasMismatch = CartState.some(
+      item => item.desigin_type !== props?.desigin_type,
+    );
+
+    if (hasMismatch) {
+      setModal(true);
     } else {
-      // Only one variation, directly add to cart
       initiateIncrement();
     }
   };
+
   const Close = () => {
     // Add selected variation to cart
     initiateIncrement();
@@ -187,6 +212,16 @@ export const ProductCart = (props: Prototype) => {
     RepeatRef?.current?.close();
     imageLargerRef?.current?.open();
   };
+  const resetCartandProceed = () => {
+    dispatch(updateCart([]));
+    setModal(false);
+
+    // Add item AFTER clearing cart
+    setTimeout(() => {
+      initiateIncrement();
+    }, 0);
+  };
+
   return (
     <>
       {props?.desigin_type === 1 && (
@@ -467,6 +502,229 @@ export const ProductCart = (props: Prototype) => {
           </View>
         </View>
       )}
+      {props?.desigin_type === 3 && (
+        <View
+          style={[
+            tailwind(
+              'mx-2 my-1 flex-row white-shadow bg-white  rounded-lg items-center',
+            ),
+            {
+              width: 180, // 固定宽度确保水平滚动效果
+              // shadowColor: '#000',
+              // shadowOffset: { width: 0, height: 1 },
+              // shadowOpacity: 0.1,
+              // shadowRadius: 3,
+              // elevation: 2,
+            },
+          ]}
+          key={props?.id}
+        >
+          {/* 产品图片区域 */}
+          <View style={[tailwind(' items-center'), {}]}>
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                resizeMode: 'contain',
+                borderRadius: 8,
+              }}
+              source={props?.img}
+              defaultSource={assets_manifest?.placeholder}
+            />
+          </View>
+
+          {/* 产品信息区域 */}
+          <View style={[tailwind('px-3 pb-3')]}>
+            <Text
+              style={[
+                tailwind('font-bold text-black text-sm mb-1 mt-1'),
+                { width: 100 },
+              ]}
+              numberOfLines={2}
+            >
+              {props?.name}
+            </Text>
+
+            {props?.des && (
+              <Text
+                style={[tailwind('text-gray-600 text-xs')]}
+                numberOfLines={2}
+              >
+                {props?.des}
+              </Text>
+            )}
+          </View>
+        </View>
+      )}
+      {props?.desigin_type === 4 && (
+        <View
+          style={[
+            tailwind('py-3 rounded-xl mx-2 items-center'),
+            {
+              backgroundColor: 'white',
+              width: 160,
+              elevation: 4, // Android shadow
+              shadowColor: '#000', // iOS shadow
+              shadowOpacity: 0.15,
+              shadowRadius: 6,
+              shadowOffset: { width: 0, height: 3 },
+            },
+          ]}
+        >
+          {/* IMAGE */}
+          <TouchableOpacity onPress={() => ImageOnlyView?.current?.open()}>
+            <Image
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 12, // FULL radius
+              }}
+              resizeMode="contain"
+              source={props?.img}
+              defaultSource={assets_manifest?.placeholder}
+            />
+          </TouchableOpacity>
+
+          {/* DETAILS */}
+          <View style={tailwind('mt-3 w-full px-3')}>
+            <Text
+              numberOfLines={1}
+              style={tailwind('font-15 font-bold text-gray-900')}
+            >
+              {props?.name}
+            </Text>
+
+            <Text style={tailwind('font-12 text-gray-700 mt-1')}>
+              {svar?.product_variation} {svar?.product_unit}
+            </Text>
+
+            {/* PRICE */}
+            <View style={tailwind('flex-row items-center mt-2')}>
+              <Text
+                style={[tailwind('font-17 font-bold'), { color: '#F39F3E' }]}
+              >
+                ₹{svar?.product_price}
+              </Text>
+
+              {svar?.mrp_price && (
+                <Text
+                  style={tailwind('font-14 ml-2 text-gray-400 line-through')}
+                >
+                  ₹{svar?.mrp_price}
+                </Text>
+              )}
+            </View>
+
+            {/* BUTTON */}
+            <TouchableOpacity
+              onPress={() => {
+                if (!props?.subscribe) {
+                  Variation();
+                } else {
+                  props?.navigation?.navigate('Subscription');
+                }
+              }}
+              style={[
+                tailwind('mt-3 py-2 rounded-full'),
+                {
+                  backgroundColor: props?.subscribe ? 'white' : '#F39F3E',
+                  borderWidth: props?.subscribe ? 1 : 0,
+                  borderColor: '#F39F3E',
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  tailwind('text-center font-bold'),
+                  { color: props?.subscribe ? '#F39F3E' : 'white' },
+                ]}
+              >
+                {props?.subscribe ? 'View Details' : 'Subscribe'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      {props?.desigin_type === 5 && (
+        <View
+          style={[
+            tailwind('flex-row items-center rounded-xl mx-2 my-2 p-3'),
+            {
+              backgroundColor: 'white',
+              // width: '80%',
+              elevation: 3,
+              shadowColor: '#000',
+              shadowOpacity: 0.1,
+              shadowRadius: 5,
+              shadowOffset: { width: 0, height: 2 },
+            },
+          ]}
+        >
+          {/* IMAGE */}
+          <TouchableOpacity
+            style={[tailwind(''), { width: '20%' }]}
+            onPress={() => ImageOnlyView?.current?.open()}
+          >
+            <Image
+              source={props?.img}
+              defaultSource={assets_manifest?.placeholder}
+              resizeMode="contain"
+              style={{
+                width: '100%',
+                height: 80,
+                borderRadius: 10,
+              }}
+            />
+          </TouchableOpacity>
+
+          {/* DETAILS */}
+          <View style={{ width: '80%', marginLeft: 12 }}>
+            <Text
+              numberOfLines={1}
+              style={tailwind('font-15 font-bold text-gray-900')}
+            >
+              {props?.name}
+            </Text>
+
+            <Text style={tailwind('font-12 text-gray-600 mt-1')}>
+              {svar?.product_variation} {svar?.product_unit}
+            </Text>
+
+            {/* PRICE */}
+            <View style={[tailwind('flex-row')]}>
+              <View style={tailwind('flex-row items-center mt-2')}>
+                <Text
+                  style={[tailwind('font-16 font-bold'), { color: '#F39F3E' }]}
+                >
+                  ₹{svar?.product_price}
+                </Text>
+
+                {svar?.mrp_price && (
+                  <Text
+                    style={tailwind('font-13 ml-2 text-gray-400 line-through')}
+                  >
+                    ₹{svar?.mrp_price}
+                  </Text>
+                )}
+              </View>
+              <View style={[tailwind('mr-3'), { marginLeft: 'auto' }]}>
+                <QuantityActions
+                  type={1}
+                  id={props.id}
+                  initiateIncrement={Variation}
+                  initiateDecrement={initiateDecrement}
+                  quantity={quantity}
+                  product_message={''}
+                  product_status={true}
+                  variations={props?.product_price}
+                />
+              </View>
+              {/* BUTTON */}
+            </View>
+          </View>
+        </View>
+      )}
+
       <Portal>
         <Modalize
           ref={imageLargerRef}
@@ -476,7 +734,7 @@ export const ProductCart = (props: Prototype) => {
           disableScrollIfPossible={false}
           closeOnOverlayTap={true}
         >
-          <ImageViewer image={props.img} imageLargerRef={imageLargerRef} />
+          <ImageViewer image={props?.img} imageLargerRef={imageLargerRef} />
           <VariationSheetList
             svar={svar}
             variations={props?.product_price}
@@ -486,7 +744,7 @@ export const ProductCart = (props: Prototype) => {
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={Close}
-            style={[tailwind('flex bg-primary p-3 m-3'), { borderRadius: 10 }]}
+            style={[tailwind('flex bg-green p-3 m-3'), { borderRadius: 10 }]}
           >
             <Text
               style={[
@@ -680,6 +938,18 @@ export const ProductCart = (props: Prototype) => {
           <View></View>
         </Modalize>
       </Portal>
+      {modal ? (
+        <GlobalDialogModal
+          visible={modal}
+          setAlertModal={setModal}
+          target={1}
+          title="Replace Cart Item ?"
+          // title=""
+          // subtitle={`Your Cart Contains dishes from ${ShopState?.shop_name}. Do you want to discard the selection and add dishes ? `}
+          subtitle={'Do you want to add the other shop products in your cart ?'}
+          action={resetCartandProceed}
+        />
+      ) : null}
     </>
   );
 };

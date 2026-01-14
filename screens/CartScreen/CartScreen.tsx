@@ -68,7 +68,8 @@ export default function CartScreen() {
   const Delivery_charge = useSelector(
     (state: any) => state.user.delivery_chargs,
   );
-
+    const Data = useSelector((state: any) => state.user.customized_dayss);
+console.log("DataDataDataData",Data)
   const Couponstate = useSelector((state: any) => state.user.coupon);
   const AppControll = useSelector((state: any) => state.app.app_controll);
   const [visible, setVisible] = useState(false);
