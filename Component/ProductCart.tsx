@@ -121,20 +121,7 @@ export const ProductCart = (props: Prototype) => {
 
     props.decrement({ uuid });
   }, [props.id, props?.type, svar, svar?.product_price_id]);
-  const InitialVaration = () => {
-    let isShopIdMismatch = false;
-    if (CartState?.length === 0) {
-      initiateIncrement();
-    }
-    CartState.forEach(item => {
-      if (item.desigin_type === props?.desigin_type) {
-        initiateIncrement();
-      } else {
-        isShopIdMismatch = true;
-        setModal(true);
-      }
-    });
-  };
+
   const initiateIncrement = useCallback(() => {
     (async () => {
       let uuid = `${props.id}_${svar?.product_price_id}`;

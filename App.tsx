@@ -65,8 +65,7 @@ function App() {
       Linking.openSettings();
     }
   };
-  const barStyle =
-    Platform.OS === 'android' ? 'dark-content' : 'light-content';
+  const barStyle = Platform.OS === 'android' ? 'dark-content' : 'dark-content';
 
   return (
     <>
@@ -81,7 +80,11 @@ function App() {
             </View>
             <View style={[tailwind('items-center')]}>
               <CloudIcon />
-              <Text style={[tailwind('font-fold text-primary font-20 text-center mt-2')]}>
+              <Text
+                style={[
+                  tailwind('font-fold text-primary font-20 text-center mt-2'),
+                ]}
+              >
                 No Internet
               </Text>
             </View>

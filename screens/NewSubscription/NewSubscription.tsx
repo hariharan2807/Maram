@@ -19,7 +19,11 @@ import {
   EditIcon1,
 } from '../../assets/icons';
 import { useNavigation } from '@react-navigation/native';
-import { CalenderComponent, WeekDaysSelector } from '../../screens/Component';
+import {
+  CalenderComponent,
+  DateCustomized,
+  WeekDaysSelector,
+} from '../../screens/Component';
 import { errorBox, infoBox } from '../../workers/utils';
 
 export default function NewSubscription() {
@@ -32,7 +36,7 @@ export default function NewSubscription() {
   const Address = useSelector((state: any) => state.user.userAddresses);
   const Data = useSelector((state: any) => state.user.customized_dayss);
 
-  //   console.log('DataDataDataDataDataDataDataDataData', Data);
+  console.log('AddressAddressAddressAddress', Address);
 
   const category_list = useSelector((state: any) => state.user.category_list);
 
@@ -133,31 +137,62 @@ export default function NewSubscription() {
     // Initialize result object
     selectedDays.forEach(day => (result[day] = []));
 
-    // Total days in current month
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    // Calculate for current month AND next month
+    for (let monthOffset = 0; monthOffset < 1; monthOffset++) {
+      const targetMonth = currentMonth + monthOffset;
+      const targetYear =
+        monthOffset === 0
+          ? currentYear
+          : currentMonth === 11
+          ? currentYear + 1
+          : currentYear;
+      const actualMonth = targetMonth % 12;
+      const actualYear = targetYear + Math.floor(targetMonth / 12);
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(currentYear, currentMonth, day);
-      const weekday = date.getDay();
+      // Total days in target month
+      const daysInMonth = new Date(actualYear, actualMonth + 1, 0).getDate();
 
-      // Only future dates including today
-      if (date >= today && selectedWeekdayNumbers.includes(weekday)) {
-        const label = Object.keys(WEEK_LABELS).find(
-          key => WEEK_LABELS[key] === weekday,
-        );
-        result[label].push(day);
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(actualYear, actualMonth, day);
+        const weekday = date.getDay();
+
+        // Only future dates including today (for current month only)
+        // For next month, include all dates
+        if ((monthOffset === 0 && date >= today) || monthOffset === 1) {
+          if (selectedWeekdayNumbers.includes(weekday)) {
+            const label = Object.keys(WEEK_LABELS).find(
+              key => WEEK_LABELS[key] === weekday,
+            );
+            result[label].push({
+              date: date.toISOString().split('T')[0], // YYYY-MM-DD
+              day: day,
+              month: actualMonth + 1,
+              year: actualYear,
+              fullDate: `${day}/${actualMonth + 1}/${actualYear}`,
+            });
+          }
+        }
       }
     }
 
     return result;
   };
   const futureDates = getFutureDatesByWeekday(Data);
+  console.log('futureDatesfutureDatesfutureDatesfutureDates', futureDates);
   const counts = {};
   for (const day in futureDates) {
     counts[day] = futureDates[day].length;
   }
   const total = Object.values(counts).reduce((sum, val) => sum + val, 0);
   const Subscription = () => {
+    console.log('objjjjjj', CartState);
+    console.log(
+      'subscription_start_datesubscription_start_date',
+      subscription_start_date,
+      selectedCat,
+      Data,
+    );
+    const obj = {};
     if (!subscription_start_date?.length && !total) {
       return errorBox('Please Choose Your Plan');
     } else {
@@ -201,6 +236,7 @@ export default function NewSubscription() {
               color_variation={item.product_color_var}
               item={item}
               product_price={item?.product_price}
+              type={1}
             />
           </View>
         ))}
@@ -317,7 +353,22 @@ export default function NewSubscription() {
               </View>
             ) : null}
           </View>
-          {calenderOpen && selectedCat !== 'Customized' && (
+          <DateCustomized
+            setSelectedDate={setSelectedDate}
+            selectedCat={selectedCat}
+            setSelectedCat={setSelectedCat}
+            selectedDate={selectedDate}
+            setCustomDates={setCustomDates}
+            customDates={customDates}
+            calenderOpen={calenderOpen}
+            setCalenderOpen={setCalenderOpen}
+            subscription_start_date={subscription_start_date}
+            totalAmount={totalAmount}
+            total={total}
+            new={true}
+            Data={Data}
+          />
+          {/* {calenderOpen && selectedCat !== 'Customized' && (
             <CalenderComponent
               setSelectedDate={setSelectedDate}
               selectedCat={selectedCat}
@@ -328,9 +379,9 @@ export default function NewSubscription() {
               calenderOpen={calenderOpen}
               setCalenderOpen={setCalenderOpen}
             />
-          )}
-          {selectedCat === 'Customized' && <WeekDaysSelector />}
-          {!!(subscription_start_date?.length || total) && (
+          )} */}
+          {/* {selectedCat === 'Customized' && <WeekDaysSelector />} */}
+          {/* {!!(subscription_start_date?.length || total) && (
             <View
               style={[
                 tailwind('flex-row px-3 my-3 py-3 rounded-xl items-center'),
@@ -356,7 +407,7 @@ export default function NewSubscription() {
                 | ₹{totalAmount * (subscription_start_date?.length || total)}
               </Text>
             </View>
-          )}
+          )} */}
         </View>
         {Address?.length > 1 ? (
           <View

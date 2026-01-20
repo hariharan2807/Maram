@@ -14,24 +14,18 @@ const WEEK_DAYS = [
   { label: 'Sat', value: 6 },
 ];
 
-export default function WeekDaysSelector() {
+export default function WeekDaysSelector(props: any) {
   const dispatch = useDispatch();
-  const Data = useSelector((state: any) => state.user.customized_dayss);
-
-  // Initialize selectedDays from Redux (array of labels)
-  const [selectedDays, setSelectedDays] = useState(Data || []);
+  const [selectedDays, setSelectedDays] = useState(props?.Data || []);
 
   const toggleDay = (dayLabel: string) => {
     let newSelected: string[];
 
     if (selectedDays.includes(dayLabel)) {
-      // Remove if already selected
       newSelected = selectedDays.filter(d => d !== dayLabel);
     } else {
-      // Add if not selected
       newSelected = [...selectedDays, dayLabel];
     }
-
     setSelectedDays(newSelected);
     dispatch(Customized_days(newSelected));
   };

@@ -63,13 +63,13 @@ export default function CartScreen() {
   const navigation = useNavigation();
   const ID = useSelector((state: any) => state.user.user_id);
   const Branch = useSelector((state: any) => state.app.branch);
-  const CartState = useSelector((state: any) => state.user.cart);
+  const CartState1 = useSelector((state: any) => state.user.cart);
   const Address = useSelector((state: any) => state.user.userAddresses);
   const Delivery_charge = useSelector(
     (state: any) => state.user.delivery_chargs,
   );
-    const Data = useSelector((state: any) => state.user.customized_dayss);
-console.log("DataDataDataData",Data)
+  const Data = useSelector((state: any) => state.user.customized_dayss);
+  console.log('DataDataDataData', Data);
   const Couponstate = useSelector((state: any) => state.user.coupon);
   const AppControll = useSelector((state: any) => state.app.app_controll);
   const [visible, setVisible] = useState(false);
@@ -81,6 +81,7 @@ console.log("DataDataDataData",Data)
   const [value, setValue] = useState(false);
   const [loading, setLoading] = useState(false);
   const ResponseData = useRef(null);
+  const CartState = CartState1?.filter(item => item?.desigin_type != 4);
   const totalQuantity = CartState.reduce(
     (sum, item) => sum + item.product_price * item.quantity,
     0,
@@ -339,7 +340,7 @@ console.log("DataDataDataData",Data)
   const Total =
     totalQuantity + deliveryFee - (Couponstate?.caluculate_amount || 0);
   return (
-    <View style={[tailwind('h-full bg-secondary')]}>
+    <View style={[tailwind('h-full bg-white')]}>
       <Topbar title="Your Cart" type={3} />
       {CartState?.length > 0 ? (
         <View style={tailwind('flex-1 w-full')}>
@@ -350,20 +351,33 @@ console.log("DataDataDataData",Data)
               { paddingBottom: height * 0.1 },
             ]}
           >
-            {CartState.length > 0 && (
-              <Text
-                style={[
-                  tailwind('font-bold mx-5 my-2 text-primary'),
-                  { fontSize: scaleFont(16) },
-                ]}
-              >
-                Items in your cart
-              </Text>
-            )}
+            <View style={[tailwind('flex-row mx-5')]}>
+              {CartState.length > 0 && (
+                <Text
+                  style={[
+                    tailwind('font-bold  my-2 text-black'),
+                    { fontSize: scaleFont(16) },
+                  ]}
+                >
+                  Items
+                </Text>
+              )}
+              {CartState.length > 0 && (
+                <Text
+                  style={[
+                    tailwind('font-bold  my-2 text-black'),
+                    { fontSize: scaleFont(14), marginLeft: 'auto' },
+                  ]}
+                >
+                  {CartState.length} Items
+                </Text>
+              )}
+            </View>
+
             {CartState?.map((item: any, index: number) => (
               <View
                 key={index}
-                style={[tailwind('mx-3 px-1'), { backgroundColor: '#ffffff' }]}
+                style={[tailwind('mx-3 my-1  rounded-xl'), { backgroundColor: '#ffffff' }]}
               >
                 <CartComponent
                   isVeg={item.eggless == 0 || item.eggless == 1}
@@ -383,6 +397,7 @@ console.log("DataDataDataData",Data)
                   color_variation={item.product_color_var}
                   item={item}
                   product_price={item?.product_price}
+                  type={2}
                 />
               </View>
             ))}

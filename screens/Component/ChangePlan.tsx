@@ -1,108 +1,160 @@
-import React, { useState } from 'react';
-import tailwind from '@tailwind';
-import {
-  View,
-  Text,
-  Image,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
-import assets from '@assets';
-import { useNavigation } from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
-import Modal from 'react-native-modal';
-interface PropTypes {
-  target: number;
-  visible: boolean;
-  title: string;
-  subtitle?: string;
-  action?(): void;
-  setAlertModal?: any;
-  plan: string;
-}
-export default function ChangePlan(props: PropTypes) {
-  const navigation = useNavigation();
-  const [selectedCat, setSelectedCat] = useState(null);
-  const closeModal = () => {
-    if (props.setAlertModal) {
-      props.setAlertModal(false);
+// Simple Calendar Component (put this in your file)
+import tailwind from "@tailwind";
+import React from "react";
+import { useState } from "react";
+import { View,Text,TouchableOpacity } from "react-native";
+// Simple Calendar Component
+export const SimpleCalendar = ({ selectedDate, onDateSelect, onClose }) => {
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  // Get days in month
+  const getDaysInMonth = () => {
+    return new Date(currentYear, currentMonth + 1, 0).getDate();
+  };
+
+  // Get first day of month
+  const getFirstDayOfMonth = () => {
+    return new Date(currentYear, currentMonth, 1).getDay();
+  };
+
+  // Generate calendar grid
+  const generateCalendar = () => {
+    const daysInMonth = getDaysInMonth();
+    const firstDay = getFirstDayOfMonth();
+    const days = [];
+
+    // Empty days before first day
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    // Actual days
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(day);
+    }
+
+    return days;
+  };
+
+  // Check if date is today
+  const isToday = (day) => {
+    const today = new Date();
+    return (
+      day === today.getDate() &&
+      currentMonth === today.getMonth() &&
+      currentYear === today.getFullYear()
+    );
+  };
+
+  // Check if date is selected
+  const isSelected = (day) => {
+    if (!selectedDate || !day) return false;
+    const [selectedDay, selectedMonth, selectedYear] = selectedDate.split('/');
+    return (
+      day === parseInt(selectedDay) &&
+      currentMonth === parseInt(selectedMonth) - 1 &&
+      currentYear === parseInt(selectedYear)
+    );
+  };
+
+  // Handle day press
+  const handleDayPress = (day) => {
+    if (!day) return;
+    const dateString = `${day}/${currentMonth + 1}/${currentYear}`;
+    onDateSelect(dateString);
+  };
+
+  // Navigate months
+  const goToPreviousMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
     }
   };
+
+  const goToNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const calendarDays = generateCalendar();
+
   return (
-    <Modal
-      isVisible={props.visible}
-      animationInTiming={200}
-      animationOutTiming={150}
-      useNativeDriver={true}
-      useNativeDriverForBackdrop={true}
-      hideModalContentWhileAnimating={true}
-      backdropTransitionOutTiming={0}
-      scrollHorizontal={true}
-      onBackdropPress={closeModal}
-    >
-      <View style={tailwind('bg-white rounded-xl')}>
-        <View style={[tailwind('p-3')]}>
-          <Text style={[tailwind('text-lg text-black pb-2 font-bold')]}>
-            {props.title}
-          </Text>
-        </View>
-        <View
-          style={[
-            tailwind('mx-4 mb-4 flex-row items-center'),
-            { justifyContent: 'space-between' },
-          ]}
-        >
-          {['Alternate Days', 'Customized', 'Daily']
-            .filter(plan => plan !== props?.plan)
-            .map(plan => (
-              <TouchableOpacity
-                key={plan}
-                onPress={() => setSelectedCat(plan)}
-                activeOpacity={0.8}
+    <View style={tailwind('bg-white rounded-xl')}>
+      {/* Header */}
+      <View style={tailwind('flex-row items-center justify-between mb-4')}>
+        <TouchableOpacity onPress={goToPreviousMonth}>
+          <Text style={tailwind('text-2xl text-gray-600')}>‹</Text>
+        </TouchableOpacity>
+        <Text style={tailwind('text-xl font-bold text-gray-900')}>
+          {months[currentMonth]} {currentYear}
+        </Text>
+        <TouchableOpacity onPress={goToNextMonth}>
+          <Text style={tailwind('text-2xl text-gray-600')}>›</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Weekday headers */}
+      <View style={tailwind('flex-row mb-3')}>
+        {weekDays.map(day => (
+          <View key={day} style={tailwind('flex-1 items-center')}>
+            <Text style={tailwind('text-gray-500 font-bold')}>{day}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Calendar grid */}
+      <View style={tailwind('flex-row flex-wrap')}>
+        {calendarDays.map((day, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleDayPress(day)}
+            disabled={!day}
+            style={[
+              tailwind('w-10 h-10 items-center justify-center m-0.5 rounded-full'),
+              {
+                backgroundColor: isSelected(day)
+                  ? '#10B981'
+                  : isToday(day)
+                  ? '#DBEAFE'
+                  : 'transparent',
+              },
+            ]}
+          >
+            {day ? (
+              <Text
                 style={[
-                  tailwind('py-3 rounded-full items-center'),
+                  tailwind('font-bold'),
                   {
-                    width: '48%',
-                    backgroundColor:
-                      selectedCat === plan ? '#80C659' : '#F3F4F6',
+                    color: isSelected(day)
+                      ? 'white'
+                      : isToday(day)
+                      ? '#3B82F6'
+                      : '#374151',
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    tailwind('font-bold'),
-                    { color: selectedCat === plan ? 'white' : '#374151' },
-                  ]}
-                >
-                  {plan}
-                </Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-        <Text style={tailwind('mt-6 text-gray-400 font-16')}>
-          Choose Start Date
-        </Text>
-
-        <TouchableOpacity
-          onPress={() => setCalenderOpen(true)}
-          style={[
-            tailwind('mt-2 flex-row items-center px-4 py-4 rounded-full'),
-            {
-              borderWidth: 1,
-              borderColor: '#E5E7EB',
-              backgroundColor: '#fff',
-            },
-          ]}
-        >
-          <Text style={tailwind('text-gray-800 font-16')}>
-            {subscription_start_date?.[0] || 'Select Date'}
-          </Text>
-
-          <View style={{ marginLeft: 'auto' }}>
-            <CalenderIcon />
-          </View>
-        </TouchableOpacity>
+                {day}
+              </Text>
+            ) : null}
+          </TouchableOpacity>
+        ))}
       </View>
-    </Modal>
+    </View>
   );
-}
+};
+ 

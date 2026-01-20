@@ -15,78 +15,40 @@ export const CalenderComponent = (props: any) => {
     return formatDate(date);
   };
   const today = new Date();
-
-  //   const markedDates1 = {
-  //     ...getDisabledPastDates(),
-
-  //     ...(props?.selectedDate && {
-  //       [props?.selectedDate]: {
-  //         selected: true,
-  //         selectedColor: '#009A93',
-  //         selectedTextColor: '#ffffff',
-  //       },
-  //     }),
-  //   };
+  const getDailyDates = (startDate, endDate) => {
+    const dates = [];
+    let current = new Date(startDate);
+    const end = new Date(endDate);
+    while (current <= end) {
+      dates.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
+    }
+    return dates;
+  };
   const onDayPress = day => {
     const date = day.dateString;
-
     if (props?.selectedCat === 'Alternate Days') {
       const alternateDates = getAlternateDates(date, getEndOfNextMonth());
-
       props?.setSelectedDate(date);
       props?.setCustomDates(alternateDates);
-      //   props?.setCalenderOpen(false);
-      //   dispatch(updateSubscription_start_date(alternateDates));
     }
-
     if (props?.selectedCat === 'Daily') {
+      const dailyDates = getDailyDates(date, getEndOfNextMonth());
       props?.setSelectedDate(date);
-      props?.setCustomDates([date]);
-      //   props?.setCalenderOpen(false);
-
-      //   dispatch(updateSubscription_start_date([date]));
+      props?.setCustomDates(dailyDates);
     }
-
     if (props?.selectedCat === 'Customized') {
       let updatedDates = [];
-
       if (props?.customDates.includes(date)) {
         updatedDates = props?.customDates.filter(d => d !== date);
       } else {
         updatedDates = [...props?.customDates, date];
       }
-
       props?.setCustomDates(updatedDates);
       props?.setSelectedDate(null);
-      //   props?.setCalenderOpen(false);
-
-      //   dispatch(updateSubscription_start_date(updatedDates));
     }
   };
-
-  console.log('setCustomDatessetCustomDatessetCustomDates', props?.customDates);
-  const getAlternateDisabledDates = () => {
-    const disabled = {};
-
-    if (!props?.selectedDate) return disabled;
-
-    const allowedDate = addDays(props?.selectedDate, 2);
-
-    for (let i = 1; i <= 365; i++) {
-      const date = new Date(props?.selectedDate);
-      date.setDate(date.getDate() + i);
-      const d = formatDate(date);
-
-      if (d !== allowedDate) {
-        disabled[d] = {
-          disabled: true,
-          disableTouchEvent: true,
-        };
-      }
-    }
-
-    return disabled;
-  };
+  // console.log('setCustomDatessetCustomDatessetCustomDates', props?.customDates);
   const markedDates1 = {
     ...(props?.selectedCat === 'Alternate Days' &&
       props?.customDates.reduce((acc, date) => {
@@ -116,7 +78,7 @@ export const CalenderComponent = (props: any) => {
 
   const getEndOfNextMonth = () => {
     const date = new Date();
-    date.setMonth(date.getMonth() + 2, 0); // end of next month
+    date.setMonth(date.getMonth() + 1, 0); // end of next month
     return formatDate(date);
   };
   const getAlternateDates = (startDate: string, endDate: string) => {

@@ -104,6 +104,7 @@ export default function DashboardScreen() {
     youtube: 'https://www.youtube.com/@BakeryMaharaj',
     tv: 'https://bakerymaharaj.com/',
   };
+  console.log("BannerBannerBanner",Banner)
   const DailyData = [
     {
       name: 'Farm Fresh Natural Milk',
@@ -127,13 +128,13 @@ export default function DashboardScreen() {
   const ProductData = [
     {
       category_name: 'Farm Fresh Natural Milk',
-      eggless: '0',
-      is_favourite: 0,
+      // eggless: '0',
+      // is_favourite: 0,
       product_id: '84',
       product_image: assets_manifest?.milk1,
       product_name: 'Farm Fresh Natural Milk',
-      product_offer: '0',
-      product_percentage: '0',
+      // product_offer: '0',
+      // product_percentage: '0',
       product_price: [
         {
           product_price_id: '729',
@@ -143,7 +144,7 @@ export default function DashboardScreen() {
           mrp_price: 30.5,
         },
       ],
-      product_recommended: '0',
+      // product_recommended: '0',
       product_type: '1',
       timeslot: '0',
       subscribe: 1,

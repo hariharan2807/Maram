@@ -1,5 +1,14 @@
 import { HomeTitle } from './HomeTitleScreen';
 import { CalenderComponent } from './CalenderComponen';
 import WeekDaysSelector from './WeekDaysSelector';
-import ChangePlan from './ChangePlan';
-export { HomeTitle,WeekDaysSelector, CalenderComponent ,ChangePlan};
+import { SimpleCalendar } from './ChangePlan';
+import { DateCustomized } from './DateCustomized';
+import { PauseSubscription } from './PauseSubscription';
+export {
+  HomeTitle,
+  WeekDaysSelector,
+  PauseSubscription,
+  CalenderComponent,
+  SimpleCalendar,
+  DateCustomized,
+};

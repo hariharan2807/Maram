@@ -79,7 +79,10 @@ export default function CustomBottomTab({
             }
           }
         };
-
+        console.log('CartStateCartState', CartState);
+        const CartStateValue = CartState?.filter(
+          item => item?.desigin_type != 4,
+        );
         return (
           <TouchableOpacity
             activeOpacity={0.9}
@@ -92,7 +95,7 @@ export default function CustomBottomTab({
             style={{ flex: 1, paddingVertical: 7 }}
           >
             <View style={tailwind('flex items-center my-1')}>
-              {index === 2 && CartState?.length > 0 ? (
+              {index === 2 && CartStateValue?.length > 0 ? (
                 <View
                   style={[
                     tailwind(
@@ -103,7 +106,8 @@ export default function CustomBottomTab({
                       bottom: 20,
                       zIndex: 999,
                       height: 16,
-                      width: 16,backgroundColor:"red"
+                      width: 16,
+                      backgroundColor: 'red',
                     },
                   ]}
                 >
@@ -134,11 +138,7 @@ export default function CustomBottomTab({
 
               <Text
                 style={[
-                  tailwind(
-                    `text-white font-12   ${
-                      'font-bold'
-                    }`,
-                  ),
+                  tailwind(`text-white font-12   ${'font-bold'}`),
                   { color: `${isFocused ? '#FFCC01' : 'white'}` },
                 ]}
               >

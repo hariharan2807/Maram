@@ -53,8 +53,10 @@ import EditIcon1 from './SvgIcons/EditIcon1';
 import LockIcon from './SvgIcons/LockIcon';
 import SubscriptionIcon from './SvgIcons/SubscriptionIcon';
 import CheckIcon from './SvgIcons/CheckIcon';
+import TickIcon1 from './SvgIcons/TickIcon1';
 export {
   AddressIcon,
+  TickIcon1,
   LockIcon,
   CheckIcon,
   SubscriptionIcon,
