@@ -10,6 +10,8 @@ import CartScreen from '../screens/CartScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ViewAllScreen from '../screens/ViewAllScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SubscriptionScreen from '../screens/SubscriptionScreen';
+import { NewSubscription } from '../screens/NewSubscription';
 
 const StackConfig = { headerShown: false };
 
@@ -28,14 +30,17 @@ export function Dashboard(props: any) {
     </DashboardStack.Navigator>
   );
 }
-export function Search(props: any) {
+export function Subscriptions(props: any) {
   return (
     <SearchStack.Navigator screenOptions={StackConfig}>
       <SearchStack.Screen
-        name="SearchScreen"
-        component={SearchScreen}
+        name="SubscriptionScreen"
+        component={SubscriptionScreen}
       />
-      
+        <SearchStack.Screen
+        name="NewSubscription"
+        component={NewSubscription}
+      />
     </SearchStack.Navigator>
   );
 }

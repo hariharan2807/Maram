@@ -21,7 +21,7 @@ export const DateCustomized = (props: any) => {
       )}
 
       {props?.selectedCat === 'Customized' && (
-        <WeekDaysSelector Data={props?.Data} />
+        <WeekDaysSelector Data={props?.Data} save={props?.save} setSelectedDate={props?.setSelectedDate}/>
       )}
       {!!(props?.subscription_start_date?.length || props?.total) &&
         props?.new && (

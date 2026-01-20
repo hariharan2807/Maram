@@ -94,7 +94,7 @@ export default function SingleOrderScreen() {
   if (Response?.isLoading) {
     return <FullScreenLoading />;
   }
-  console?.log('ResponseResponseResponse', route?.params?.screen);
+  // console?.log('ResponseResponseResponse', route?.params?.screen);
   return (
     <View style={[tailwind('h-full bg-secondary')]}>
       {/* <Topbar title="Order Status" type={3} /> */}

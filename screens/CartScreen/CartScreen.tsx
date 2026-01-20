@@ -69,7 +69,7 @@ export default function CartScreen() {
     (state: any) => state.user.delivery_chargs,
   );
   const Data = useSelector((state: any) => state.user.customized_dayss);
-  console.log('DataDataDataData', Data);
+  // console.log('DataDataDataData', Data);
   const Couponstate = useSelector((state: any) => state.user.coupon);
   const AppControll = useSelector((state: any) => state.app.app_controll);
   const [visible, setVisible] = useState(false);
@@ -175,7 +175,7 @@ export default function CartScreen() {
   }, []);
   useEffect(() => {
     if (CartState?.length === 0) {
-      console.log('🛒 Cart is empty, removing coupon...');
+      // console.log('🛒 Cart is empty, removing coupon...');
       dispatch(updateCoupon(null));
     }
   }, [CartState, dispatch]);
@@ -219,7 +219,7 @@ export default function CartScreen() {
     useCallback(() => {
       // Check if cart is empty - if yes, skip delivery check
       if (CartState?.length === 0) {
-        console.log('Cart is empty, skipping delivery check');
+        // console.log('Cart is empty, skipping delivery check');
         return;
       }
 
@@ -266,7 +266,7 @@ export default function CartScreen() {
               user_id: ID,
               total_amount: totalQuantity,
             });
-            console.log('ResponseDataResponseDataResponseData', ResponseData);
+            // console.log('ResponseDataResponseDataResponseData', ResponseData);
 
             if (ResponseData?.status === 'success') {
               dispatch(updateDelivery_charge(ResponseData));

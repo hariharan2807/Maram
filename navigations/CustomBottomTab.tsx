@@ -1,5 +1,12 @@
 import tailwind from '@tailwind';
-import { BagColor, DashboardIcon, SearchIcons } from '../assets/icons';
+import {
+  AccoundIcon,
+  BagColor,
+  CalenderIconTab,
+  DashboardIcon,
+  SearchIcons,
+  SubscriptionIcontab,
+} from '../assets/icons';
 import React, { useEffect, useState } from 'react';
 import { Keyboard, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -37,113 +44,111 @@ export default function CustomBottomTab({
   }
 
   return (
-    <View style={tailwind('flex flex-row bg-primary items-center')}>
+    <View
+      style={[
+        tailwind('flex-row bg-white px-2'),
+        {
+          elevation: 10,
+          shadowColor: '#000',
+          shadowOpacity: 0.1,
+          shadowRadius: 6,
+        },
+      ]}
+    >
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
+        const label = options.tabBarLabel ?? options.title ?? route.name;
+
         const isFocused = state.index === index;
 
-        const onPress = async () => {
+        const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
             canPreventDefault: true,
           });
-          // if (route?.name == 'Home') {
-          //   await analytics().logEvent('click_homemenu');
-          // }
-          // if (route?.name == 'Search') {
-          //   await analytics().logEvent('click_searchmenu');
-          // }
-          // if (route?.name == 'Cart') {
-          //   await analytics().logEvent('click_cartmenu');
-          // }
-          // if (route?.name == 'Account') {
-          //   await analytics().logEvent('click_accountmenu');
-          // }
-          // console.log(route);
+
           if (!isFocused && !event.defaultPrevented) {
-            try {
-              if (route.name == 'Account') {
-                navigation.openDrawer();
-              } else {
-                navigation.navigate(route.state.routeNames[0]);
-              }
-            } catch {
-              navigation.navigate(route.name);
-            }
+            route.name === 'Account'
+              ? navigation.openDrawer()
+              : navigation.navigate(route.name);
           }
         };
-        console.log('CartStateCartState', CartState);
+
         const CartStateValue = CartState?.filter(
-          item => item?.desigin_type != 4,
+          item => item?.desigin_type !== 4,
         );
+
         return (
           <TouchableOpacity
-            activeOpacity={0.9}
             key={index}
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
+            activeOpacity={0.8}
             onPress={onPress}
-            style={{ flex: 1, paddingVertical: 7 }}
+            style={[tailwind(''), { width: '25%', justifyContent: 'center' }]}
           >
-            <View style={tailwind('flex items-center my-1')}>
-              {index === 2 && CartStateValue?.length > 0 ? (
+            <View
+              style={[
+                tailwind('items-center  justify-center py-2'),
+                {
+                  backgroundColor: isFocused ? '#80C659' : 'transparent',
+                  // marginHorizontal: 2,
+                  marginVertical: 6,
+                  // borderRadius: 16,
+                  borderTopLeftRadius: 20,
+                  borderBottomRightRadius: 20,
+                },
+              ]}
+            >
+              {/* CART BADGE */}
+              {index === 2 && CartStateValue?.length > 0 && (
                 <View
-                  style={[
-                    tailwind(
-                      'flex absolute  rounded-full items-center justify-center  items-center flex-row',
-                    ),
-                    {
-                      right: 27,
-                      bottom: 20,
-                      zIndex: 999,
-                      height: 16,
-                      width: 16,
-                      backgroundColor: 'red',
-                    },
-                  ]}
+                  style={{
+                    position: 'absolute',
+                    top: 6,
+                    right: 18,
+                    backgroundColor: 'red',
+                    height: 18,
+                    width: 18,
+                    borderRadius: 9,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 10,
+                  }}
                 >
                   <Text
-                    style={[
-                      tailwind('font-bold font-10  text-center'),
-                      { color: 'white' },
-                    ]}
+                    style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}
                   >
-                    {CartState?.length}
+                    {CartStateValue.length}
                   </Text>
                 </View>
-              ) : null}
-
-              {index === 0 ? (
-                // isFocused ? (
-                <DashboardIcon color={isFocused ? '#FFCC01' : 'white'} />
-              ) : // ) : (
-              //   <Home />
-              // )
-              index === 1 ? (
-                <SearchIcons color={isFocused ? '#FFCC01' : 'white'} />
-              ) : index === 2 ? (
-                <BagColor color={isFocused ? '#FFCC01' : 'white'} />
-              ) : (
-                <ProfileIcon1 color={isFocused ? '#FFCC01' : 'white'} />
               )}
 
-              <Text
-                style={[
-                  tailwind(`text-white font-12   ${'font-bold'}`),
-                  { color: `${isFocused ? '#FFCC01' : 'white'}` },
-                ]}
-              >
-                {label}
-              </Text>
+              {/* ICON */}
+              {index === 0 ? (
+                <DashboardIcon color={isFocused ? 'white' : '#666'} />
+              ) : index === 1 ? (
+                <SubscriptionIcontab color={isFocused ? 'white' : '#666'} />
+              ) : index === 2 ? (
+                <CalenderIconTab color={isFocused ? 'white' : '#666'} />
+              ) : (
+                <AccoundIcon color={isFocused ? 'white' : '#666'} />
+              )}
+
+              {/* LABEL (no layout jump) */}
+              {isFocused && (
+                <Text
+                  style={{
+                    paddingVertical: 2,
+                    // marginTop: 2,
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                    color: isFocused ? 'white' : '#666',
+                    opacity: isFocused ? 1 : 0.7,
+                  }}
+                >
+                  {label}
+                </Text>
+              )}
             </View>
           </TouchableOpacity>
         );

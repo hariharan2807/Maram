@@ -47,7 +47,6 @@ export const ProductCart = (props: Prototype) => {
   const imageLargerRef = useRef(null);
   const RepeatRef = useRef(null);
   const ImageOnlyView = useRef(null);
-
   useEffect(() => {
     if (props?.enable) {
       setIsFavoriteLocal(1);
@@ -135,7 +134,7 @@ export const ProductCart = (props: Prototype) => {
         type: props?.type,
         mismatch_id: props?.type === 2 ? props?.mismatch_id : '0',
         image: props?.img,
-        desigin_type: props?.desigin_type,
+        desigin_type: props?.desigin_type == 6 ? 4 : props?.desigin_type,
       };
 
       previeousUid.current = uuid;
@@ -151,7 +150,8 @@ export const ProductCart = (props: Prototype) => {
     svar?.product_price_id,
   ]);
   const Variation = () => {
-    ImageOnlyView?.current?.close();
+    // ImageOnlyView?.current?.close();
+console?.log("desigin_typedesigin_typedesigin_typedesigin_typedesigin_type1",props?.desigin_type)
 
     // MULTIPLE VARIATIONS
     if (props?.product_price?.length > 1) {
@@ -174,11 +174,12 @@ export const ProductCart = (props: Prototype) => {
     }
 
     const hasMismatch = CartState.some(
-      item => item.desigin_type !== props?.desigin_type,
+      item => item.desigin_type !== (props?.desigin_type==6?4:props?.desigin_type),
     );
-
+console.log("hasMismatch",hasMismatch)
     if (hasMismatch) {
       setModal(true);
+      console.log("props?.desigin_typeprops?.desigin_typeprops?.desigin_type",props?.desigin_type)
     } else {
       initiateIncrement();
     }
@@ -221,10 +222,11 @@ export const ProductCart = (props: Prototype) => {
               ]}
             >
               <TouchableOpacity
+                activeOpacity={0.9}
                 style={[tailwind('relative')]}
-                onPress={() => {
-                  ImageOnlyView?.current?.open();
-                }}
+                // onPress={() => {
+                //   ImageOnlyView?.current?.open();
+                // }}
               >
                 <Image
                   style={{
@@ -559,7 +561,10 @@ export const ProductCart = (props: Prototype) => {
           ]}
         >
           {/* IMAGE */}
-          <TouchableOpacity onPress={() => ImageOnlyView?.current?.open()}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            // onPress={() => ImageOnlyView?.current?.open()}
+          >
             <Image
               style={{
                 width: 120,
@@ -650,7 +655,8 @@ export const ProductCart = (props: Prototype) => {
           {/* IMAGE */}
           <TouchableOpacity
             style={[tailwind(''), { width: '20%' }]}
-            onPress={() => ImageOnlyView?.current?.open()}
+            activeOpacity={0.9}
+            // onPress={() => ImageOnlyView?.current?.open()}
           >
             <Image
               source={props?.img}
@@ -711,7 +717,102 @@ export const ProductCart = (props: Prototype) => {
           </View>
         </View>
       )}
+      {props?.desigin_type === 6 && (
+        <View
+          style={[
+            tailwind('flex-row items-center rounded-xl mx-2 my-2 p-3'),
+            {
+              backgroundColor: 'white',
+              // width: '80%',
+              elevation: 3,
+              shadowColor: '#000',
+              shadowOpacity: 0.1,
+              shadowRadius: 5,
+              shadowOffset: { width: 0, height: 2 },
+            },
+          ]}
+        >
+          {/* IMAGE */}
+          <TouchableOpacity
+            style={[tailwind(''), { width: '20%' }]}
+            activeOpacity={0.9}
+            // onPress={() => ImageOnlyView?.current?.open()}
+          >
+            <Image
+              source={props?.img}
+              defaultSource={assets_manifest?.placeholder}
+              resizeMode="contain"
+              style={{
+                width: '100%',
+                height: 80,
+                borderRadius: 10,
+              }}
+            />
+          </TouchableOpacity>
 
+          {/* DETAILS */}
+          <View style={{ width: '80%', marginLeft: 12 }}>
+            <Text
+              numberOfLines={1}
+              style={tailwind('font-15 font-bold text-gray-900')}
+            >
+              {props?.name}
+            </Text>
+
+            <Text style={tailwind('font-12 text-gray-600 mt-1')}>
+              {svar?.product_variation} {svar?.product_unit}
+            </Text>
+
+            {/* PRICE */}
+            <View style={[tailwind('flex-row')]}>
+              <View style={tailwind('flex-row items-center mt-2')}>
+                <Text
+                  style={[tailwind('font-16 font-bold'), { color: '#F39F3E' }]}
+                >
+                  ₹{svar?.product_price}
+                </Text>
+
+                {svar?.mrp_price && (
+                  <Text
+                    style={tailwind('font-13 ml-2 text-gray-400 line-through')}
+                  >
+                    ₹{svar?.mrp_price}
+                  </Text>
+                )}
+              </View>
+              <View style={[tailwind('mr-3'), { marginLeft: 'auto' }]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!props?.subscribe) {
+                      Variation();
+                    } else {
+                      props?.navigation?.navigate('Subscription');
+                    }
+                  }}
+                  style={[
+                    tailwind('mt-3 py-2 rounded-full'),
+                    {
+                      backgroundColor: props?.subscribe ? 'white' : '#F39F3E',
+                      borderWidth: props?.subscribe ? 1 : 0,
+                      borderColor: '#F39F3E',
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      tailwind(`text-center ${props?.subscribe?'px-6':'px-3'} font-bold`),
+                      { color: props?.subscribe ? '#F39F3E' : 'white' },
+                    ]}
+                  >
+                    {props?.subscribe ? 'Pause' : 'Subscribe'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* BUTTON */}
+            </View>
+          </View>
+        </View>
+      )}
       <Portal>
         <Modalize
           ref={imageLargerRef}
@@ -808,123 +909,7 @@ export const ProductCart = (props: Prototype) => {
           </View>
         </Modalize>
       </Portal>
-      <Portal>
-        <Modalize
-          ref={ImageOnlyView}
-          useNativeDriver={true}
-          modalTopOffset={100}
-          adjustToContentHeight={true}
-          disableScrollIfPossible={false}
-          closeOnOverlayTap={true}
-        >
-          <ImageViewer image={props.img} imageLargerRef={ImageOnlyView} />
-          <View style={[tailwind('flex-1 ml-3 mr-3 my-5')]}>
-            <View
-              style={[
-                tailwind('flex-row items-center justify-between '),
-                { width: '100%' },
-              ]}
-            >
-              <View style={[tailwind('flex-row items-center flex-1'), {}]}>
-                <Image
-                  source={
-                    props?.product_type
-                      ? assets_manifest?.nonvegimg
-                      : assets_manifest?.vegimg
-                  }
-                  style={[tailwind(''), { width: 15, height: 15 }]}
-                />
-                <Text
-                  style={[
-                    tailwind('font-14 ml-2 font-bold text-black'),
-                    { width: '85%' },
-                  ]}
-                  // numberOfLines={}
-                >
-                  {props?.name}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={[tailwind('px-3')]}
-                onPress={() => handleFavoriteToggle()}
-              >
-                {isFavoriteLocal === 1 ? (
-                  // Filled heart when favorite
-                  <Image
-                    style={[tailwind(''), { height: 20, width: 20 }]}
-                    source={assets_manifest?.heart}
-                  />
-                ) : (
-                  // <Entypo name="heart" color={'red'} size={20} />
-                  // <Text style={[tailwind('text-red-500')]}>❤️</Text>
-                  // Outline heart when not favorite
-                  <Image
-                    style={[tailwind(''), { height: 20, width: 20 }]}
-                    source={assets_manifest?.heartoutLine}
-                    tintColor={'red'}
-                  />
 
-                  // <Entypo name="heart-outlined" color={'red'} size={20} />
-                )}
-              </TouchableOpacity>
-            </View>
-            <View style={[tailwind('  justify-between mt-2')]}>
-              <View>
-                <View style={[tailwind('flex-row items-center')]}>
-                  <Text style={[tailwind('font-16 font-bold text-gray-900')]}>
-                    ₹{svar?.product_price}
-                  </Text>
-                  {/* <Text
-                        style={[
-                          tailwind('ml-1 font-bold font-12 '),
-                          { color: 'green' },
-                        ]}
-                      >
-                        {props?.product_percentage !== '0' &&
-                          props?.product_offer === '1' &&
-                          `${props?.product_percentage}% Offer`}
-                      </Text> */}
-                </View>
-
-                <View
-                  style={[
-                    tailwind('flex-row items-center'),
-                    { justifyContent: 'space-between' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      tailwind(
-                        `font-12 ${
-                          !props?.isopen ? 'py-2' : ''
-                        } text-black font-bold`,
-                      ),
-                    ]}
-                  >
-                    {svar?.product_variation} {''}
-                    {svar?.product_unit}
-                  </Text>
-                  {props?.isOpen && (
-                    <View style={[tailwind('')]}>
-                      <QuantityActions
-                        type={1}
-                        id={props.id}
-                        initiateIncrement={Variation}
-                        initiateDecrement={initiateDecrement}
-                        quantity={quantity}
-                        product_message={''}
-                        product_status={true}
-                        variations={props?.product_price}
-                      />
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-          <View></View>
-        </Modalize>
-      </Portal>
       {modal ? (
         <GlobalDialogModal
           visible={modal}

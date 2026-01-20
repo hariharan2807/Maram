@@ -26,6 +26,7 @@ import {
   incrementAction,
   updateSubscription_start_date,
 } from '@actions/userActions';
+import { errorBox } from '../../workers/utils';
 
 // JSON Data Structure
 
@@ -34,7 +35,6 @@ const SUBSCRIPTION_DATA = {
     id: '100',
     name: 'Farm Fresh Natural Milk',
     image: assets_manifest?.milk1,
-
     total_amount: 1000,
   },
   variation: {
@@ -44,43 +44,28 @@ const SUBSCRIPTION_DATA = {
     price: 50,
     quantity: 1,
   },
-
   subscription: {
-      plan: 'Daily',
-      start_date: ['21/01/2026'],
-      next_billing_date: '01/02/2025',
-      start_days: ['sun', 'mon'],
-      status: '0',
-    },
+    subscription_id: 23,
+    plan: 'Daily',
+    start_date: ['20/01/2026'],
+    next_billing_date: '01/02/2025',
+    start_days: ['sun', 'mon', 'tue', 'fri'],
+    pause_subscription: ['2026-01-20', '2026-01-25', '2026-01-30'],
+  },
   delivery: {
     address:
       '1st, Gandhi Ind Est, L.J.X Cross Road, Thooraipakkam, Chennai - 600112',
-    slot: 'Morning (7-9 AM)',
-    contact: '+91 9876543210',
   },
-  stats: {
-    current_month: {
-      delivered: {
-        subscription: 25,
-        additional: 2,
-      },
-      remaining: {
-        subscription: 5,
-        additional: 0,
-      },
-      total_days: 30,
-    },
-    billing: {
-      subscription_fee: 1000,
-      additional_orders: 0,
-      total: 1000,
-    },
+  delivered: {
+    subscription: 25,
+    additional: 2,
   },
-  additional_orders: [],
+  remaining: {
+    subscription: 5,
+    additional: 0,
+  },
   settings: {
     allowed_plans: ['Daily', 'Alternate Days', 'Customized'],
-    pause_duration: 7,
-    pause_count: 2,
   },
 };
 const PLANS_CONFIG = {
@@ -128,12 +113,59 @@ export default function Subscription() {
   }, [quantity]);
   // console.log('quantityquantityquantity', quantity);
   const handlePlanChange = newPlan => {
+    if (selectedCategory === 'Daily') {
+      const obj = {
+        start_date: [selectedDate?.[0]],
+        subscription_id: SUBSCRIPTION_DATA?.subscription?.subscription_id,
+        category: selectedCategory,
+        start_days: [],
+      };
+      console.log('Daily =-=-=-==-=--=-=-=', obj);
+    } else if (selectedCategory === 'Alternate Days') {
+      const obj = {
+        start_date: [selectedDate?.[0]],
+        subscription_id: SUBSCRIPTION_DATA?.subscription?.subscription_id,
+        category: selectedCategory,
+        start_days: [],
+      };
+      // console.log('Daily =-=-=-==-=--=-=-=',obj);
+      console.log('Alternate Days =-=-=-==-=--=-=-=', obj);
+    } else if (selectedCategory === 'Customized') {
+      if (!selectedDate) {
+        return errorBox('Please Choose your Date');
+      } else {
+        const obj = {
+          start_date: [selectedDate?.[0]],
+          subscription_id: SUBSCRIPTION_DATA?.subscription?.subscription_id,
+          category: selectedCategory,
+          start_days: Data,
+        };
+        console.log('Customized=-=-=-==-=--=-=-=', obj);
+      }
+    }
     setSelectedPlan(newPlan);
     setIsPlanModalVisible(false);
   };
-    console.log("DataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataData",Data,selectedCategory)
+  // console.log(
+  //   'DataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataDataData',
+  //   Data,
+  //   selectedCategory,
+  // );
 
-  console.log("selectedCategoryselectedCategory",selectedCategory,selectedDate,customDates)
+  // console.log(
+  //   'selectedCategoryselectedCategory',
+  //   selectedCategory,
+  //   selectedDate,
+  //   Data,
+  // );
+  const QuantityUpdate = () => {
+    const obj = {
+      qty: quantity,
+      subscription_id: SUBSCRIPTION_DATA?.subscription?.subscription_id,
+    };
+    console.log('objobj', obj);
+    setChangeQty(false);
+  };
   const renderPlanOption = plan => {
     const isCurrent = plan === SUBSCRIPTION_DATA.subscription.plan;
     const isSelected = plan === selectedCategory;
@@ -184,10 +216,15 @@ export default function Subscription() {
       </TouchableOpacity>
     );
   };
+  const UnSubbscription = () => {
+    const obj = {
+      subscription_id: SUBSCRIPTION_DATA?.subscription?.subscription_id,
+    };
+    console.log('objobjobj', obj);
+  };
   return (
     <View style={tailwind('flex-1 bg-gray-50')}>
       <Topbar title="Subscription Details" type={3} />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tailwind('pb-8')}
@@ -266,12 +303,14 @@ export default function Subscription() {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              UnSubbscription();
+            }}
             style={[
-              tailwind('mx-4 my-4 py-3 rounded-lg items-center'),
+              tailwind('mx-4 my-4 py-3 rounded-full items-center'),
               {
-                backgroundColor: '#FEE2E2',
-                borderWidth: 1,
+                // backgroundColor: '#FEE2E2',
+                borderWidth: 2,
                 borderColor: '#FCA5A5',
               },
             ]}
@@ -299,7 +338,7 @@ export default function Subscription() {
               >
                 <Text style={tailwind('text-gray-600 mb-1')}>Delivered</Text>
                 <Text style={tailwind('text-2xl font-bold text-gray-900')}>
-                  {SUBSCRIPTION_DATA.stats.current_month.delivered.subscription}
+                  {SUBSCRIPTION_DATA?.delivered.subscription}
                   <Text style={tailwind('text-sm text-gray-500')}>
                     {' '}
                     {SUBSCRIPTION_DATA.variation.unit}
@@ -314,7 +353,7 @@ export default function Subscription() {
               >
                 <Text style={tailwind('text-gray-600 mb-1')}>Remaining</Text>
                 <Text style={tailwind('text-2xl font-bold text-gray-900')}>
-                  {SUBSCRIPTION_DATA.stats.current_month.remaining.subscription}
+                  {SUBSCRIPTION_DATA?.remaining.subscription}
                   <Text style={tailwind('text-sm text-gray-500')}>
                     {' '}
                     {SUBSCRIPTION_DATA.variation.unit}
@@ -434,39 +473,42 @@ export default function Subscription() {
                 new={false}
               />
             )}
-          <View style={tailwind('flex-row justify-end   ')}>
-            <TouchableOpacity
-              onPress={() => setIsPlanModalVisible(false)}
-              style={tailwind('px-6 py-3')}
-            >
-              <Text style={tailwind('text-gray-600 font-bold')}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handlePlanChange(selectedCategory)}
-              disabled={
-                !selectedCategory ||
-                (selectedCategory !== 'Customized' && !selectedDate) ||
-                (selectedCategory === 'Customized' &&
-                  !(customDates.length > 0 || (Data && Data.length > 0)))
-              }
-              style={[
-                tailwind('px-6 py-3 rounded-lg'),
-                {
-                  backgroundColor:
-                    selectedCategory &&
-                    ((selectedCategory !== 'Customized' && selectedDate) ||
-                      (selectedCategory === 'Customized' &&
-                        (customDates.length > 0 || (Data && Data.length > 0))))
-                      ? '#10B981'
-                      : '#E5E7EB',
-                },
-              ]}
-            >
-              <Text style={tailwind('font-bold text-white')}>
-                Confirm Change
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {calenderOpen == false && (
+            <View style={tailwind('flex-row justify-end   ')}>
+              <TouchableOpacity
+                onPress={() => setIsPlanModalVisible(false)}
+                style={tailwind('px-6 py-3')}
+              >
+                <Text style={tailwind('text-gray-600 font-bold')}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handlePlanChange(selectedCategory)}
+                disabled={
+                  !selectedCategory ||
+                  (selectedCategory !== 'Customized' && !selectedDate) ||
+                  (selectedCategory === 'Customized' &&
+                    !(customDates.length > 0 || (Data && Data.length > 0)))
+                }
+                style={[
+                  tailwind('px-6 py-3 rounded-lg'),
+                  {
+                    backgroundColor:
+                      selectedCategory &&
+                      ((selectedCategory !== 'Customized' && selectedDate) ||
+                        (selectedCategory === 'Customized' &&
+                          (customDates.length > 0 ||
+                            (Data && Data.length > 0))))
+                        ? '#10B981'
+                        : '#E5E7EB',
+                  },
+                ]}
+              >
+                <Text style={tailwind('font-bold text-white')}>
+                  Confirm Change
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </Modal>
       {isCalendarVisible && (
@@ -532,7 +574,6 @@ export default function Subscription() {
           <Text style={[tailwind('font-bold font-22 py-5')]}>
             Edit Quantity
           </Text>
-          {/* <View style={[tailwind('')]}> */}
           <Image
             source={SUBSCRIPTION_DATA.product.image}
             style={[tailwind('rounded-xl'), { width: '100%', height: 150 }]}
@@ -547,7 +588,6 @@ export default function Subscription() {
               {' | '} {SUBSCRIPTION_DATA.variation.variation}{' '}
               {SUBSCRIPTION_DATA.variation.unit}
             </Text>
-            {/* </View> */}
           </View>
           <View
             style={[
@@ -613,6 +653,9 @@ export default function Subscription() {
             {SUBSCRIPTION_DATA.variation.unit}
           </Text>
           <TouchableOpacity
+            onPress={() => {
+              QuantityUpdate();
+            }}
             style={[
               tailwind('py-3 px-3 bg-green my-3 items-center rounded-full'),
               { width: '90%' },
@@ -645,22 +688,6 @@ export default function Subscription() {
             </Text>
           </View>
           <Text style={[tailwind('font-15 my-3')]}>Select Date</Text>
-
-          {/* <DateCustomized
-            setSelectedDate={setSelectedDate}
-            selectedCat={selectedCategory}
-            setSelectedCat={setSelectedCategory}
-            selectedDate={selectedDate}
-            setCustomDates={setCustomDates}
-            customDates={customDates}
-            calenderOpen={isCalendarVisible}
-            setCalenderOpen={setIsCalendarVisible}
-            subscription_start_date={customDates}
-            totalAmount={SUBSCRIPTION_DATA.variation.price}
-            total={null}
-            Data={Data}
-            new={true}
-          /> */}
           {
             <PauseSubscription
               setSelectedDate={setSelectedDate}
@@ -675,8 +702,6 @@ export default function Subscription() {
               SUBSCRIPTION_DATA={SUBSCRIPTION_DATA}
             />
           }
-
-         
         </View>
       </Modal>
     </View>

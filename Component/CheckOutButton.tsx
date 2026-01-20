@@ -19,7 +19,7 @@ const CheckOutButton = (props: CartCompType) => {
           <View
             style={[
               tailwind(
-                'flex-row justify-between bg-primary rounded-xl items-center px-4 py-3 w-full',
+                'flex-row justify-between bg-green rounded-xl items-center px-4 py-3 w-full',
               ),
               {
                 // backgroundColor: '#24661E',
@@ -48,16 +48,16 @@ const CheckOutButton = (props: CartCompType) => {
               }}
               activeOpacity={0.7}
               style={[
-                tailwind('border  flex-row items-center rounded-xl  py-1'),
-                { borderWidth: 2, backgroundColor: '#FFCC01' },
+                tailwind(' flex-row items-center rounded-xl  py-1'),
+                { backgroundColor: 'white' },
               ]}
             >
-              <Text style={tailwind('text-primary flex font-bold ml-4')}>
+              <Text style={tailwind('text-primary px-3 py-2 flex font-bold ml-4')}>
                 VIEW CART
               </Text>
-              <View style={[tailwind('px-2'), { marginLeft: 'auto' }]}>
+              {/* <View style={[tailwind('px-2'), { marginLeft: 'auto' }]}>
                 <BagColor color={'black'} />
-              </View>
+              </View> */}
             </TouchableOpacity>
           </View>
         </View>

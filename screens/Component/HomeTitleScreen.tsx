@@ -10,11 +10,23 @@ interface Prototype {
   des: string;
   des_color: string;
   Image: any;
+  navigation: any;
+  data: any;
 }
 export const HomeTitle = (props: Prototype) => {
   const Navigate = () => {
     if (props?.type == 1) {
+       props?.navigation?.navigate('ViewAllScreen', {
+        data: props?.data,
+        title: props?.title,
+        desigin_type:6
+      });
     } else if (props?.type == 2) {
+      props?.navigation?.navigate('ViewAllScreen', {
+        data: props?.data,
+        title: props?.title,
+        desigin_type:5
+      });
     }
   };
   return (

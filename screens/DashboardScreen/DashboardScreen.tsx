@@ -34,6 +34,7 @@ import {
   ViewAllIcon,
 } from '../../assets/icons';
 import {
+  CheckOutButton,
   FullScreenLoading,
   FullScreenLoading1,
   Loader,
@@ -104,7 +105,7 @@ export default function DashboardScreen() {
     youtube: 'https://www.youtube.com/@BakeryMaharaj',
     tv: 'https://bakerymaharaj.com/',
   };
-  console.log("BannerBannerBanner",Banner)
+  // console.log("BannerBannerBanner",Banner)
   const DailyData = [
     {
       name: 'Farm Fresh Natural Milk',
@@ -164,7 +165,7 @@ export default function DashboardScreen() {
           product_variation: '0.5 ',
           product_unit: 'Litre',
           product_price: 25,
-          mrp_price: 30.5,
+          mrp_price: 10,
         },
       ],
       product_recommended: '0',
@@ -281,6 +282,11 @@ export default function DashboardScreen() {
       subscribe: 0,
     },
   ];
+  const CartStateValue = CartState?.filter(item => item?.desigin_type != 4);
+  const totalQuantity = CartStateValue.reduce(
+    (sum, item) => sum + item.product_price * item.quantity,
+    0,
+  );
   const swiperRef = useRef(null);
   const openAppSettings = () => {
     Alert.alert(
@@ -499,9 +505,9 @@ export default function DashboardScreen() {
                     activeOpacity={0.9}
                     disabled={!items?.category_id}
                     onPress={() => {
-                      navigation?.navigate('CategoryScreen', {
-                        id: items?.category_id,
-                      });
+                      // navigation?.navigate('CategoryScreen', {
+                      //   id: items?.category_id,
+                      // });
                     }}
                     style={[tailwind(''), { padding: 5 }]}
                   >
@@ -617,8 +623,10 @@ export default function DashboardScreen() {
                 title="Subscription Product"
                 viewAll={true}
                 des={'Subscribe & get everyday delivery'}
-                type={2}
+                type={1}
                 des_color={'#F39F3E'}
+                navigation={navigation}
+                data={ProductData}
               />
               <ScrollView
                 horizontal={true}
@@ -657,6 +665,8 @@ export default function DashboardScreen() {
                 des={'Order before 4 pm & get delivered next day'}
                 type={2}
                 des_color={'#80C659'}
+                navigation={navigation}
+                data={ProductData1}
               />
               <ScrollView
                 // horizontal={true}
@@ -687,8 +697,16 @@ export default function DashboardScreen() {
             </View>
           )}
         </ImageBackground>
-        {/* <View style={tailwind('h-24')} /> */}
+
+        <View style={tailwind('h-24')} />
       </ScrollView>
+      {CartStateValue.length > 0 && (
+        <CheckOutButton
+          CartState={CartStateValue}
+          totalQuantity={totalQuantity}
+          navigation={navigation}
+        />
+      )}
     </View>
     // </ImageBackground>
   );

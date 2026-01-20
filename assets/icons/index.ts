@@ -54,9 +54,15 @@ import LockIcon from './SvgIcons/LockIcon';
 import SubscriptionIcon from './SvgIcons/SubscriptionIcon';
 import CheckIcon from './SvgIcons/CheckIcon';
 import TickIcon1 from './SvgIcons/TickIcon1';
+import Homeicon from './SvgIcons/Homeicon';
+import SubscriptionIcontab from './SvgIcons/SubscriptionIcontab';
+import CalenderIconTab from './SvgIcons/CalenderIconTab';
 export {
   AddressIcon,
+  CalenderIconTab,
+  SubscriptionIcontab,
   TickIcon1,
+  Homeicon,
   LockIcon,
   CheckIcon,
   SubscriptionIcon,

@@ -11,12 +11,21 @@ import {
 } from 'react-native';
 import tailwind from '@tailwind';
 import { CheckOutButton, Topbar } from '@Component';
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { ProductCart } from '../../Component/ProductCart';
 import { decrementAction, incrementAction } from '@actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { BagColor } from '../../assets/icons';
-import { acquireGPSPermission, errorBox, getLocationCoords, isBranchOpen } from '../../workers/utils';
+import {
+  acquireGPSPermission,
+  errorBox,
+  getLocationCoords,
+  isBranchOpen,
+} from '../../workers/utils';
 import { saveBranchction, saveLocationAction } from '@actions/appActions';
 import { get_CheckBranch } from '@remote/userRemote';
 
@@ -28,8 +37,9 @@ export default function ViewAllScreen() {
   const Branch = useSelector((state: any) => state.app.branch);
   const [permission, setPermission] = useState(false);
 
-  //   console.log('CartStateCartStateCartState', CartState);
-  const totalQuantity = CartState.reduce(
+  //   console.log('CartStateCartStateCartState', CartState)
+  const CartStateValue = CartState?.filter(item => item?.desigin_type != 4);
+  const totalQuantity = CartStateValue.reduce(
     (sum, item) => sum + item.product_price * item.quantity,
     0,
   );
@@ -53,29 +63,29 @@ export default function ViewAllScreen() {
       { cancelable: false },
     );
   };
-  
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-  
+
       const requestPermission = async () => {
         const permission = await acquireGPSPermission();
-  
+
         if (!isActive) return;
-  
+
         if (permission?.status) {
           setPermission(true);
-  
+
           const locationCoords = await getLocationCoords();
-  
+
           if (locationCoords) {
             dispatch(saveLocationAction(locationCoords));
-  
+
             const CheckBranch = await get_CheckBranch({
               latitude: locationCoords.latitude,
               longitude: locationCoords.longitude,
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
@@ -84,23 +94,23 @@ export default function ViewAllScreen() {
               latitude: '0.0',
               longitude: '0.0',
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
           }
         } else {
           setPermission(false);
-          
+
           // 🚨 If permanently denied → open App Settings
           // if (permission?.isBlocked || permission?.neverAskAgain) {
-            openAppSettings();
+          openAppSettings();
           // }
         }
       };
-  
+
       requestPermission();
-  
+
       return () => {
         isActive = false;
       };
@@ -108,6 +118,9 @@ export default function ViewAllScreen() {
   );
   const increment = useCallback((payload: any) => {
     dispatch(incrementAction(payload));
+    if (route?.params?.desigin_type == 6) {
+      navigation?.navigate('NewSubscription');
+    }
   }, []);
   const decrement = useCallback((payload: any) => {
     dispatch(decrementAction(payload));
@@ -115,7 +128,7 @@ export default function ViewAllScreen() {
   const isOpen = isBranchOpen(Branch);
 
   return (
-    <View style={[tailwind('h-full bg-secondary'), {}]}>
+    <View style={[tailwind('h-full bg-white'), {}]}>
       <Topbar title={route?.params?.title} type={3} />
       <ScrollView
         style={[tailwind('mt-3')]}
@@ -125,8 +138,7 @@ export default function ViewAllScreen() {
           return (
             <ProductCart
               type={1}
-              desigin_type={1}
-
+              desigin_type={route?.params?.desigin_type}
               id={items?.product_id}
               img={items?.product_image}
               name={items?.product_name}
@@ -139,15 +151,16 @@ export default function ViewAllScreen() {
               isOpen={isOpen}
               product_percentage={items?.product_percentage}
               product_offer={items?.product_offer}
-
+              subscribe={items?.subscribe === 1}
+              navigation={navigation}
             />
           );
         })}
         <View style={[tailwind('h-20')]} />
       </ScrollView>
-      {CartState.length > 0 && (
+      {CartStateValue.length > 0 && (
         <CheckOutButton
-          CartState={CartState}
+          CartState={CartStateValue}
           totalQuantity={totalQuantity}
           navigation={navigation}
         />

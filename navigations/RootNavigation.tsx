@@ -6,14 +6,10 @@ import { Host } from 'react-native-portalize';
 
 import InitialScreen from '../screens/InitialScreen';
 import BottomTabNavigation from './BottomTabNavigation';
-import PasswordScreen from '../screens/PasswordScreen';
-import MisMatchScreen from '../screens/MisMatchScreen';
 import OrderListScreen from '../screens/OrderListScreen';
 import SingleOrderScreen from '../screens/SingleOrderScreen';
 import SearchScreen from '../screens/SearchScreen';
-import BluePrintScreen from '../screens/BluePrintScreen1';
 import BluePrintScreenlineChat from '../screens/BluePrintScreen';
-import { Alert, BackHandler } from 'react-native';
 import OrderSuccessFailScreen from '../screens/OrderSuccessFailScreen';
 import ErrorBoundary from '../workers/ErrorBoundary';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -22,14 +18,15 @@ import LoginScreen from '../screens/LoginScreen';
 import OtpScreen from '../screens/OtpScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ViewAllScreen from '../screens/ViewAllScreen';
-import CategoryScreen from '../screens/CategoryScreen';
-import FavoriteScreen from '../screens/FavoriteScreen';
+// import CategoryScreen from '../screens/CategoryScreen';
+// import FavoriteScreen from '../screens/FavoriteScreen';
 import AddressListScreen from '../screens/AddressListScreen';
 import AddAddressScreen from '../screens/AddaddressScreen';
-import CouponScreen from '../screens/CouponScreen';
+// import CouponScreen from '../screens/CouponScreen';
 import OrderHistoryScreeen from '../screens/OrderHistoryScreeen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import { NewSubscription, Subscription } from '../screens/NewSubscription';
+import SubscriptionScreen from '../screens/SubscriptionScreen';
 const RootNavigator = createNativeStackNavigator();
 
 const StackConfig = { headerShown: false };
@@ -92,14 +89,14 @@ export default function RootNavigation() {
               component={ViewAllScreen}
               name="ViewAllScreen"
             />
-            <RootNavigator.Screen
-              component={CategoryScreen}
-              name="CategoryScreen"
-            />
-            <RootNavigator.Screen
+            {/* <RootNavigator.Screen
+              component={SubscriptionScreen}
+              name="SubscriptionScreen"
+            /> */}
+            {/* <RootNavigator.Screen
               component={FavoriteScreen}
               name="FavoriteScreen"
-            />
+            /> */}
             <RootNavigator.Screen
               component={AddressListScreen}
               name="AddressListScreen"
@@ -109,10 +106,10 @@ export default function RootNavigation() {
               component={AddAddressScreen}
               name="AddAddressScreen"
             />
-            <RootNavigator.Screen
+            {/* <RootNavigator.Screen
               component={CouponScreen}
               name="CouponScreen"
-            />
+            /> */}
 
             <RootNavigator.Screen
               component={OrderHistoryScreeen}

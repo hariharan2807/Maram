@@ -2,7 +2,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import CustomBottomTab from '../sharedComponents/atoms/CustomBottomTab';
 
-import { Account, Auth, Cart, Dashboard, Search } from './StackNavigations';
+import { Account, Auth, Cart, Dashboard, Search, Subscriptions } from './StackNavigations';
 import {
   ViewBase,
   Animated,
@@ -29,11 +29,11 @@ export default function BottomTabNavigation(props: any) {
       tabBar={props => <CustomBottomTab {...props} />}
     >
       <BottomTab.Screen name="Home" component={Dashboard} />
-      <BottomTab.Screen name="Search" component={Search} />
+      <BottomTab.Screen name="Subscriptions" component={Subscriptions} />
 
-      <BottomTab.Screen name="Cart" component={Cart} />
+      <BottomTab.Screen name="Calendar" component={Cart} />
       {ID ? (
-        <BottomTab.Screen name="Account" component={Account} />
+        <BottomTab.Screen name="Profile" component={Account} />
       ) : (
         <BottomTab.Screen name="Login" component={Auth} />
       )}

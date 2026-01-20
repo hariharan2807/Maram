@@ -36,7 +36,7 @@ export default function NewSubscription() {
   const Address = useSelector((state: any) => state.user.userAddresses);
   const Data = useSelector((state: any) => state.user.customized_dayss);
 
-  console.log('AddressAddressAddressAddress', Address);
+  // console.log('AddressAddressAddressAddress', Address);
 
   const category_list = useSelector((state: any) => state.user.category_list);
 
@@ -61,7 +61,7 @@ export default function NewSubscription() {
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [customDates, setCustomDates] = useState([]);
 
-  const [selectedCat, setSelectedCat] = useState(category_list || List[0].name);
+  const [selectedCat, setSelectedCat] = useState(List[0].name);
   const prevCategoryRef = React.useRef(selectedCat);
 
   //   const formatDate = (date) => {
@@ -69,6 +69,9 @@ export default function NewSubscription() {
   // };
 
   // const today = formatDate(new Date());
+  useEffect(() => {
+    dispatch(Customized_days([]));
+  }, []);
   const formatToDayMonth = (dateStr: string) => {
     const date = new Date(dateStr);
 
@@ -100,6 +103,7 @@ export default function NewSubscription() {
       setCustomDates([]);
       dispatch(updateSubscription_start_date([]));
       dispatch(Customized_days([]));
+      setSelectedDate(null);
     }
     // if (selectedCat === 'Customized') {
     //   setCalenderOpen(true);
@@ -125,81 +129,185 @@ export default function NewSubscription() {
     acc[day.label] = day.value;
     return acc;
   }, {});
-  const getFutureDatesByWeekday = selectedDays => {
+  // const getFutureDatesByWeekday = selectedDays => {
+  //   const today = new Date();
+  //   const currentYear = today.getFullYear();
+  //   const currentMonth = today.getMonth();
+  //   const result = {};
+
+  //   // Convert labels to numbers
+  //   const selectedWeekdayNumbers = selectedDays.map(day => WEEK_LABELS[day]);
+
+  //   // Initialize result object
+  //   selectedDays.forEach(day => (result[day] = []));
+
+  //   // Calculate for current month AND next month
+  //   for (let monthOffset = 0; monthOffset < 1; monthOffset++) {
+  //     const targetMonth = currentMonth + monthOffset;
+  //     const targetYear =
+  //       monthOffset === 0
+  //         ? currentYear
+  //         : currentMonth === 11
+  //         ? currentYear + 1
+  //         : currentYear;
+  //     const actualMonth = targetMonth % 12;
+  //     const actualYear = targetYear + Math.floor(targetMonth / 12);
+
+  //     // Total days in target month
+  //     const daysInMonth = new Date(actualYear, actualMonth + 1, 0).getDate();
+
+  //     for (let day = 1; day <= daysInMonth; day++) {
+  //       const date = new Date(actualYear, actualMonth, day);
+  //       const weekday = date.getDay();
+
+  //       // Only future dates including today (for current month only)
+  //       // For next month, include all dates
+  //       if ((monthOffset === 0 && date >= today) || monthOffset === 1) {
+  //         if (selectedWeekdayNumbers.includes(weekday)) {
+  //           const label = Object.keys(WEEK_LABELS).find(
+  //             key => WEEK_LABELS[key] === weekday,
+  //           );
+  //           result[label].push({
+  //             date: date.toISOString().split('T')[0], // YYYY-MM-DD
+  //             day: day,
+  //             month: actualMonth + 1,
+  //             year: actualYear,
+  //             fullDate: `${day}/${actualMonth + 1}/${actualYear}`,
+  //           });
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   return result;
+  // };
+  // const futureDates = getFutureDatesByWeekday(Data);
+  // // console.log('futureDatesfutureDatesfutureDatesfutureDates', futureDates);
+  // const counts = {};
+  // for (const day in futureDates) {
+  //   counts[day] = futureDates[day].length;
+  // }
+  // const total = Object.values(counts).reduce((sum, val) => sum + val, 0);
+
+  const getTotalDatesFromStartToEnd = (selectedDays, startDate) => {
+    if (
+      !Array.isArray(selectedDays) ||
+      selectedDays.length === 0 ||
+      !startDate
+    ) {
+      return 0;
+    }
+    console.log('selectedDaysselectedDays', selectedDays, startDate);
+    const WEEK_LABELS = {
+      Sun: 0,
+      Mon: 1,
+      Tue: 2,
+      Wed: 3,
+      Thu: 4,
+      Fri: 5,
+      Sat: 6,
+    };
+
+    // Convert start date to Date object
+    const startDateObj = new Date(startDate);
     const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth();
-    const result = {};
 
-    // Convert labels to numbers
-    const selectedWeekdayNumbers = selectedDays.map(day => WEEK_LABELS[day]);
+    // Use today if startDate is before today
+    const actualStartDate = startDateObj >= today ? startDateObj : today;
 
-    // Initialize result object
-    selectedDays.forEach(day => (result[day] = []));
+    // Get end of next month
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1, 0); // Last day of next month
 
-    // Calculate for current month AND next month
-    for (let monthOffset = 0; monthOffset < 1; monthOffset++) {
-      const targetMonth = currentMonth + monthOffset;
-      const targetYear =
-        monthOffset === 0
-          ? currentYear
-          : currentMonth === 11
-          ? currentYear + 1
-          : currentYear;
-      const actualMonth = targetMonth % 12;
-      const actualYear = targetYear + Math.floor(targetMonth / 12);
+    // Convert selected days to numbers
+    const selectedDayNumbers = selectedDays.map(day => WEEK_LABELS[day]);
 
-      // Total days in target month
-      const daysInMonth = new Date(actualYear, actualMonth + 1, 0).getDate();
+    let totalCount = 0;
+    const allDates = [];
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(actualYear, actualMonth, day);
-        const weekday = date.getDay();
+    // Loop from start date to end date
+    const currentDate = new Date(actualStartDate);
 
-        // Only future dates including today (for current month only)
-        // For next month, include all dates
-        if ((monthOffset === 0 && date >= today) || monthOffset === 1) {
-          if (selectedWeekdayNumbers.includes(weekday)) {
-            const label = Object.keys(WEEK_LABELS).find(
-              key => WEEK_LABELS[key] === weekday,
-            );
-            result[label].push({
-              date: date.toISOString().split('T')[0], // YYYY-MM-DD
-              day: day,
-              month: actualMonth + 1,
-              year: actualYear,
-              fullDate: `${day}/${actualMonth + 1}/${actualYear}`,
-            });
-          }
-        }
+    while (currentDate <= endDate) {
+      const dayOfWeek = currentDate.getDay();
+
+      // Check if this day is in selected days
+      if (selectedDayNumbers.includes(dayOfWeek)) {
+        totalCount++;
+        allDates.push({
+          date: currentDate.toISOString().split('T')[0],
+          dayName: Object.keys(WEEK_LABELS).find(
+            key => WEEK_LABELS[key] === dayOfWeek,
+          ),
+        });
       }
+
+      // Move to next day
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    return result;
+    return {
+      total: totalCount,
+      dates: allDates,
+      startDate: actualStartDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0],
+    };
   };
-  const futureDates = getFutureDatesByWeekday(Data);
-  console.log('futureDatesfutureDatesfutureDatesfutureDates', futureDates);
-  const counts = {};
-  for (const day in futureDates) {
-    counts[day] = futureDates[day].length;
-  }
-  const total = Object.values(counts).reduce((sum, val) => sum + val, 0);
+
+  // Usage with your data
+  const selectedDays = Data; // e.g., ['Wed', 'Tue', 'Mon', 'Fri']
+  const startDate = selectedDate?.[0]; // e.g., '2026-01-27'
+  // console.log("startDatestartDatestartDatestartDate",startDate)
+  // Get total count from start date to end of next month
+  const result = getTotalDatesFromStartToEnd(selectedDays, startDate);
+
+  // console.log('Start Date:', result.startDate);
+  // console.log('End Date:', result.endDate);
+  // console.log('Total dates from start to end:', result.total);
+  // console.log('All dates:', result.dates);
+
+  // If you just need the total number
+  const totalDatesCount = result.total;
+  // console.log('Total count:', totalDatesCount);
   const Subscription = () => {
     console.log('objjjjjj', CartState);
     console.log(
-      'subscription_start_datesubscription_start_date',
-      subscription_start_date,
+      'log data LIst ',
+      'selected Category--->',
       selectedCat,
+      'selected Date---->',
+      selectedDate,
+      'Customized---->',
       Data,
     );
-    const obj = {};
-    if (!subscription_start_date?.length && !total) {
-      return errorBox('Please Choose Your Plan');
+    const obj = {
+      image: CartState?.[0]?.image,
+      product_id: CartState?.[0]?.product_id,
+      product_name: CartState?.[0]?.product_name,
+      product_price: CartState?.[0]?.product_price,
+      product_price_id: CartState?.[0]?.product_price_id,
+      quantity: CartState?.[0]?.quantity,
+      variation: CartState?.[0]?.variation,
+      address: Address?.[0],
+      category: selectedCat,
+      start_date:[selectedDate?.[0]],
+      total_amount:
+        totalAmount * (subscription_start_date?.length || totalDatesCount),
+      start_days: Data,
+    };
+    console.log('objobj', obj);
+    if (!subscription_start_date?.length && !totalDatesCount) {
+      return errorBox('Please Choose Your Start Date');
     } else {
       infoBox('Success');
     }
   };
-  console.log('Counts per weekdaytotal:', counts, total);
+  // console.log(
+  //   'Counts per weekdaytotalselectedDate:',
+  //   selectedDate,
+  //   Data,
+  //   selectedCat,
+  // );
   return (
     <View style={[tailwind('flex-1 bg-gray-50')]}>
       <Topbar title="New Subscription" type={3} />
@@ -364,10 +472,12 @@ export default function NewSubscription() {
             setCalenderOpen={setCalenderOpen}
             subscription_start_date={subscription_start_date}
             totalAmount={totalAmount}
-            total={total}
+            total={totalDatesCount}
             new={true}
             Data={Data}
+            save={true}
           />
+
           {/* {calenderOpen && selectedCat !== 'Customized' && (
             <CalenderComponent
               setSelectedDate={setSelectedDate}
