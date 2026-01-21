@@ -22,6 +22,7 @@ import {
   Image,
   ScrollView,
   ActivityIndicator,
+  useWindowDimensions,
 } from 'react-native';
 import { errorBox } from '../../workers/utils';
 import { saveUser_id } from '../../workers/localStorage';
@@ -39,6 +40,8 @@ const OtpScreen = () => {
   const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
   const screenWidth = Dimensions.get('window').width;
+  const { height } = useWindowDimensions();
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -108,6 +111,7 @@ const OtpScreen = () => {
       otp: enteredOtp, // Send as string: "5800" (if all digits filled)
       user_id: route?.params?.user_id,
     });
+    console.log("ResponseData",response)
     if (response?.status) {
       setLoading(false);
 
@@ -150,7 +154,7 @@ const OtpScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Topbar title="OTP" type={3} />
+      {/* <Topbar title="OTP" type={3} /> */}
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -165,15 +169,31 @@ const OtpScreen = () => {
             {/* Image Section - Will stay in place */}
             <View style={tailwind('items-center ')}>
               <Image
-                style={{ width: 180, height: 180 }}
-                source={require('../../assets/images/img_otp.png')}
-                resizeMode="contain"
+                source={require('../../assets/icons/common/Login1.png')}
+                style={[
+                  tailwind(''),
+                  {
+                    width: '100%',
+                    height: height / 2,
+                    borderBottomLeftRadius: 20,
+                    borderBottomRightRadius: 20,
+                  },
+                ]}
+                // style={styles.loginImage}
+                resizeMode="cover"
               />
             </View>
 
             {/* Rest of your content remains the same */}
             <View style={styles.header}>
-              <Text style={[tailwind('font-20 font-bold'),styles.title]}>OTP Verification</Text>
+              <Text
+                style={[tailwind('font-20 font-bold py-3 px-5'), styles.title]}
+              >
+                Verfiy OTP
+              </Text>
+              <Text style={[tailwind('font-13 font-bold py-3 px-5')]}>
+                Enter OTP Sent To Your Phone Number +91 784 253 ****
+              </Text>
               {/* <Text style={styles.subtitle}>Enter the 4-digit code sent to your mobile</Text> */}
             </View>
 
@@ -209,18 +229,30 @@ const OtpScreen = () => {
               {loading ? (
                 <ActivityIndicator color={'white'} size={'small'} />
               ) : (
-                <Text style={[tailwind('font-16 font-bold'),styles.verifyButtonText]}>Verify OTP</Text>
+                <Text
+                  style={[
+                    tailwind('font-16 font-bold'),
+                    styles.verifyButtonText,
+                  ]}
+                >
+                  Verify OTP
+                </Text>
               )}
             </TouchableOpacity>
-
-            <View style={styles.timerContainer}>
-              <Text style={[tailwind('font-16 font-bold'),styles.timerText]}>
+            <Text style={styles.termsText}>
+              By signing in you agree to our{' '}
+              <Text style={styles.termsLink}>Terms & Conditions</Text>
+            </Text>
+            {/* <View style={styles.timerContainer}>
+              <Text style={[tailwind('font-16 font-bold'), styles.timerText]}>
                 Seconds remaining: {timer.toString().padStart(2, '0')}
               </Text>
             </View>
 
             <View style={styles.resendContainer}>
-              <Text style={[tailwind('font-14 font-semi'),styles.resendText]}>Didn't get the code yet?</Text>
+              <Text style={[tailwind('font-14 font-semi'), styles.resendText]}>
+                Didn't get the code yet?
+              </Text>
               <TouchableOpacity onPress={handleResendOtp} disabled={!canResend}>
                 <Text
                   style={[
@@ -231,7 +263,7 @@ const OtpScreen = () => {
                   Resend Code
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -241,20 +273,30 @@ const OtpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF9D8',
+    backgroundColor: 'white',
   },
   keyboardView: {
     flex: 1,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 40,
+    // paddingHorizontal: 24,
+    // paddingVertical: 40,
     justifyContent: 'center',
   },
+  termsText: {
+    fontSize: 12,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  termsLink: {
+    color: '#F39F3E',
+    fontWeight: '600',
+  },
   header: {
-    alignItems: 'center',
-    marginBottom: 40,
+    // alignItems: 'center',
+    paddingVertical: 10,
+    marginBottom: 10,
   },
   scrollContent: {
     flexGrow: 1,
@@ -264,7 +306,7 @@ const styles = StyleSheet.create({
     // fontSize: 20,
     // fontWeight: '700',
     color: '#45302B',
-    marginBottom: 8,
+    // marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
@@ -309,23 +351,26 @@ const styles = StyleSheet.create({
 
   otpInput: {
     width: 60,
-    height: 70,
+    height: 60,
+
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
-    paddingBottom: 8, // Space above bottom border
+    // paddingBottom: 3, // Space above bottom border
   },
 
   otpInputEmpty: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#D1D5DB', // Gray bottom border
+    borderWidth: 2,
+    borderRadius: 50,
+    // borderBottomColor: '#D1D5DB', // Gray bottom border
     backgroundColor: 'transparent',
     color: '#6B7280',
   },
 
   otpInputFilled: {
-    borderBottomWidth: 3, // Thicker when filled
-    borderBottomColor: '#45302B', // Blue bottom border
+    borderWidth: 2,
+    borderRadius: 50,
+    // borderBottomColor: '#45302B', // Blue bottom border
     backgroundColor: 'transparent',
     color: '#1F2937',
   },

@@ -18,15 +18,17 @@ import LoginScreen from '../screens/LoginScreen';
 import OtpScreen from '../screens/OtpScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ViewAllScreen from '../screens/ViewAllScreen';
-// import CategoryScreen from '../screens/CategoryScreen';
-// import FavoriteScreen from '../screens/FavoriteScreen';
 import AddressListScreen from '../screens/AddressListScreen';
 import AddAddressScreen from '../screens/AddaddressScreen';
-// import CouponScreen from '../screens/CouponScreen';
 import OrderHistoryScreeen from '../screens/OrderHistoryScreeen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import { NewSubscription, Subscription } from '../screens/NewSubscription';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
+import CartScreen from '../screens/CartScreen';
+import { BillDetailScreen, BillViewDetails } from '../screens/BillDetailScreen';
+import { FailureScreen, SuccessScreen } from '../screens/SuccessScreen';
+import DashboardScreen from '../screens/DashboardScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 const RootNavigator = createNativeStackNavigator();
 
 const StackConfig = { headerShown: false };
@@ -89,14 +91,11 @@ export default function RootNavigation() {
               component={ViewAllScreen}
               name="ViewAllScreen"
             />
-            {/* <RootNavigator.Screen
-              component={SubscriptionScreen}
-              name="SubscriptionScreen"
-            /> */}
-            {/* <RootNavigator.Screen
-              component={FavoriteScreen}
-              name="FavoriteScreen"
-            /> */}
+            <RootNavigator.Screen component={CartScreen} name="Cart" />
+            <RootNavigator.Screen
+              component={BillDetailScreen}
+              name="BillDetailScreen"
+            />
             <RootNavigator.Screen
               component={AddressListScreen}
               name="AddressListScreen"
@@ -106,10 +105,10 @@ export default function RootNavigation() {
               component={AddAddressScreen}
               name="AddAddressScreen"
             />
-            {/* <RootNavigator.Screen
-              component={CouponScreen}
-              name="CouponScreen"
-            /> */}
+            <RootNavigator.Screen
+              component={BillViewDetails}
+              name="BillViewDetails"
+            />
 
             <RootNavigator.Screen
               component={OrderHistoryScreeen}
@@ -127,6 +126,31 @@ export default function RootNavigation() {
             <RootNavigator.Screen
               component={Subscription}
               name="Subscription"
+            />
+            <RootNavigator.Screen
+              component={FailureScreen}
+              name="FailureScreen"
+              // options={{
+              //   headerShown: false,
+              //   gestureEnabled: false,
+              // }}
+            />
+            <RootNavigator.Screen
+              component={SuccessScreen}
+              name="SuccessScreen"
+              // options={{
+              //   headerShown: false,
+              //   gestureEnabled: false,
+              // }}
+            />
+            <RootNavigator.Screen
+              component={CategoryScreen}
+              name="CategoryScreen"
+            />
+
+            <RootNavigator.Screen
+              component={DashboardScreen}
+              name="DashboardScreen"
             />
           </RootNavigator.Navigator>
         </Host>

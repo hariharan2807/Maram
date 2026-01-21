@@ -8,6 +8,7 @@ import {
   Alert,
   Platform,
   Linking,
+  ImageBackground,
 } from 'react-native';
 import tailwind from '@tailwind';
 import { CheckOutButton, Topbar } from '@Component';
@@ -28,6 +29,7 @@ import {
 } from '../../workers/utils';
 import { saveBranchction, saveLocationAction } from '@actions/appActions';
 import { get_CheckBranch } from '@remote/userRemote';
+import assets_manifest from '@assets';
 
 export default function ViewAllScreen() {
   const route = useRoute();
@@ -130,34 +132,39 @@ export default function ViewAllScreen() {
   return (
     <View style={[tailwind('h-full bg-white'), {}]}>
       <Topbar title={route?.params?.title} type={3} />
-      <ScrollView
-        style={[tailwind('mt-3')]}
-        showsVerticalScrollIndicator={false}
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
       >
-        {route?.params?.data?.map((items: any, index: any) => {
-          return (
-            <ProductCart
-              type={1}
-              desigin_type={route?.params?.desigin_type}
-              id={items?.product_id}
-              img={items?.product_image}
-              name={items?.product_name}
-              key={`${items?.product_id}_${index}`}
-              increment={increment}
-              decrement={decrement}
-              product_price={items?.product_price}
-              is_favourite={items?.is_favourite}
-              product_type={items?.product_type === '0'}
-              isOpen={isOpen}
-              product_percentage={items?.product_percentage}
-              product_offer={items?.product_offer}
-              subscribe={items?.subscribe === 1}
-              navigation={navigation}
-            />
-          );
-        })}
-        <View style={[tailwind('h-20')]} />
-      </ScrollView>
+        <ScrollView
+          style={[tailwind('mt-3')]}
+          showsVerticalScrollIndicator={false}
+        >
+          {route?.params?.data?.map((items: any, index: any) => {
+            return (
+              <ProductCart
+                type={1}
+                desigin_type={route?.params?.desigin_type}
+                id={items?.product_id}
+                img={items?.product_image}
+                name={items?.product_name}
+                key={`${items?.product_id}_${index}`}
+                increment={increment}
+                decrement={decrement}
+                product_price={items?.product_price}
+                is_favourite={items?.is_favourite}
+                product_type={items?.product_type === '0'}
+                isOpen={isOpen}
+                product_percentage={items?.product_percentage}
+                product_offer={items?.product_offer}
+                subscribe={items?.subscribe === 1}
+                navigation={navigation}
+              />
+            );
+          })}
+          <View style={[tailwind('h-20')]} />
+        </ScrollView>
+      </ImageBackground>
       {CartStateValue.length > 0 && (
         <CheckOutButton
           CartState={CartStateValue}

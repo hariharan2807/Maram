@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { ImageBackground, ScrollView, View } from 'react-native';
 import React, { useCallback } from 'react';
 import tailwind from '@tailwind';
 import { Topbar } from '@Component';
@@ -103,6 +103,10 @@ export default function SubscriptionScreen() {
   return (
     <View style={[tailwind('h-full bg-white')]}>
       <Topbar title="My Subscriptions" type={3} />
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
+      >
       <ScrollView
         horizontal={false}
         style={[tailwind(' py-3')]}
@@ -129,6 +133,7 @@ export default function SubscriptionScreen() {
           );
         })}
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }

@@ -1,135 +1,123 @@
-import { Topbar } from '@Component';
-import tailwind from '@tailwind';
 import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  SafeAreaView,
+  // SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Image,
   ActivityIndicator,
+  useWindowDimensions,
 } from 'react-native';
-import { errorBox } from '../../workers/utils';
-import { getLogin } from '@remote/userRemote';
 import { useNavigation } from '@react-navigation/native';
+import { Topbar } from '@Component';
+import { getLogin } from '@remote/userRemote';
+import { errorBox } from '../../workers/utils';
+import tailwind from '@tailwind';
 
 const LoginScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [mobileNumber, setMobileNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const { height } = useWindowDimensions();
   const handleLogin = async () => {
-    if (mobileNumber.length !== 10 || !mobileNumber) {
-      errorBox('Please enter a valid 10-digit mobile number');
+    if (mobileNumber.length !== 10) {
+      errorBox('Please enter a valid 10 digit mobile number');
       return;
     }
-    setLoading(true);
-    const Response = await getLogin({
-      fcm: 'test',
-      mobile: '+91' + mobileNumber,
-    });
-    if (Response?.status) {
-      setLoading(false);
 
-      navigation?.navigate('OtpScreen', {
-        user_id: Response?.user_id,
-        mobileNumber: mobileNumber,
+    setLoading(true);
+
+    try {
+      const response = await getLogin({
+        fcm: 'test',
+        mobile: '+91' + mobileNumber,
       });
-    } else {
-      console.log("ResponseResponse",Response)
-      errorBox(Response?.res?.data?.message);
+      // console.log("responseresponseresponse",response)
+
+      if (response?.status) {
+        navigation.navigate('OtpScreen', {
+          user_id: response?.user_id,
+          mobileNumber,
+        });
+      } else {
+        errorBox(response?.res?.data?.message || 'Login failed');
+      }
+    } catch (error) {
+      errorBox('Something went wrong. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Topbar title="Login" type={3} />
+      {/* <Topbar title="Login" type={3} /> */}
+
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Main Content - Now centered */}
-          <View style={styles.content}>
-            {/* Title Section - Centered */}
-            <View style={[tailwind('items-center'), { marginBottom: 20 }]}>
-              <Image
-                style={{ width: 200, height: 200 }}
-                source={require('../../assets/images/img_login.png')}
+          <Image
+            source={require('../../assets/icons/common/Login1.png')}
+            style={[tailwind(''), { width: '100%', height: height /1.8 }]}
+            // style={styles.loginImage}
+            resizeMode="cover"
+          />
+
+          {/* FORM CARD */}
+          <View style={styles.card}>
+            <Text style={styles.mainTitle}>Login</Text>
+            <Text style={styles.instruction}>
+              Enter your 10 digit mobile number. We will send you an OTP to
+              verify.
+            </Text>
+
+            {/* MOBILE INPUT */}
+            <View style={styles.inputField}>
+              <Text style={styles.countryCodeText}>+91</Text>
+              <View style={styles.divider} />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Enter mobile number"
+                placeholderTextColor="#999"
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={mobileNumber}
+                onChangeText={setMobileNumber}
+                returnKeyType="done"
               />
             </View>
 
-            <View style={styles.titleContainer}>
-              <Text style={[tailwind('font-18 font-bold'),styles.mainTitle]}>Login</Text>
-              <Text style={[tailwind('font-16 font-bold'),styles.subTitle]}>with mobile number</Text>
-            </View>
-
-            <Text style={[tailwind('font-13 font-semi'),styles.instruction]}>
-              Enter your 10 digit mobile number.{'\n'}We will send you OTP to
-              verify
-            </Text>
-
-            {/* Mobile Input Field - Centered */}
-            <View style={[styles.inputContainer, { width: '100%' }]}>
-              <View
-                style={[
-                  tailwind(
-                    'flex-row items-center border border-gray-300 rounded-full px-4 bg-white',
-                  ),
-                  { height: 50 },
-                ]}
-              >
-                <Text style={tailwind('text-gray-800 font-bold text-lg')}>
-                  +91
-                </Text>
-                <View style={tailwind('h-6 w-px bg-gray-300 mx-3')} />
-                <TextInput
-                  style={[
-                    tailwind('flex-1 font-14 font-semi text-black'),
-                    { paddingVertical: 0 },
-                  ]}
-                  placeholder="Enter 10 digit mobile number"
-                  placeholderTextColor="#999"
-                  keyboardType="phone-pad"
-                  maxLength={10}
-                  value={mobileNumber}
-                  onChangeText={setMobileNumber}
-                />
-              </View>
-            </View>
-
-            {/* Login Button - Centered */}
+            {/* BUTTON */}
             <TouchableOpacity
               style={[
-                tailwind('rounded-full'),
                 styles.loginButton,
-                styles.buttonActive,
-                { width: '100%' },
+                (mobileNumber.length < 10 || loading) && styles.buttonDisabled,
               ]}
               onPress={handleLogin}
-              disabled={!loading ? false : true}
+              disabled={mobileNumber.length < 10 || loading}
+              activeOpacity={0.8}
             >
               {loading ? (
-                <ActivityIndicator color={'white'} size={'small'} />
+                <ActivityIndicator color="#FFFFFF" />
               ) : (
-                <Text style={[tailwind('font-16 font-bold'),styles.buttonText]}>LOGIN</Text>
+                <Text style={styles.buttonText}>Next</Text>
               )}
             </TouchableOpacity>
 
-            {/* Terms & Conditions - Centered */}
-            <Text style={[tailwind('font-14 font-bold'),styles.termsText]}>
-              By continuing you agree to the{'\n'}
-              <Text style={styles.termsLink}>
-                Terms and Condition Swiss Bakers
-              </Text>
+            <Text style={styles.termsText}>
+              By signing in you agree to our{' '}
+              <Text style={styles.termsLink}>Terms & Conditions</Text>
             </Text>
           </View>
         </ScrollView>
@@ -137,75 +125,88 @@ const LoginScreen = () => {
     </View>
   );
 };
-
-// Styles matching your image exactly
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF9D8',
+    backgroundColor: '#FFFFFF',
   },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center', // Centers content vertically
-  },
-  content: {
-    paddingHorizontal: 24,
-    alignItems: 'center', // Centers all child elements horizontally
-  },
-  titleContainer: {
+  scrollContainer: {
+    // padding: 24,
     alignItems: 'center',
-    marginBottom: 10,
+  },
+  loginImage: {
+    width: 220,
+    height: 220,
+    marginVertical: 20,
+  },
+  card: {
+    width: '100%',
+    backgroundColor: '#F9FAFB',
+    borderRadius: 24,
+    padding: 24,
+    elevation: 3,
   },
   mainTitle: {
-    // fontSize: 18,
-    // fontWeight: '700',
+    fontSize: 26,
+    fontWeight: '700',
     color: '#45302B',
-    marginBottom: 4,
-  },
-  subTitle: {
-    // fontSize: 16,
-    // fontWeight: '700',
-    color: '#45302B',
+    marginBottom: 8,
   },
   instruction: {
-    fontSize: 13,
-    color: '#4B5563',
-    textAlign: 'center',
-    marginBottom: 20, // Added spacing
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 24,
   },
-  inputContainer: {
+  inputField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    height: 50,
+    backgroundColor: '#FFFFFF',
     marginBottom: 20,
-    marginTop: 20,
-    width: '100%', // Ensures full width for centering
+  },
+  countryCodeText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#45302B',
+  },
+  divider: {
+    width: 1,
+    height: 22,
+    backgroundColor: '#D1D5DB',
+    marginHorizontal: 12,
+  },
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#111827',
   },
   loginButton: {
-    borderRadius: 8,
-    paddingVertical: 16,
+    backgroundColor: '#80C659',
+    paddingVertical: 14,
+    borderRadius: 25,
     alignItems: 'center',
-    marginBottom: 24,
-    width: '100%', // Makes button full width
+    marginBottom: 16,
   },
-  buttonActive: {
-    backgroundColor: '#45302B',
+  buttonDisabled: {
+    backgroundColor: '#9CA3AF',
   },
   buttonText: {
     color: '#FFFFFF',
-    // fontSize: 16,
-    // fontWeight: '600',
-    letterSpacing: 0.5,
+    fontSize: 16,
+    fontWeight: '600',
   },
   termsText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6B7280',
     textAlign: 'center',
-    lineHeight: 20,
   },
   termsLink: {
-    color: '#45302B',
-    // fontWeight: '500',
+    color: '#F39F3E',
+    fontWeight: '600',
   },
 });
 

@@ -26,7 +26,7 @@ const EditProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const User_id = useSelector((state: any) => state.user.user_id);
   const UserResponse = useQuery(['getUpdate_user', User_id], getGetUser);
-    // console.log('UserResponseUserResponseUserResponse', UserResponse?.data);
+  // console.log('UserResponseUserResponseUserResponse', UserResponse?.data);
   //   const get_user_id=useSelector()
   useEffect(() => {
     if (UserResponse?.isSuccess && UserResponse?.data) {
@@ -46,17 +46,18 @@ const EditProfileScreen = () => {
       errorBox('Invalid User Email');
       return;
     }
-    if(alternateMobile){
-      const Response = UserResponse?.data?.GTS?.user_phone_number !==`+91${alternateMobile}`
-      if(alternateMobile?.length!=10){
-        errorBox('Invalid Alternative Mobile Number')
-        return
+    if (alternateMobile) {
+      const Response =
+        UserResponse?.data?.GTS?.user_phone_number !== `+91${alternateMobile}`;
+      if (alternateMobile?.length != 10) {
+        errorBox('Invalid Alternative Mobile Number');
+        return;
+      } else if (!Response) {
+        errorBox('User Login Mobile number same to Alterative Mobile Number ');
+        return;
       }
-      else if(!Response){
-        errorBox('User Login Mobile number same to Alterative Mobile Number ')
-return
-      }}
-    
+    }
+
     setLoading(true);
     const Response = await getUpdate_user({
       user_id: id,
@@ -83,7 +84,7 @@ return
     }
   };
   return (
-    <View style={tailwind('flex-1 bg-secondary')}>
+    <View style={tailwind('flex-1 bg-white')}>
       <Topbar title="Edit Profile" type={3} />
 
       <View style={tailwind('flex-1 px-6')}>
@@ -99,7 +100,7 @@ return
           <View style={tailwind('mb-3')}>
             <TextInput
               style={tailwind(
-                'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 text-base',
+                'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 ',
               )}
               placeholder="Your name"
               placeholderTextColor="#9CA3AF"
@@ -107,22 +108,6 @@ return
               onChangeText={setName}
             />
           </View>
-
-          {/* Email Field */}
-          <View style={tailwind('mb-3')}>
-            <TextInput
-              style={tailwind(
-                'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 text-base',
-              )}
-              placeholder="Your Email Address"
-              placeholderTextColor="#9CA3AF"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-            />
-          </View>
-
-          {/* Alternate Mobile */}
           <View style={tailwind('mb-3')}>
             <View
               style={tailwind(
@@ -142,6 +127,21 @@ return
               />
             </View>
           </View>
+          {/* Email Field */}
+          <View style={tailwind('mb-3')}>
+            <TextInput
+              style={tailwind(
+                'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 ',
+              )}
+              placeholder="Your Email Address"
+              placeholderTextColor="#9CA3AF"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+          </View>
+
+          {/* Alternate Mobile */}
 
           {/* Continue Button */}
           <TouchableOpacity
@@ -149,14 +149,19 @@ return
               Edit();
             }}
             disabled={loading ? true : false}
-            style={tailwind('bg-primary rounded-full py-4 items-center mt-3')}
+            style={tailwind('bg-green rounded-full py-4 items-center mt-3')}
             activeOpacity={0.8}
           >
             {loading ? (
               <ActivityIndicator size={'small'} color={'#45302B'} />
             ) : (
-              <Text style={tailwind('text-white text-lg font-bold')}>
-                CONTINUE
+              <Text
+                style={[
+                  tailwind('text-white font-18 font-bold'),
+                  { textTransform: 'uppercase' },
+                ]}
+              >
+                Save
               </Text>
             )}
           </TouchableOpacity>

@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   Platform,
   Linking,
+  Image,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -74,19 +75,23 @@ function App() {
         {offline ? (
           <View style={tailwind('bg-white h-full flex-col justify-between ')}>
             <View style={[tailwind('flex-row justify-end items-center p-3')]}>
-              <Text style={[tailwind('font-regular text-right font-17 mt-12')]}>
-                No Internet
+              <Text style={[tailwind('font-bold text-right font-17 mt-12')]}>
+                Network error
               </Text>
             </View>
             <View style={[tailwind('items-center')]}>
-              <CloudIcon />
+              <Image
+                style={[tailwind(''), { height: 300, width: 300 }]}
+                source={require('./assets/images/No_Internet.png')}
+              />
+              {/* <CloudIcon />
               <Text
                 style={[
                   tailwind('font-fold text-primary font-20 text-center mt-2'),
                 ]}
               >
                 No Internet
-              </Text>
+              </Text> */}
             </View>
             <View style={[tailwind('py-4')]}>
               <TouchableOpacity
@@ -94,7 +99,7 @@ function App() {
                 onPress={appRestart}
                 style={[
                   tailwind(
-                    'bg-primary m-3 p-3 rounded flex-row justify-center items-center',
+                    'bg-green m-3 p-3 rounded-xl flex-row justify-center items-center',
                   ),
                 ]}
               >
@@ -114,7 +119,7 @@ function App() {
                 onPress={openSettings}
                 style={[
                   tailwind(
-                    'bg-secondary m-3 p-3 rounded flex-row items-center justify-center',
+                    'bg-black m-3 p-3 rounded-xl flex-row items-center justify-center',
                   ),
                 ]}
               >
@@ -122,7 +127,7 @@ function App() {
                 <Text
                   style={[
                     tailwind(
-                      'font-bold text-primary text-center px-3 uppercase font-15',
+                      'font-bold text-white text-center px-3 uppercase font-15',
                     ),
                   ]}
                 >

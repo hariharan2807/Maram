@@ -68,7 +68,7 @@ export default function NotificationScreen() {
       <Topbar title="Notification" type={3} />
       {getdata?.length > 0 ? (
         <View style={[tailwind('p-2 px-3')]}>
-          <Text style={[tailwind('font-semibold font-17')]}>Notification</Text>
+          <Text style={[tailwind('font-semi font-17')]}>Notification</Text>
           {getdata?.length > 0 ? (
             <Text style={[tailwind('font-medium font-15 text-gray mt-2')]}>
               {getdata?.length} Unread Messages
@@ -126,7 +126,7 @@ export default function NotificationScreen() {
                   {item?.body ? (
                     <View style={[tailwind('mx-3 py-2')]}>
                       <Text
-                        style={[tailwind('font-semibold font-13 text-gray')]}
+                        style={[tailwind('font-semi font-13 text-gray')]}
                       >
                         {item?.body}
                       </Text>

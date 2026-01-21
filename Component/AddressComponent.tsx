@@ -42,7 +42,7 @@ export default function AddressComponent(props: any) {
   // return (
   //   <View style={[tailwind('mx-3 my-3 p-2')]}>
   //     <View style={[tailwind('border-b pb-4'), {borderColor: '#F2F2F2'}]}>
-  //       <Text style={[tailwind('font-semibold font-16 py-4')]}>Addresses</Text>
+  //       <Text style={[tailwind('font-semi font-16 py-4')]}>Addresses</Text>
   //       {/* <Image
   //           style={[tailwind('w-7 h-7')]}
   //           resizeMode="contain"
@@ -147,7 +147,7 @@ export default function AddressComponent(props: any) {
       <View style={[tailwind('my-3 mx-3')]}>
         {!props?.allUserAddressesQuery.isLoading &&
         !props?.allUserAddressesQuery.data?.GTS ? null : (
-          <Text style={[tailwind('font-bold font-20')]}>Saved Addresses</Text>
+          <Text style={[tailwind('font-bold font-20')]}>Your Delivery Address</Text>
         )}
       </View>
       {props?.allUserAddressesQuery?.data?.GTS

@@ -7,7 +7,7 @@ export const METHODS = {
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
-
+export const INDIAN='₹'
 export const primaryColorBG = '#29627F';
 export const LRedlog = (a: any, b: any) => {
   console.log('');

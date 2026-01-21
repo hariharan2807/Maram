@@ -99,7 +99,7 @@ export default function CustomBottomTab({
                 },
               ]}
             >
-              {/* CART BADGE */}
+              {/* CART BADGE
               {index === 2 && CartStateValue?.length > 0 && (
                 <View
                   style={{
@@ -121,7 +121,7 @@ export default function CustomBottomTab({
                     {CartStateValue.length}
                   </Text>
                 </View>
-              )}
+              )} */}
 
               {/* ICON */}
               {index === 0 ? (

@@ -57,10 +57,32 @@ import TickIcon1 from './SvgIcons/TickIcon1';
 import Homeicon from './SvgIcons/Homeicon';
 import SubscriptionIcontab from './SvgIcons/SubscriptionIcontab';
 import CalenderIconTab from './SvgIcons/CalenderIconTab';
+import PayBillIcon from './SvgIcons/PayBillIcon';
+import BillHistoryIcon from './SvgIcons/BillHistoryIcon';
+import Address from './SvgIcons/Address';
+import FeedBackIcon from './SvgIcons/FeedBackIcon';
+import PrivacyPolicyIcon from './SvgIcons/PrivacyPolicyIcon';
+import TermsCondtionIcon from './SvgIcons/TermsCondtionIcon';
+import AbountIcon from './SvgIcons/AbountIcon';
+import ContactUsIcon from './SvgIcons/ContactUsIcon';
+import PendingIcon from './SvgIcons/PendingIcon';
+import SubscriptionIcon1 from './SvgIcons/SubscriptionIcon1';
+import ExtraProductIcon from './SvgIcons/ExtraProductIcon';
 export {
   AddressIcon,
+  SubscriptionIcon1,
+  ExtraProductIcon,
+  PendingIcon,
   CalenderIconTab,
+  AbountIcon,
+  ContactUsIcon,
+  PrivacyPolicyIcon,
+  PayBillIcon,
+  FeedBackIcon,
+  TermsCondtionIcon,
+  Address,
   SubscriptionIcontab,
+  BillHistoryIcon,
   TickIcon1,
   Homeicon,
   LockIcon,

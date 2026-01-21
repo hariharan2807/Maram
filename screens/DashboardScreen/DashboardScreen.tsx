@@ -82,7 +82,7 @@ import {
 import { HomeTitle } from '../../screens/Component';
 
 export default function DashboardScreen() {
-  const isReady = useIsScreenReady();
+  // const isReady = useIsScreenReady();
   const CartState = useSelector((state: any) => state.user.cart);
   const ID = useSelector((state: any) => state.user.user_id);
   const Branch = useSelector((state: any) => state.app.branch);
@@ -120,10 +120,16 @@ export default function DashboardScreen() {
   ];
   const Category = [
     {
-      image: assets_manifest?.SubSction,
+      category_image: assets_manifest?.SubSction,
+      type: 'Subscription',
+      category_name: 'Subscription Product',
+      category_id: 1,
     },
     {
-      image: assets_manifest?.Addon,
+      category_image: assets_manifest?.Addon,
+      type: 'Extra',
+      category_name: 'Add On Product',
+      category_id: 2,
     },
   ];
   const ProductData = [
@@ -602,14 +608,18 @@ export default function DashboardScreen() {
                       },
                     ]}
                     activeOpacity={0.8}
-                    onPress={() => {}}
+                    onPress={() => {
+                      navigation?.navigate('CategoryScreen', {
+                        items: items,
+                      });
+                    }}
                   >
                     <Image
                       style={[
                         tailwind(' mb-3'),
                         { resizeMode: 'contain', width: '100%', height: 200 },
                       ]}
-                      source={items?.image}
+                      source={items?.category_image}
                     />
                   </TouchableOpacity>
                 ))}
@@ -696,9 +706,8 @@ export default function DashboardScreen() {
               </ScrollView>
             </View>
           )}
+          <View style={tailwind('h-24')} />
         </ImageBackground>
-
-        <View style={tailwind('h-24')} />
       </ScrollView>
       {CartStateValue.length > 0 && (
         <CheckOutButton

@@ -317,7 +317,7 @@ export default function CartScreen() {
       const isOpen = isBranchOpen(Branch);
       if (isOpen) {
         if (Delivery_charge?.status === 'success') {
-          navigation?.navigate('CheckoutScreen', { massege: giftcontent });
+          navigation?.navigate('CheckoutScreen', { amount: Total });
         } else {
           addressSheetRef?.current?.open();
         }

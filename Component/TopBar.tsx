@@ -126,7 +126,12 @@ const Topbar = (props: TopbarType) => {
     );
   } else {
     return (
-      <View style={[tailwind('flex-row items-center bg-white '), {}]}>
+      <View
+        style={[
+          tailwind('flex-row  items-center bg-white '),
+          { borderBottomWidth: 1, borderBottomColor: 'silver' },
+        ]}
+      >
         <TouchableOpacity
           style={[tailwind('ml-3')]}
           onPress={() => (navigation.canGoBack() ? navigation.goBack() : null)}

@@ -12,16 +12,28 @@ import {
   Alert,
   Platform,
   Linking,
+  ImageBackground,
 } from 'react-native';
 import tailwind from '@tailwind';
 import { GlobalDialogModal, Topbar } from '@Component';
 import assets_manifest from '@assets';
 import {
+  AbountIcon,
+  Address,
+  BillHistoryIcon,
   CallIcon,
+  ContactUsIcon,
+  EditIcon,
+  FeedBackIcon,
   Logout,
   MyOrderIcon,
   OrderStatusIcon,
+  PayBillIcon,
+  PrivacyPolicyIcon,
   RightIcon,
+  SubscriptionIcontab,
+  TermsCondtionIcon,
+  TickIcon1,
 } from '../../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { removeToken, removeUser_id } from '../../workers/localStorage';
@@ -32,6 +44,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { get_DeleteAccount } from '@remote/userRemote';
+import { INDIAN } from '@constants/API_constants';
 const log = console.log;
 
 export default function UserProfileScreen() {
@@ -40,21 +53,26 @@ export default function UserProfileScreen() {
   const [support, setSupport] = useState(false);
 
   const [deactivityModal, setDeactivityModal] = useState(false);
-  const ProfileData = useSelector((state: any) => state.user.userInfo);
+
   const AppControll = useSelector((state: any) => state.app.app_controll);
   const location = useSelector((state: any) => state.app.locationState);
   const ID = useSelector((state: any) => state.user.user_id);
-
-  // console.log(
-  //   'locationlocationlocationlocationlocation',
-  //   AppControll?.contact_number,
-  // );
+  const ProfileData = {
+    user_name: 'Jayden Jackson',
+    user_phone_number: '7348925084',
+    user_email: 'Jack@jydn.com',
+    bill_due_amount: 1745,
+    subscriptions_count: 3,
+    saved_address_count: 2,
+    bill_history_count: 20,
+    profile_image: '',
+  };
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
   const phoneUrl = Platform.select({
-    ios: `telprompt:${AppControll?.contact_number}`, // Shows confirmation dialog
-    android: `tel:${AppControll?.contact_number}`, // Directly dials
+    ios: `telprompt:${AppControll?.contact_number}`,
+    android: `tel:${AppControll?.contact_number}`,
   });
   const logout = async () => {
     setLogoutModal(false);
@@ -70,43 +88,59 @@ export default function UserProfileScreen() {
 
     RNRestart.Restart();
   };
-  // console.log("AppControll?.terms_contion",AppControll)
   return (
-    <View style={[tailwind('bg-secondary h-full')]}>
+    <View style={[tailwind('bg-white h-full')]}>
       <Topbar title="Account" type={3} />
-      <ScrollView style={tailwind('flex-1 ')}>
-        <View
-          style={[tailwind('bg-secondary rounded-2xl mx-4 mt-5 shadow-md p-5')]}
+      <ImageBackground
+          style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+          source={assets_manifest?.background}
         >
-          <View style={[tailwind('items-center')]}>
-            <Text style={tailwind('text-xl font-bold text-black')}>
-              {ProfileData?.user_name}
-            </Text>
-            <View style={[tailwind('flex-row items-center my-2')]}>
-              <Text style={tailwind('text-gray-500 mr-2  font-semi')}>
-                {ProfileData?.user_phone_number}
-              </Text>
+      <ScrollView style={tailwind('flex-1 ')} showsVerticalScrollIndicator={false}>
+        <View
+          style={[tailwind('bg-white  rounded-2xl mx-4 mt-5 shadow-md p-5')]}
+        >
+          <View
+            style={[
+              tailwind('items-center flex-row'),
+              { justifyContent: 'space-evenly' },
+            ]}
+          >
+            <View style={[tailwind(''), { width: '15%' }]}>
               <Image
-                tintColor={'green'}
-                style={[tailwind(''), { height: 20, width: 20 }]}
-                source={assets_manifest?.verify1}
+                style={[tailwind(''), { width: 50, height: 50 }]}
+                resizeMode="contain"
+                source={
+                  ProfileData?.profile_image != ''
+                    ? ProfileData?.profile_image
+                    : assets_manifest?.Cancelled
+                }
+                defaultSource={assets_manifest?.Cancelled}
               />
             </View>
-
-            {/* <MaterialIcons name="verified" color={'green'} size={20} /> */}
+            <View style={[tailwind(''), { width: '70%' }]}>
+              <Text style={tailwind('text-xl font-bold text-black')}>
+                {ProfileData?.user_name}
+              </Text>
+              <View style={[tailwind('flex-row items-center my-2')]}>
+                <Text style={tailwind('text-gray-500 mr-2  font-semi')}>
+                  {ProfileData?.user_phone_number} | {ProfileData?.user_email}
+                </Text>
+              </View>
+            </View>
             <TouchableOpacity
               style={[tailwind('')]}
               onPress={() => {
                 navigation?.navigate('EditProfileScreen');
               }}
             >
-              <Text style={tailwind('text-green mt-1 font-bold')}>Edit</Text>
+              <EditIcon />
             </TouchableOpacity>
           </View>
           <View style={tailwind('mt-3')}>
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() => {
-                navigation?.navigate('FavoriteScreen');
+                navigation?.navigate('BillDetailScreen');
               }}
               style={[
                 tailwind(
@@ -119,23 +153,24 @@ export default function UserProfileScreen() {
                 },
               ]}
             >
-              <View style={tailwind('flex-row items-center')}>
+              <View style={tailwind('')}>
                 <Image
-                  style={[tailwind(''), { height: 20, width: 20 }]}
-                  source={assets_manifest?.heartoutLine}
+                  style={[tailwind(''), { height: 24, width: 24 }]}
+                  source={require('../../assets/icons/common/bank.png')}
                 />
-                {/* <Entypo name="heart-outlined" color={'gray'} size={20} /> */}
-                <Text style={tailwind('ml-3  font-bold font-15 text-black')}>
-                  My Favourite
+                <Text style={tailwind('my-2 font-bold font-15 text-black')}>
+                  Pay Bill
+                </Text>
+                <Text style={tailwind('font-regular font-13 text-black')}>
+                  Bill due amount {INDIAN} {ProfileData?.bill_due_amount}
                 </Text>
               </View>
               <RightIcon />
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() => {
-                navigation?.navigate('OrderListScreen', {
-                  text: 'Active Orders',
-                });
+                navigation?.navigate('Subscriptions');
               }}
               style={[
                 tailwind(
@@ -148,22 +183,24 @@ export default function UserProfileScreen() {
                 },
               ]}
             >
-              <View style={tailwind('flex-row items-center')}>
+              <View style={tailwind('')}>
                 <Image
-                  style={[tailwind(''), { height: 20, width: 20 }]}
-                  source={assets_manifest?.my_order}
+                  style={[tailwind(''), { height: 24, width: 24 }]}
+                  source={require('../../assets/icons/common/file.png')}
                 />
-                <Text style={tailwind('ml-3  font-bold font-15 text-black')}>
-                  Order Status
+                <Text style={tailwind('my-2 font-bold font-15 text-black')}>
+                  My Subscription
+                </Text>
+                <Text style={tailwind('font-regular font-13 text-black')}>
+                  {ProfileData?.subscriptions_count} subscriptions
                 </Text>
               </View>
               <RightIcon />
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() => {
-                navigation?.navigate('OrderHistoryScreeen', {
-                  text: 'order History',
-                });
+                navigation?.navigate('BillDetailScreen');
               }}
               style={[
                 tailwind(
@@ -176,18 +213,22 @@ export default function UserProfileScreen() {
                 },
               ]}
             >
-              <View style={tailwind('flex-row items-center')}>
+              <View style={tailwind('')}>
                 <Image
-                  style={[tailwind(''), { height: 20, width: 20 }]}
-                  source={assets_manifest?.cart1}
+                  style={[tailwind(''), { height: 24, width: 24 }]}
+                  source={require('../../assets/icons/common/clipboard.png')}
                 />
-                <Text style={tailwind('ml-3 font-bold font-15 text-black')}>
-                  My Orders
+                <Text style={tailwind('my-2 font-bold font-15 text-black')}>
+                  Bill History
+                </Text>
+                <Text style={tailwind('font-regular font-13 text-black')}>
+                  {ProfileData?.bill_history_count} bills
                 </Text>
               </View>
               <RightIcon />
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() => {
                 navigation?.navigate('AddressListScreen');
               }}
@@ -202,108 +243,82 @@ export default function UserProfileScreen() {
                 },
               ]}
             >
-              <View style={tailwind('flex-row items-center')}>
+              <View style={tailwind('')}>
                 <Image
-                  style={[tailwind(''), { height: 20, width: 20 }]}
-                  source={assets_manifest?.address}
+                  style={[tailwind(''), { height: 24, width: 24 }]}
+                  source={require('../../assets/icons/common/Address.png')}
                 />
-                <Text style={tailwind('ml-3  font-bold font-15 text-black')}>
-                  Address
+                <Text style={tailwind('my-2 font-bold font-15 text-black')}>
+                  Delivery Address
+                </Text>
+                <Text style={tailwind('font-regular font-13 text-black')}>
+                  {ProfileData?.saved_address_count} Saved Address
                 </Text>
               </View>
               <RightIcon />
             </TouchableOpacity>
           </View>
-          <View style={tailwind('mt-6')}>
-            <TouchableOpacity
-              onPress={
-                () => {
-                  setSupport(true);
-                  // navigation?.navigate('WebViewScreen', {
-                  //   title: 'Terms & Conditions',
-                  //   url: AppControll?.terms_contion,
-                  // });
-                }
-
-                // openLink(AppControll?.terms_contion)
-              }
-            >
-              <Text style={tailwind('text-gray-500 mb-3  font-bold')}>
-                Customer Suport
+        </View>
+        <View style={tailwind('mt-6 ')}>
+          <Text style={[tailwind('font-bold text-black font-16  px-5')]}>
+            Other Options
+          </Text>
+          <View
+            style={[tailwind('bg-white  rounded-2xl mx-4 mt-5 shadow-md p-5')]}
+          >
+            <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
+              <FeedBackIcon />
+              <Text style={tailwind('text-black ml-2  font-medium')}>
+                Feedback
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={
-                () => {
-                  navigation?.navigate('WebViewScreen', {
-                    title: 'Privacy Policy',
-                    url: AppControll?.privacy_policy,
-                  });
-                }
-                // openLink(AppControll?.privacy_policy)
-              }
-            >
-              <Text style={tailwind('text-gray-500 mb-3 font-bold')}>
-                Privacy Policy
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={
-                () => {
-                  navigation?.navigate('WebViewScreen', {
-                    title: 'Terms & Conditions',
-                    url: AppControll?.terms_and_conditions,
-                  });
-                }
-
-                // openLink(AppControll?.terms_contion)
-              }
-            >
-              <Text style={tailwind('text-gray-500 mb-3 font-bold')}>
+            <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
+              <TermsCondtionIcon />
+              <Text style={tailwind('text-black ml-2  font-medium')}>
                 Terms & Conditions
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={
-                () => {
-                  navigation?.navigate('WebViewScreen', {
-                    title: 'About us',
-                    url: AppControll?.about_us,
-                  });
-                }
-
-                // onPress={() => openLink(AppControll.about_us)
-              }
-            >
-              <Text style={tailwind('text-gray-500 mb-3 font-bold')}>
+            <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
+              <PrivacyPolicyIcon />
+              <Text style={tailwind('text-black ml-2  font-medium')}>
+                Privacy Policy
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
+              <ContactUsIcon />
+              <Text style={tailwind('text-black ml-2  font-medium')}>
+                Contact Us
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
+              <AbountIcon />
+              <Text style={tailwind('text-black ml-2  font-medium')}>
                 About us
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={tailwind('mt-6')}>
-            <TouchableOpacity
-              onPress={() => {
-                setLogoutModal(true);
-              }}
-              style={tailwind('flex-row items-center mb-3')}
-            >
-              <Logout />
-              <Text style={tailwind('ml-2 text-red-600 font-semi')}>
-                Logout
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={tailwind('flex-row items-center')}
-              onPress={() => {
-                setDeactivityModal(true);
-              }}
-            >
-              <Logout />
-              <Text style={tailwind('ml-2 text-red-600 font-semi')}>
-                Delete Account
-              </Text>
-            </TouchableOpacity>
-          </View>
+        </View>
+        <View style={tailwind('mt-6 mb-6 px-5')}>
+          <TouchableOpacity
+            onPress={() => {
+              setLogoutModal(true);
+            }}
+            style={tailwind('flex-row items-center mb-3')}
+          >
+            <Logout />
+            <Text style={tailwind('ml-2 text-red-600 font-semi')}>Logout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={tailwind('flex-row items-center')}
+            onPress={() => {
+              setDeactivityModal(true);
+            }}
+          >
+            <Logout />
+            <Text style={tailwind('ml-2 text-red-600 font-semi')}>
+              Delete Account
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <Modal
@@ -395,6 +410,7 @@ export default function UserProfileScreen() {
         setAlertModal={setDeactivityModal}
         action={deactivateAction}
       />
+      </ImageBackground>
     </View>
   );
 }

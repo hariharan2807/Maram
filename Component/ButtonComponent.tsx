@@ -7,14 +7,14 @@ export const ButtonComponent = (props: any) => {
   return (
     <View
       style={[
-        tailwind('px-6 py-4 mt-6 rounded-2xl bg-primary'),
-        { width: width * 0.94 },
+        tailwind('px-6 py-4 mt-6 rounded-full'),
+        { width: width * 0.94,borderColor:"#80C659",borderWidth:2},
       ]}
       // activeOpacity={0.8}
     >
       <Text
         style={[
-          tailwind('text-white text-center font-bold'),
+          tailwind('text-white text-center text-green font-bold'),
           { fontSize: scaleFont(16) },
         ]}
       >

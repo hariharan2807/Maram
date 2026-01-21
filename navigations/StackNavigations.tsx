@@ -12,6 +12,7 @@ import ViewAllScreen from '../screens/ViewAllScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
 import { NewSubscription } from '../screens/NewSubscription';
+import CalenderScreen from '../screens/CalenderScreeen';
 
 const StackConfig = { headerShown: false };
 
@@ -20,9 +21,9 @@ const AccountStack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 
-export function Dashboard(props: any) {
+export function Home(props: any) {
   return (
-    <DashboardStack.Navigator screenOptions={StackConfig} >
+    <DashboardStack.Navigator screenOptions={StackConfig}>
       <DashboardStack.Screen
         name="DashboardScreen"
         component={DashboardScreen}
@@ -37,10 +38,10 @@ export function Subscriptions(props: any) {
         name="SubscriptionScreen"
         component={SubscriptionScreen}
       />
-        <SearchStack.Screen
+      {/* <SearchStack.Screen
         name="NewSubscription"
         component={NewSubscription}
-      />
+      /> */}
     </SearchStack.Navigator>
   );
 }
@@ -50,10 +51,7 @@ export function Auth(props: any) {
       initialRouteName="LoginScreen"
       screenOptions={StackConfig}
     >
-      <AccountStack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-      />
+      <AccountStack.Screen name="LoginScreen" component={LoginScreen} />
     </AccountStack.Navigator>
   );
 }
@@ -70,13 +68,13 @@ export function Account(props: any) {
     </AccountStack.Navigator>
   );
 }
-export function Cart(props: any) {
+export function Calendar(props: any) {
   return (
     <AuthStack.Navigator
-      initialRouteName="CartScreen"
+      initialRouteName="CalenderScreen"
       screenOptions={StackConfig}
     >
-      <AuthStack.Screen name="CartScreen" component={CartScreen} />
+      <AuthStack.Screen name="CalenderScreen" component={CalenderScreen} />
     </AuthStack.Navigator>
   );
 }

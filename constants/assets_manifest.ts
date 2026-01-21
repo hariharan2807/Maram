@@ -98,5 +98,11 @@ export default {
   Addon: require('../assets/images/Addon.png'),
   leaves: require('../assets/images/leaves.png'),
   No_Internet: require('../assets/images/No_Internet.png'),
+  PaymentSucess: require('../assets/icons/common/PaymentSucess.png'),
+  PaymentFailed: require('../assets/icons/common/PaymentFailed.png'),
+  Sucess: require('../assets/icons/common/Succes.png'),
+  Failed: require('../assets/icons/common/Failure.png'),
+  Login: require('../assets/icons/common/Login.png'),
+
   // ic_status_delivered.jpeg
 };

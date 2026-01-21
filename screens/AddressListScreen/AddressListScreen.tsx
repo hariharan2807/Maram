@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import tailwind from '@tailwind';
 import {
@@ -18,6 +19,7 @@ import { useQuery } from 'react-query';
 import { deleteAddressRemote, get_allAddressList } from '@remote/userRemote';
 import { useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import assets_manifest from '@assets';
 
 export default function AddressListScreen() {
   const navigation = useNavigation();
@@ -70,8 +72,12 @@ export default function AddressListScreen() {
   );
   // console.log('ResponseResponseResponse', Response?.data?.GTS);
   return (
-    <View style={[tailwind('bg-secondary h-full'), {}]}>
-      <Topbar title="Address" type={3} />
+    <View style={[tailwind('bg-white h-full'), {}]}>
+      <Topbar title="Delivery Address" type={3} />
+       <ImageBackground
+          style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+          source={assets_manifest?.background}
+        >
       <View style={[tailwind('')]}>
         <ScrollView style={tailwind('')} showsVerticalScrollIndicator={false}>
           <AddressComponent
@@ -108,6 +114,7 @@ export default function AddressListScreen() {
         subtitle=""
         target={0}
       />
+      </ImageBackground>
     </View>
   );
 }

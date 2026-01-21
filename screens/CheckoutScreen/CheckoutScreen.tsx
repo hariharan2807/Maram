@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import { useQuery } from 'react-query';
 import {
@@ -44,7 +45,7 @@ export default function CheckoutScreen() {
   const DeloiveryCharge = useSelector(
     (state: any) => state.user.delivery_chargs?.delivery_charge,
   );
-  console.log("DeloiveryChargeDeloiveryCharge",DeloiveryCharge)
+  console.log('DeloiveryChargeDeloiveryCharge', DeloiveryCharge);
   const Couponstate = useSelector((state: any) => state.user.coupon);
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const selected_address = useSelector(
@@ -166,36 +167,37 @@ export default function CheckoutScreen() {
       errorBox('Please select a payment method');
       return;
     }
-    const Response = await get_Create_order(Payload);
-    // console.log('ResponseResponseResponse', Response?.order_id);
-    if (Response?.order_id) {
-      order_id.current = Response?.order_id;
-      if (selectedPayment?.payment_method_id == 1) {
-        const payloadData = {
-          order_id: Response?.order_id,
-          payment_status: '1',
-          payment_message: 'success',
-          payment_type: 'Cash on Delivery',
-          razorPayId: '',
-          razorpay_order_id: '',
-          user_id: ID?.toString(),
-        };
-        const OrderStatusDetail = await get_OrderStatus(payloadData);
-        if (OrderStatusDetail?.order_id) {
-          setSuccesserror(true);
-          setVisible(true);
-        }
-        console.log(
-          'OrderStatusDetailOrderStatusDetailOrderStatusDetail',
-          OrderStatusDetail,
-        );
-      } else {
-        OnlinePayment(Response?.order_id);
-      }
-    } else {
-      errorBox('Order Failed!');
-      order_id.current = null;
-    }
+    navigation?.navigate('FailureScreen');
+    // const Response = await get_Create_order(Payload);
+    // // console.log('ResponseResponseResponse', Response?.order_id);
+    // if (Response?.order_id) {
+    //   order_id.current = Response?.order_id;
+    //   if (selectedPayment?.payment_method_id == 1) {
+    //     const payloadData = {
+    //       order_id: Response?.order_id,
+    //       payment_status: '1',
+    //       payment_message: 'success',
+    //       payment_type: 'Cash on Delivery',
+    //       razorPayId: '',
+    //       razorpay_order_id: '',
+    //       user_id: ID?.toString(),
+    //     };
+    //     const OrderStatusDetail = await get_OrderStatus(payloadData);
+    //     if (OrderStatusDetail?.order_id) {
+    //       setSuccesserror(true);
+    //       setVisible(true);
+    //     }
+    //     console.log(
+    //       'OrderStatusDetailOrderStatusDetailOrderStatusDetail',
+    //       OrderStatusDetail,
+    //     );
+    //   } else {
+    //     OnlinePayment(Response?.order_id);
+    //   }
+    // } else {
+    //   errorBox('Order Failed!');
+    //   order_id.current = null;
+    // }
   };
   const CloseCart = async () => {
     const payloadData = {
@@ -243,7 +245,10 @@ export default function CheckoutScreen() {
     dispatch(updateSelectedAddressAction(null));
     dispatch(updateCoupon(null));
     setVisible(false);
-navigation?.navigate('SingleOrderScreen',{order_id: order_id?.current,screen:false})
+    navigation?.navigate('SingleOrderScreen', {
+      order_id: order_id?.current,
+      screen: false,
+    });
     // navigation.reset({
     //   index: 1,
     //   routes: [
@@ -305,32 +310,93 @@ navigation?.navigate('SingleOrderScreen',{order_id: order_id?.current,screen:fal
 
   return (
     <View style={styles.container}>
-      <Topbar title="Check out Payment" type={3} />
-
-      <ScrollView
+      <Topbar title="Payment Method" type={3} />
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
+      >
+        {/* <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.title}>Choose your Payment Option</Text>
-
-        <View style={styles.paymentOptionsContainer}>
-          {paymentMethods.map(
-            (method: any) =>
-              method.payment_method_status === '1' &&
-              renderPaymentOption(method),
-          )}
-        </View>
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.placeOrderButton}
-          onPress={handlePlaceOrder}
-          activeOpacity={0.8}
+      > */}
+        <View
+          style={[
+            tailwind(''),
+            {
+              paddingHorizontal: 20,
+              paddingTop: 30,
+              paddingBottom: 100,
+              alignItems: 'stretch',
+            },
+          ]}
         >
-          <Text style={styles.placeOrderText}>PLACE ORDER</Text>
-        </TouchableOpacity>
+          <Text style={styles.title}>Choose Payment Method</Text>
+
+          <View style={styles.paymentOptionsContainer}>
+            {paymentMethods.map(
+              (method: any) =>
+                method.payment_method_status === '1' &&
+                renderPaymentOption(method),
+            )}
+          </View>
+        </View>
+        {/* </ScrollView> */}
+      </ImageBackground>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          // paddingHorizontal: 20,
+          // paddingVertical: 20,
+          backgroundColor: 'white',
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: 'white',
+            // borderRadius: 12,
+            paddingVertical: 18,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            justifyContent: 'space-between',
+            shadowOpacity: 0.3,
+            shadowRadius: 5,
+            elevation: 5,
+            flexDirection: 'row',
+          }}
+        >
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 18,
+              fontWeight: 'bold',
+              letterSpacing: 1,
+            }}
+          >
+            To Pay
+          </Text>
+          <TouchableOpacity
+            onPress={handlePlaceOrder}
+            activeOpacity={0.8}
+            style={[
+              tailwind('py-3 px-3 rounded-full'),
+              { backgroundColor: '#80C659' },
+            ]}
+          >
+            <Text style={[tailwind('font-bold text-white px-3 font-15 ')]}>
+              {' '}
+              Pay ₹{routes?.params?.amount}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Modal
@@ -522,7 +588,7 @@ navigation?.navigate('SingleOrderScreen',{order_id: order_id?.current,screen:fal
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5E6D3',
+    backgroundColor: 'white',
   },
   scrollView: {
     flex: 1,
@@ -535,10 +601,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color: '#888888',
+    color: 'Black',
     marginBottom: 30,
-    fontWeight: '500',
-    textAlign: 'left',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   paymentOptionsContainer: {
     gap: 20,
@@ -561,8 +627,8 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   paymentOptionSelected: {
-    borderColor: '#6B4423',
-    backgroundColor: '#FFF9F0',
+    borderColor: '#80C659',
+    backgroundColor: 'white',
   },
   paymentOptionContent: {
     flexDirection: 'row',
@@ -576,7 +642,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#80C659',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -611,10 +677,10 @@ const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#F5E6D3',
+    backgroundColor: 'white',
   },
   placeOrderButton: {
-    backgroundColor: '#4A3728',
+    backgroundColor: '#80C659',
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -623,6 +689,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
+    justifyContent: 'space-between',
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,

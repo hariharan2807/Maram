@@ -2,7 +2,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import CustomBottomTab from '../sharedComponents/atoms/CustomBottomTab';
 
-import { Account, Auth, Cart, Dashboard, Search, Subscriptions } from './StackNavigations';
+import { Account, Auth, Calendar, Cart, Dashboard, Home, Search, Subscriptions } from './StackNavigations';
 import {
   ViewBase,
   Animated,
@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux';
 
 const BottomTab = createBottomTabNavigator();
 
-const config = { headerShown: false };
+const config = { headerShown: false ,};
 
 export default function BottomTabNavigation(props: any) {
   const ID = useSelector((state: any) => state.user.user_id);
@@ -28,10 +28,10 @@ export default function BottomTabNavigation(props: any) {
       screenOptions={config}
       tabBar={props => <CustomBottomTab {...props} />}
     >
-      <BottomTab.Screen name="Home" component={Dashboard} />
+      <BottomTab.Screen name="Home" component={Home} />
       <BottomTab.Screen name="Subscriptions" component={Subscriptions} />
 
-      <BottomTab.Screen name="Calendar" component={Cart} />
+      <BottomTab.Screen name="Calendar" component={Calendar} />
       {ID ? (
         <BottomTab.Screen name="Profile" component={Account} />
       ) : (
