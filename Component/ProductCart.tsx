@@ -917,8 +917,8 @@ console.log("hasMismatch",hasMismatch)
           target={1}
           title="Replace Cart Item ?"
           // title=""
-          // subtitle={`Your Cart Contains dishes from ${ShopState?.shop_name}. Do you want to discard the selection and add dishes ? `}
-          subtitle={'Do you want to add the other shop products in your cart ?'}
+          subtitle={`This will replace all items in your cart with this item. OK ?`}
+          // subtitle={'Do you want to add the other shop products in your cart ?'}
           action={resetCartandProceed}
         />
       ) : null}

@@ -43,6 +43,9 @@ export default function GlobalDialogModal(props: PropTypes) {
           <Text style={[tailwind('text-lg text-black pb-2 font-bold')]}>
             {props.title}
           </Text>
+          <Text style={[tailwind('font-13 text-black pb-2 font-medium')]}>
+            {props.subtitle}
+          </Text>
         </View>
         <View style={[tailwind('flex flex-row justify-between items-center')]}>
           <TouchableOpacity

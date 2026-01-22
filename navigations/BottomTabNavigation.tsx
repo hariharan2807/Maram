@@ -32,6 +32,7 @@ export default function BottomTabNavigation(props: any) {
       <BottomTab.Screen name="Subscriptions" component={Subscriptions} />
 
       <BottomTab.Screen name="Calendar" component={Calendar} />
+      
       {ID ? (
         <BottomTab.Screen name="Profile" component={Account} />
       ) : (

@@ -103,6 +103,7 @@ export default {
   Sucess: require('../assets/icons/common/Succes.png'),
   Failed: require('../assets/icons/common/Failure.png'),
   Login: require('../assets/icons/common/Login.png'),
+  SubscriptionSuccesss: require('../assets/icons/common/SubscriptionSuccesss.png'),
 
   // ic_status_delivered.jpeg
 };

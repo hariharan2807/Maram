@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Linking,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,7 +56,12 @@ import {
   get_CheckBranch,
   get_Delivery_Charge,
 } from '@remote/userRemote';
-import { GiftBoxIcon, Location } from '../../assets/icons';
+import {
+  EditIcon1,
+  GiftBoxIcon,
+  Location,
+  LocationICon1,
+} from '../../assets/icons';
 import { useQuery } from 'react-query';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function CartScreen() {
@@ -69,7 +75,7 @@ export default function CartScreen() {
     (state: any) => state.user.delivery_chargs,
   );
   const Data = useSelector((state: any) => state.user.customized_dayss);
-  // console.log('DataDataDataData', Data);
+  console.log('AddressAddressAddressAddress', Address);
   const Couponstate = useSelector((state: any) => state.user.coupon);
   const AppControll = useSelector((state: any) => state.app.app_controll);
   const [visible, setVisible] = useState(false);
@@ -340,337 +346,349 @@ export default function CartScreen() {
   const Total =
     totalQuantity + deliveryFee - (Couponstate?.caluculate_amount || 0);
   return (
-    <View style={[tailwind('h-full bg-white')]}>
+    <View style={tailwind('h-full bg-gray-50')}>
       <Topbar title="Your Cart" type={3} />
+
       {CartState?.length > 0 ? (
-        <View style={tailwind('flex-1 w-full')}>
+        <View style={tailwind('flex-1')}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={[
-              tailwind('pb-20 mt-3'),
-              { paddingBottom: height * 0.1 },
-            ]}
+            contentContainerStyle={tailwind('pb-32')}
           >
-            <View style={[tailwind('flex-row mx-5')]}>
-              {CartState.length > 0 && (
-                <Text
-                  style={[
-                    tailwind('font-bold  my-2 text-black'),
-                    { fontSize: scaleFont(16) },
-                  ]}
-                >
-                  Items
-                </Text>
-              )}
-              {CartState.length > 0 && (
-                <Text
-                  style={[
-                    tailwind('font-bold  my-2 text-black'),
-                    { fontSize: scaleFont(14), marginLeft: 'auto' },
-                  ]}
-                >
-                  {CartState.length} Items
-                </Text>
-              )}
-            </View>
-
-            {CartState?.map((item: any, index: number) => (
+            {/* Cart Items Card */}
+            <View
+              style={[
+                tailwind('mx-4 mt-4 bg-white rounded-2xl'),
+                styles.cardShadow,
+              ]}
+            >
+              {/* Header */}
               <View
-                key={index}
-                style={[tailwind('mx-3 my-1  rounded-xl'), { backgroundColor: '#ffffff' }]}
+                style={tailwind(
+                  'flex-row justify-between items-center px-5 py-4 border-b border-gray-100',
+                )}
               >
-                <CartComponent
-                  isVeg={item.eggless == 0 || item.eggless == 1}
-                  veg={item.eggless == 0}
-                  quantity={item?.quantity}
-                  image={item.image}
-                  product_name={item?.product_name}
-                  price={200}
-                  id={item?.product_id}
-                  offer={item?.offer}
-                  is_favourite={item?.is_favourite}
-                  description={item?.description}
-                  product_image={item?.product_image}
-                  variation={item?.variation}
-                  increment={increment}
-                  decrement={decrement}
-                  color_variation={item.product_color_var}
-                  item={item}
-                  product_price={item?.product_price}
-                  type={2}
-                />
-              </View>
-            ))}
-            <ApplyCoupon navigation={navigation} />
-            <View style={[tailwind(' px-5 py-3 my-3')]}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => {
-                  setGiftEnable(!giftEnable);
-                }}
-                style={[tailwind('flex-row items-center')]}
-              >
-                <Image
+                <Text
                   style={[
-                    tailwind(''),
-                    {
-                      height: 18,
-                      width: 18,
-                    },
+                    tailwind('font-bold text-gray-800'),
+                    { fontSize: scaleFont(18) },
                   ]}
-                  source={
-                    giftEnable
-                      ? assets_manifest?.checkbox
-                      : assets_manifest?.unchecked
-                  }
-                />
-
-                <Text style={[tailwind('px-2 font-bold text-black')]}>
-                  Have a Gifting Message
+                >
+                  Cart Items
                 </Text>
-              </TouchableOpacity>
-              {giftEnable && (
                 <View
                   style={[
-                    tailwind(
-                      'flex-row items-center rounded-xl bg-white   px-3 my-3',
-                    ),
+                    tailwind('px-3 py-1 rounded-full'),
+                    { backgroundColor: '#F3F4F6' },
                   ]}
-                >
-                  <GiftBoxIcon />
-                  <TextInput
-                    style={[
-                      tailwind('text-black font-bold py-3 '),
-                      { width: '90%' },
-                    ]}
-                    onChangeText={txt => {
-                      setGiftcontent(txt);
-                    }}
-                    value={giftcontent}
-                    placeholderTextColor={'gray'}
-                    placeholder="Enter Your Gift Content"
-                  />
-                </View>
-              )}
-            </View>
-            <View style={[tailwind('mx-3 px-3 ')]}>
-              <Text
-                style={[
-                  tailwind('font-bold text-primary'),
-                  { fontSize: scaleFont(16) },
-                ]}
-              >
-                Payment Details
-              </Text>
-              <InvoiceComponent
-                totalQuantity={totalQuantity}
-                Couponstate={Couponstate}
-                Total={Total}
-                Delivery_charge={Delivery_charge}
-                //  scaleFont={scaleFont}
-              />
-            </View>
-            {Address?.length && (
-              <View style={[tailwind('flex-row items-center px-5 py-2')]}>
-                <Text
-                  style={[
-                    tailwind('font-bold text-primary'),
-                    { fontSize: scaleFont(16) },
-                  ]}
-                >
-                  Delivery Address
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    addressSheetRef?.current?.open();
-                  }}
-                  style={[tailwind(''), { marginLeft: 'auto' }]}
                 >
                   <Text
                     style={[
-                      tailwind('font-bold font-12 text-black'),
-                      { color: 'green', textDecorationLine: 'underline' },
+                      tailwind('font-semibold'),
+                      { fontSize: scaleFont(13), color: '#6B7280' },
                     ]}
                   >
-                    Change Address
+                    {CartState.length}{' '}
+                    {CartState.length === 1 ? 'Item' : 'Items'}
+                  </Text>
+                </View>
+              </View>
+
+              {/* Cart Items */}
+              <View style={tailwind('px-4 py-2')}>
+                {CartState?.map((item, index) => (
+                  <View
+                    key={`${item?.product_id}_${index}`}
+                    style={[
+                      tailwind('my-2'),
+                      index < CartState.length - 1 &&
+                        tailwind('border-b border-gray-50 pb-4'),
+                    ]}
+                  >
+                    <CartComponent
+                      isVeg={item.eggless === 0 || item.eggless === 1}
+                      veg={item.eggless === 0}
+                      quantity={item?.quantity}
+                      image={item.image}
+                      product_name={item?.product_name}
+                      price={200}
+                      id={item?.product_id}
+                      offer={item?.offer}
+                      is_favourite={item?.is_favourite}
+                      description={item?.description}
+                      product_image={item?.product_image}
+                      variation={item?.variation}
+                      increment={increment}
+                      decrement={decrement}
+                      color_variation={item.product_color_var}
+                      item={item}
+                      product_price={item?.product_price}
+                      type={2}
+                    />
+                  </View>
+                ))}
+              </View>
+
+              {/* Order Total */}
+              {totalQuantity && (
+                <View
+                  style={[
+                    tailwind('px-5 py-4 border-t border-gray-100'),
+                    { backgroundColor: '#FAFAFA' },
+                  ]}
+                >
+                  <View
+                    style={tailwind('flex-row justify-between items-center')}
+                  >
+                    <Text
+                      style={[
+                        tailwind('font-bold text-gray-700'),
+                        { fontSize: scaleFont(16) },
+                      ]}
+                    >
+                      Subtotal
+                    </Text>
+                    <Text
+                      style={[
+                        tailwind('font-bold'),
+                        { fontSize: scaleFont(18), color: '#F39F3E' },
+                      ]}
+                    >
+                      ₹{totalQuantity}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
+
+            {/* Delivery Address Card */}
+            {Address?.length > 0 ? (
+              <View
+                style={[
+                  tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
+                  styles.cardShadow,
+                ]}
+              >
+                <View
+                  style={tailwind('flex-row justify-between items-center mb-3')}
+                >
+                  <View style={tailwind('flex-row items-center')}>
+                    <LocationICon1 />
+                    <Text
+                      style={[
+                        tailwind('ml-2 font-bold text-gray-800'),
+                        { fontSize: scaleFont(16) },
+                      ]}
+                    >
+                      Delivery Address
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => addressSheetRef?.current?.open()}
+                  >
+                    <Text
+                      style={[
+                        tailwind('font-semibold'),
+                        { color: '#80C659', fontSize: scaleFont(14) },
+                      ]}
+                    >
+                      Change
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={[
+                    tailwind('rounded-xl p-4 mt-2'),
+                    { backgroundColor: '#F9FAFB' },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      tailwind('font-medium text-gray-700'),
+                      { fontSize: scaleFont(14), lineHeight: 20 },
+                    ]}
+                  >
+                    {Address?.[0]?.user_address_details}
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              <View
+                style={[
+                  tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
+                  styles.cardShadow,
+                ]}
+              >
+                <View style={tailwind('flex-row items-center mb-3')}>
+                  <LocationICon1 />
+                  <Text
+                    style={[
+                      tailwind('ml-2 font-bold text-gray-800'),
+                      { fontSize: scaleFont(16) },
+                    ]}
+                  >
+                    Delivery Address
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation?.navigate('AddAddressScreen')}
+                  style={[
+                    tailwind('border-2 rounded-xl py-4 mt-2'),
+                    { borderColor: '#80C659', borderStyle: 'dashed' },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      tailwind('text-center font-semibold'),
+                      { fontSize: scaleFont(15), color: '#80C659' },
+                    ]}
+                  >
+                    + Add Delivery Address
                   </Text>
                 </TouchableOpacity>
               </View>
             )}
-
-            {selectedAddress && (
-              <View
-                style={[tailwind('bg-white rounded-xl mx-3  my-1 px-3 '), {}]}
-              >
-                <View
-                  style={[tailwind('flex-row items-center'), { width: '100%' }]}
-                >
-                  <View style={[tailwind('items-center'), { width: '15%' }]}>
-                    <Image
-                      style={[tailwind(''), { height: 40, width: 40 }]}
-                      source={assets_manifest?.locationpin}
-                      resizeMode="contain"
-                    />
-                  </View>
-
-                  <View style={[tailwind('my-2'), { width: '85%' }]}>
-                    <Text style={[tailwind('font-bold text-black font-15')]}>
-                      {selectedAddress?.user_address_name}
-                    </Text>
-                    <Text style={[tailwind('font-bold font-10 mt-1')]}>
-                      {selectedAddress?.user_address_details}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            )}
-            <View style={[tailwind('h-20')]} />
           </ScrollView>
-          <View>
-            {CartState.length > 0 && (
+
+          {/* Bottom Checkout Bar */}
+          <View
+            style={[
+              tailwind('absolute bottom-0 left-0 right-0 bg-white'),
+              styles.bottomBarShadow,
+            ]}
+          >
+            <View style={tailwind('px-4 py-4')}>
+              {/* Price Summary */}
               <View
-                style={[
-                  tailwind(' mx-4 mb-4'),
-                  { position: 'absolute', bottom: 0 },
-                ]}
+                style={tailwind('flex-row justify-between items-center mb-3')}
               >
-                <View
-                  style={[
-                    tailwind(
-                      'flex-row justify-between bg-primary rounded-xl items-center px-4 py-3 w-full',
-                    ),
-                    {
-                      // backgroundColor: '#24661E',
-                      borderRadius: 18,
-                    },
-                  ]}
-                >
-                  <View style={[tailwind('flex-1 flex-row items-center')]}>
-                    <Text
-                      style={[
-                        tailwind('font-bold text-white  font-15'),
-                        { textTransform: 'uppercase' },
-                      ]}
-                    >
-                      To Pay {''}
-                    </Text>
-                    <View
-                      style={[
-                        tailwind(''),
-                        { height: '100%', width: 2, backgroundColor: 'red' },
-                      ]}
-                    />
-                    <Text style={tailwind(' font-bold text-white text-base')}>
-                      ₹ {Total}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    disabled={!loading ? false : true}
-                    onPress={() => {
-                      Check();
-                    }}
-                    activeOpacity={0.7}
+                <View>
+                  <Text
                     style={[
-                      tailwind(
-                        'border  flex-row items-center rounded-xl  py-2',
-                      ),
-                      { borderWidth: 2, backgroundColor: '#FFCC01' },
+                      tailwind('text-gray-600 mb-1'),
+                      { fontSize: scaleFont(13) },
                     ]}
                   >
-                    {loading ? (
-                      <ActivityIndicator
-                        color={'white'}
-                        size={'small'}
-                        style={[tailwind('px-8')]}
-                      />
-                    ) : (
-                      <Text
-                        style={tailwind('text-primary flex font-bold px-8 ')}
-                      >
-                        Continue
-                      </Text>
-                    )}
-                  </TouchableOpacity>
+                    Total Amount
+                  </Text>
+                  <Text
+                    style={[
+                      tailwind('font-bold text-gray-900'),
+                      { fontSize: scaleFont(20) },
+                    ]}
+                  >
+                    ₹{Total}
+                  </Text>
                 </View>
+
+                <TouchableOpacity
+                  disabled={loading}
+                  onPress={Check}
+                  activeOpacity={0.8}
+                  style={[
+                    tailwind('rounded-xl px-8 py-4'),
+                    { backgroundColor: loading ? '#D1D5DB' : '#80C659' },
+                    styles.buttonShadow,
+                  ]}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="white" size="small" />
+                  ) : (
+                    <Text
+                      style={[
+                        tailwind('text-white font-bold'),
+                        { fontSize: scaleFont(16) },
+                      ]}
+                    >
+                      Proceed to Checkout
+                    </Text>
+                  )}
+                </TouchableOpacity>
               </View>
-            )}
+            </View>
           </View>
         </View>
       ) : (
-        <View
-          style={[
-            tailwind('flex-1 items-center  px-5'),
-            { justifyContent: 'center' },
-          ]}
-        >
+        // Empty Cart State
+        <View style={tailwind('flex-1 justify-center items-center px-8')}>
           <Image
-            style={{
-              height: 80,
-              width: 80,
-              marginBottom: 10,
-            }}
+            style={{ height: 120, width: 120, marginBottom: 24, opacity: 0.8 }}
             source={assets_manifest?.cart1}
             resizeMode="contain"
           />
           <Text
             style={[
-              tailwind(
-                'text-gray-500 font-14 font-bold text-center items-center mb-8 px-5',
-              ),
-              { lineHeight: 20, justifyContent: 'center' },
+              tailwind('text-gray-800 font-bold text-center mb-2'),
+              { fontSize: scaleFont(20) },
             ]}
           >
-            Looks like you haven't added anything to your cart yet
+            Your Cart is Empty
+          </Text>
+          <Text
+            style={[
+              tailwind('text-gray-500 text-center mb-8'),
+              { fontSize: scaleFont(14), lineHeight: 22 },
+            ]}
+          >
+            Looks like you haven't added anything to your cart yet. Start
+            shopping now!
           </Text>
 
           <TouchableOpacity
             style={[
-              tailwind('bg-primary px-8 py-3 mb-5 rounded-full'),
-              { width: '100%', position: 'absolute', bottom: 10 },
+              tailwind('rounded-xl px-12 py-4'),
+              { backgroundColor: '#80C659', width: '100%', maxWidth: 300 },
+              styles.buttonShadow,
             ]}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('Home')} // Or your explore screen
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Home')}
           >
             <Text
-              style={tailwind('text-white text-center font-bold text-base')}
+              style={[
+                tailwind('text-white text-center font-bold'),
+                { fontSize: scaleFont(16), textTransform: 'uppercase' },
+              ]}
             >
-              EXPLORE
+              Explore
             </Text>
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Address Selection Modal */}
       <Modalize
         ref={addressSheetRef}
         modalTopOffset={200}
         adjustToContentHeight={true}
         HeaderComponent={
           <View
-            style={[
-              tailwind('flex flex-row justify-between items-center p-3 my-3'),
-            ]}
+            style={tailwind(
+              'flex-row justify-between items-center p-5 border-b border-gray-100',
+            )}
           >
             <Text
               style={[
-                tailwind('font-medium text-gray font-17 font-bold'),
-                // { fontWeight: Platform?.OS === 'android' ? 'normal' : '500' },
+                tailwind('font-bold text-gray-800'),
+                { fontSize: scaleFont(18) },
               ]}
             >
-              Select Delivery Address
+              Select Address
             </Text>
             <TouchableOpacity
-              style={[tailwind('bg-primary px-2 py-2 rounded-full')]}
-              onPress={() => {
-                navigation?.navigate('AddAddressScreen');
-              }}
-              // onPress={props.navigateToAddressAdd}
+              style={[
+                tailwind('rounded-full px-4 py-2'),
+                { backgroundColor: '#80C659' },
+              ]}
+              onPress={() => navigation?.navigate('AddAddressScreen')}
             >
               <Text
                 style={[
-                  tailwind('font-medium font-14 text-white font-bold'),
-                  // { fontWeight: Platform?.OS === 'android' ? 'normal' : '500' },
+                  tailwind('font-semibold text-white'),
+                  { fontSize: scaleFont(14) },
                 ]}
               >
-                Add Address
+                + Add New
               </Text>
             </TouchableOpacity>
           </View>
@@ -680,21 +698,42 @@ export default function CartScreen() {
       >
         {Address?.length &&
           selectedAddress &&
-          Address?.map((item: any, index: any) => {
-            return (
-              <ChangeAddress
-                key={`${item?.user_address_id}_${index}`}
-                selectedAddress={selectedAddress}
-                address_id={item?.user_address_id}
-                user_address_name={item?.user_address_name}
-                user_address_details={item?.user_address_details}
-                action={ChangeAddressDetails}
-                item={item}
-                setValue={setValue}
-              />
-            );
-          })}
+          Address?.map((item, index) => (
+            <ChangeAddress
+              key={`${item?.user_address_id}_${index}`}
+              selectedAddress={selectedAddress}
+              address_id={item?.user_address_id}
+              user_address_name={item?.user_address_name}
+              user_address_details={item?.user_address_details}
+              action={ChangeAddressDetails}
+              item={item}
+              setValue={setValue}
+            />
+          ))}
       </Modalize>
     </View>
   );
 }
+const styles = {
+  cardShadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  bottomBarShadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  buttonShadow: {
+    shadowColor: '#80C659',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+};

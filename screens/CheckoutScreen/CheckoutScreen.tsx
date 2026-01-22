@@ -167,37 +167,37 @@ export default function CheckoutScreen() {
       errorBox('Please select a payment method');
       return;
     }
-    navigation?.navigate('FailureScreen');
-    // const Response = await get_Create_order(Payload);
-    // // console.log('ResponseResponseResponse', Response?.order_id);
-    // if (Response?.order_id) {
-    //   order_id.current = Response?.order_id;
-    //   if (selectedPayment?.payment_method_id == 1) {
-    //     const payloadData = {
-    //       order_id: Response?.order_id,
-    //       payment_status: '1',
-    //       payment_message: 'success',
-    //       payment_type: 'Cash on Delivery',
-    //       razorPayId: '',
-    //       razorpay_order_id: '',
-    //       user_id: ID?.toString(),
-    //     };
-    //     const OrderStatusDetail = await get_OrderStatus(payloadData);
-    //     if (OrderStatusDetail?.order_id) {
-    //       setSuccesserror(true);
-    //       setVisible(true);
-    //     }
-    //     console.log(
-    //       'OrderStatusDetailOrderStatusDetailOrderStatusDetail',
-    //       OrderStatusDetail,
-    //     );
-    //   } else {
-    //     OnlinePayment(Response?.order_id);
-    //   }
-    // } else {
-    //   errorBox('Order Failed!');
-    //   order_id.current = null;
-    // }
+    // navigation?.navigate('FailureScreen');
+    const Response = await get_Create_order(Payload);
+    // console.log('ResponseResponseResponse', Response?.order_id);
+    if (Response?.order_id) {
+      order_id.current = Response?.order_id;
+      if (selectedPayment?.payment_method_id == 1) {
+        const payloadData = {
+          order_id: Response?.order_id,
+          payment_status: '1',
+          payment_message: 'success',
+          payment_type: 'Cash on Delivery',
+          razorPayId: '',
+          razorpay_order_id: '',
+          user_id: ID?.toString(),
+        };
+        const OrderStatusDetail = await get_OrderStatus(payloadData);
+        if (OrderStatusDetail?.order_id) {
+          setSuccesserror(true);
+          setVisible(true);
+        }
+        console.log(
+          'OrderStatusDetailOrderStatusDetailOrderStatusDetail',
+          OrderStatusDetail,
+        );
+      } else {
+        OnlinePayment(Response?.order_id);
+      }
+    } else {
+      errorBox('Order Failed!');
+      order_id.current = null;
+    }
   };
   const CloseCart = async () => {
     const payloadData = {

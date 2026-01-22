@@ -26,6 +26,7 @@ import {
 import assets_manifest from '@assets';
 import Swiper from 'react-native-swiper';
 import {
+  CartIcon,
   CategoryIcon,
   LockIcon,
   NotificationIcon,
@@ -407,6 +408,39 @@ export default function DashboardScreen() {
           style={{ height: 40, width: 100 }}
         />
         <View style={tailwind('flex-1')} />
+        {
+          CartStateValue?.length?  <TouchableOpacity style={[tailwind('mr-2')]}>
+          <CartIcon />
+          <View
+            style={[
+              tailwind(
+                'absolute rounded-full items-center justify-center z-10',
+              ),
+              {
+                top: -5,
+                right: -5,
+                height: 18,
+                width: 18,
+                backgroundColor: 'red',
+              },
+            ]}
+          >
+            <Text
+              style={[
+                tailwind('font-bold font-10 text-center'),
+                { color: 'white' },
+              ]}
+            >
+              {CartStateValue?.length}
+            </Text>
+          </View>
+        </TouchableOpacity>:
+         <TouchableOpacity style={[tailwind('mr-2')]}>
+          <CartIcon />
+         
+        </TouchableOpacity>
+        }
+       
         {getdata?.length ? (
           <TouchableOpacity
             activeOpacity={0.7}

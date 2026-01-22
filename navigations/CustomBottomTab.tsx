@@ -44,24 +44,18 @@ export default function CustomBottomTab({
   }
 
   return (
-    <View
-      style={[
-        tailwind('flex-row bg-white px-2'),
-        {
-          elevation: 10,
-          shadowColor: '#000',
-          shadowOpacity: 0.1,
-          shadowRadius: 6,
-        },
-      ]}
-    >
+    <View style={tailwind('flex flex-row bg-white items-center  ')}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
-        const label = options.tabBarLabel ?? options.title ?? route.name;
-
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
         const isFocused = state.index === index;
 
-        const onPress = () => {
+        const onPress = async () => {
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -69,82 +63,89 @@ export default function CustomBottomTab({
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            route.name === 'Account'
-              ? navigation.openDrawer()
-              : navigation.navigate(route.name);
+            try {
+              if (route.name == 'Account') {
+                navigation.openDrawer();
+              } else {
+                navigation.navigate(route.state.routeNames[0]);
+              }
+            } catch {
+              navigation.navigate(route.name);
+            }
           }
         };
 
         const CartStateValue = CartState?.filter(
-          item => item?.desigin_type !== 4,
+          item => item?.desigin_type != 4,
         );
 
         return (
           <TouchableOpacity
+            activeOpacity={0.9}
             key={index}
-            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
             onPress={onPress}
-            style={[tailwind(''), { width: '25%', justifyContent: 'center' }]}
+            style={{ flex: 1, paddingVertical: 7 }}
           >
             <View
               style={[
-                tailwind('items-center  justify-center py-2'),
+                tailwind('flex   items-center justify-center  py-1.5'),
                 {
                   backgroundColor: isFocused ? '#80C659' : 'transparent',
-                  // marginHorizontal: 2,
-                  marginVertical: 6,
-                  // borderRadius: 16,
                   borderTopLeftRadius: 20,
                   borderBottomRightRadius: 20,
                 },
               ]}
             >
-              {/* CART BADGE
-              {index === 2 && CartStateValue?.length > 0 && (
+              {/* {index === 2 && CartStateValue?.length > 0 && (
                 <View
-                  style={{
-                    position: 'absolute',
-                    top: 6,
-                    right: 18,
-                    backgroundColor: 'red',
-                    height: 18,
-                    width: 18,
-                    borderRadius: 9,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 10,
-                  }}
+                  style={[
+                    tailwind(
+                      'absolute rounded-full items-center justify-center z-10',
+                    ),
+                    {
+                      top: -5,
+                      right: -5,
+                      height: 18,
+                      width: 18,
+                      backgroundColor: 'red',
+                    },
+                  ]}
                 >
                   <Text
-                    style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}
+                    style={[
+                      tailwind('font-bold font-10 text-center'),
+                      { color: 'white' },
+                    ]}
                   >
-                    {CartStateValue.length}
+                    {CartStateValue?.length}
                   </Text>
                 </View>
               )} */}
-
-              {/* ICON */}
-              {index === 0 ? (
-                <DashboardIcon color={isFocused ? 'white' : '#666'} />
-              ) : index === 1 ? (
-                <SubscriptionIcontab color={isFocused ? 'white' : '#666'} />
-              ) : index === 2 ? (
-                <CalenderIconTab color={isFocused ? 'white' : '#666'} />
-              ) : (
-                <AccoundIcon color={isFocused ? 'white' : '#666'} />
-              )}
-
-              {/* LABEL (no layout jump) */}
+              <View style={tailwind('')}>
+                {index === 0 ? (
+                  <DashboardIcon color={isFocused ? 'white' : '#666666'} />
+                ) : index === 1 ? (
+                  <SubscriptionIcontab
+                    color={isFocused ? 'white' : '#666666'}
+                  />
+                ) : index === 2 ? (
+                  <CalenderIconTab color={isFocused ? 'white' : '#666666'} />
+                ) : (
+                  <AccoundIcon color={isFocused ? 'white' : '#666666'} />
+                )}
+              </View>
               {isFocused && (
                 <Text
-                  style={{
-                    paddingVertical: 2,
-                    // marginTop: 2,
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: isFocused ? 'white' : '#666',
-                    opacity: isFocused ? 1 : 0.7,
-                  }}
+                  style={[
+                    tailwind('font-14  font-bold'),
+                    {
+                      color: isFocused ? 'white' : '#666666',
+                    },
+                  ]}
                 >
                   {label}
                 </Text>

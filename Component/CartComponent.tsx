@@ -166,137 +166,90 @@ const CartComponent = (props: CartCompType) => {
         </View>
       )}
       {props?.type == 2 && (
-        <View style={[tailwind(' my-1 rounded-xl')]}>
-          <View
-            style={[
-              tailwind('flex-row   p-3'),
-              {
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 3,
-              },
-            ]}
-          >
-            <View style={[tailwind('mr-3'), { width: '15%' }]}>
+        <View  style={[tailwind(' my-3')]}>
+          <View style={tailwind('flex-row items-center')}>
+            <View style={tailwind('mr-4')}>
               <Image
                 source={props?.image}
                 style={[
                   tailwind('rounded-lg'),
                   {
-                    width: 50,
-                    height: 60,
+                    width: 80,
+                    height: 80,
                   },
                 ]}
                 resizeMode="cover"
                 defaultSource={assets_manifest?.banner_loading}
               />
             </View>
-            <View style={[tailwind('flex-1 flex-row'), { width: '100%' }]}>
-              <View style={[tailwind(''), { width: '70%' }]}>
-                <Text
-                  style={tailwind('font-16 font-bold text-black')}
-                  numberOfLines={2}
-                >
-                  {props?.product_name}
+            <View style={tailwind('flex-1 mr-4')}>
+              <Text
+                style={tailwind('font-bold text-gray-900 text-base mb-1')}
+                numberOfLines={2}
+              >
+                {props?.product_name}
+              </Text>
+
+              <View style={tailwind('flex-row items-center mb-1')}>
+                <Text style={tailwind('font-medium text-gray-600 text-sm')}>
+                  {props?.variation?.product_variation}
                 </Text>
-                <View  style={[tailwind('flex-row my-2')]}>
-                   <Text
-                    style={[
-                      tailwind('font-medium font-14'),
-                      { color: 'black',},
-                    ]}
-                  >
-                    {props?.variation?.product_variation}
-                  </Text>
-                   <Text
-                  style={tailwind('font-medium font-14 text-black')}
-                  numberOfLines={2}
+                <Text
+                  style={tailwind('font-medium text-gray-600 text-sm ml-1')}
                 >
                   {props?.variation?.product_unit}
                 </Text>
-                  </View>
-                
-                
               </View>
-              <View style={[tailwind(''), { width: '30%' ,}]}>
-                <View style={tailwind('')}>
+            </View>
+            <View style={tailwind('items-end')}>
+              <Text style={tailwind('font-bold text-gray-900 text-lg mb-3')}>
+                ₹{props?.variation?.product_price}
+              </Text>
+              <View style={tailwind('flex-row items-center')}>
+                <TouchableOpacity
+                  onPress={initiateDecrement}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  style={[
+                    tailwind(' items-center justify-center'),
+                    {
+                      backgroundColor: '#80C659',
+                      width: 32,
+                      height: 32,borderTopRightRadius:12,borderBottomLeftRadius:12
+                    },
+                  ]}
+                  // disabled={props?.quantity <= 1}
+                >
+                  <Text style={tailwind('font-bold text-xl text-white')}>
+                    −
+                  </Text>
+                </TouchableOpacity>
+
+                <View style={tailwind('mx-3')}>
                   <Text
-                    style={[
-                      tailwind('font-bold font-18 my-2'),
-                      { color: 'black',marginLeft:"auto" },
-                    ]}
+                    style={tailwind(
+                      'font-bold text-gray-900 text-base text-center',
+                    )}
                   >
-                    ₹{props?.variation?.product_price}
+                    {props?.quantity}
                   </Text>
                 </View>
-                <View
+
+                <TouchableOpacity
+                  onPress={initiateIncrement}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={[
-                    tailwind('flex-row  items-center '),
-                    { borderRadius: 10, width: '100%',justifyContent:"center" },
+                    tailwind(' items-center justify-center'),
+                    {
+                      backgroundColor: '#80C659',
+                      width: 32,
+                      height: 32,borderTopLeftRadius:12,borderBottomRightRadius:12
+                    },
                   ]}
                 >
-                  <TouchableOpacity
-                    onPress={initiateDecrement}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    style={[
-                      {
-                        backgroundColor: '#80C659',
-                        width: 25,
-                        height: 25,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderTopRightRadius: 10,
-                        borderBottomLeftRadius: 10,
-                      },
-                      tailwind(''),
-                    ]}
-                  >
-                    <Text style={tailwind('font-bold font-20 text-white')}>
-                      −
-                    </Text>
-                  </TouchableOpacity>
-                  <View
-                    style={[
-                      tailwind('flex-row items-center'),
-                      { justifyContent: 'center', width: 30 },
-                    ]}
-                  >
-                    <Text
-                      style={tailwind(
-                        'font-bold text-base text-black text-center',
-                      )}
-                    >
-                      {props?.quantity}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={initiateIncrement}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    style={[
-                      {
-                        width: 25,
-                        height: 25,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#80C659',
-                        borderTopLeftRadius: 10,
-                        borderBottomRightRadius: 10,
-                      },
-                      tailwind(''),
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        tailwind('font-bold font-20 '),
-                        { color: 'white' },
-                      ]}
-                    >
-                      +
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                  <Text style={tailwind('font-bold text-xl text-white')}>
+                    +
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

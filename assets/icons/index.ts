@@ -68,7 +68,10 @@ import ContactUsIcon from './SvgIcons/ContactUsIcon';
 import PendingIcon from './SvgIcons/PendingIcon';
 import SubscriptionIcon1 from './SvgIcons/SubscriptionIcon1';
 import ExtraProductIcon from './SvgIcons/ExtraProductIcon';
+import CalenderIconSubscription from './SvgIcons/CalenderIconSubscription';
+import CartIcon from './SvgIcons/CartIcon';
 export {
+  CartIcon,
   AddressIcon,
   SubscriptionIcon1,
   ExtraProductIcon,
@@ -86,6 +89,7 @@ export {
   TickIcon1,
   Homeicon,
   LockIcon,
+  CalenderIconSubscription,
   CheckIcon,
   SubscriptionIcon,
   Subscription,

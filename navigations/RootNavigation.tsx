@@ -29,6 +29,7 @@ import { BillDetailScreen, BillViewDetails } from '../screens/BillDetailScreen';
 import { FailureScreen, SuccessScreen } from '../screens/SuccessScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import CategoryScreen from '../screens/CategoryScreen';
+import SubscritionSuccess from '../screens/SubscritionSuccess';
 const RootNavigator = createNativeStackNavigator();
 
 const StackConfig = { headerShown: false };
@@ -151,6 +152,10 @@ export default function RootNavigation() {
             <RootNavigator.Screen
               component={DashboardScreen}
               name="DashboardScreen"
+            />
+            <RootNavigator.Screen
+              component={SubscritionSuccess}
+              name="SubscritionSuccess"
             />
           </RootNavigator.Navigator>
         </Host>
