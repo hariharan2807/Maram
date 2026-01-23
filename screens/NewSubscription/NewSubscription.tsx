@@ -15,6 +15,7 @@ import {
   Customized_days,
   decrementAction,
   incrementAction,
+  updateCart,
   updateCategory_List,
   updateSubscription_start_date,
 } from '@actions/userActions';
@@ -327,6 +328,7 @@ export default function NewSubscription() {
       dispatch(updateCategory_List(null));
       dispatch(updateSubscription_start_date([]));
       dispatch(Customized_days([]));
+      dispatch(updateCart([]));
 
       infoBox('Success');
       navigation?.navigate('SubscritionSuccess');

@@ -161,7 +161,7 @@ export default function UserProfileScreen() {
                 <Text style={tailwind('my-2 font-bold font-15 text-black')}>
                   Pay Bill
                 </Text>
-                <Text style={tailwind('font-regular font-13 text-black')}>
+                <Text style={tailwind('font-semi font-13 text-black')}>
                   Bill due amount {INDIAN} {ProfileData?.bill_due_amount}
                 </Text>
               </View>
@@ -191,7 +191,7 @@ export default function UserProfileScreen() {
                 <Text style={tailwind('my-2 font-bold font-15 text-black')}>
                   My Subscription
                 </Text>
-                <Text style={tailwind('font-regular font-13 text-black')}>
+                <Text style={tailwind('font-semi font-13 text-black')}>
                   {ProfileData?.subscriptions_count} subscriptions
                 </Text>
               </View>
@@ -221,7 +221,7 @@ export default function UserProfileScreen() {
                 <Text style={tailwind('my-2 font-bold font-15 text-black')}>
                   Bill History
                 </Text>
-                <Text style={tailwind('font-regular font-13 text-black')}>
+                <Text style={tailwind('font-semi font-13 text-black')}>
                   {ProfileData?.bill_history_count} bills
                 </Text>
               </View>
@@ -251,7 +251,7 @@ export default function UserProfileScreen() {
                 <Text style={tailwind('my-2 font-bold font-15 text-black')}>
                   Delivery Address
                 </Text>
-                <Text style={tailwind('font-regular font-13 text-black')}>
+                <Text style={tailwind('font-semi font-13 text-black')}>
                   {ProfileData?.saved_address_count} Saved Address
                 </Text>
               </View>
@@ -268,31 +268,31 @@ export default function UserProfileScreen() {
           >
             <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
               <FeedBackIcon />
-              <Text style={tailwind('text-black ml-2  font-medium')}>
+              <Text style={tailwind('text-black ml-2  font-semi')}>
                 Feedback
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
               <TermsCondtionIcon />
-              <Text style={tailwind('text-black ml-2  font-medium')}>
+              <Text style={tailwind('text-black ml-2  font-semi')}>
                 Terms & Conditions
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
               <PrivacyPolicyIcon />
-              <Text style={tailwind('text-black ml-2  font-medium')}>
+              <Text style={tailwind('text-black ml-2  font-semi')}>
                 Privacy Policy
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
               <ContactUsIcon />
-              <Text style={tailwind('text-black ml-2  font-medium')}>
+              <Text style={tailwind('text-black ml-2  font-semi')}>
                 Contact Us
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[tailwind('flex-row items-center py-2')]}>
               <AbountIcon />
-              <Text style={tailwind('text-black ml-2  font-medium')}>
+              <Text style={tailwind('text-black ml-2  font-semi')}>
                 About us
               </Text>
             </TouchableOpacity>

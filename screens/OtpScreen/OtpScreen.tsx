@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20, // Button also has side space
   },
   buttonActive: {
-    backgroundColor: '#45302B',
+    backgroundColor: '#80C659',
   },
   buttonInactive: {
     backgroundColor: '#9CA3AF',
