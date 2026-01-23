@@ -13,6 +13,7 @@ import SearchScreen from '../screens/SearchScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
 import { NewSubscription } from '../screens/NewSubscription';
 import CalenderScreen from '../screens/CalenderScreeen';
+import WalletScreeen from '../screens/Wallet';
 
 const StackConfig = { headerShown: false };
 
@@ -75,6 +76,17 @@ export function Calendar(props: any) {
       screenOptions={StackConfig}
     >
       <AuthStack.Screen name="CalenderScreen" component={CalenderScreen} />
+    </AuthStack.Navigator>
+  );
+}
+
+export function Wallet(props: any) {
+  return (
+    <AuthStack.Navigator
+      initialRouteName="WalletScreeen"
+      screenOptions={StackConfig}
+    >
+      <AuthStack.Screen name="WalletScreeen" component={WalletScreeen} />
     </AuthStack.Navigator>
   );
 }

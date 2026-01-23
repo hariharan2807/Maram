@@ -1,16 +1,23 @@
 import tailwind from '@tailwind';
 import {
   AccoundIcon,
-  BagColor,
   CalenderIconTab,
   DashboardIcon,
-  SearchIcons,
   SubscriptionIcontab,
+  CartIcon, // Add CartIcon import
 } from '../assets/icons';
 import React, { useEffect, useState } from 'react';
-import { Keyboard, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import { useSelector } from 'react-redux';
-import ProfileIcon1 from '../assets/icons/SvgIcons/ProfileIcon1';
+
+const { width } = Dimensions.get('window');
 
 export default function CustomBottomTab({
   state,
@@ -18,7 +25,6 @@ export default function CustomBottomTab({
   navigation,
 }: any) {
   const [showTab, setShowTab] = useState(true);
-
   const CartState = useSelector(state => state.user.cart);
 
   useEffect(() => {
@@ -36,124 +42,221 @@ export default function CustomBottomTab({
 
   const focusedOptions = descriptors[state.routes[state.index].key].options;
 
-  // if (focusedOptions.tabBarVisible === false) {
-  //     return null;
-  // }
   if (showTab === false) {
     return null;
   }
 
+  // Get cart item count (excluding type 4)
+  const cartItemCount =
+    CartState?.filter(item => item?.desigin_type !== 4)?.length || 0;
+
   return (
-    <View style={tailwind('flex flex-row bg-white items-center  ')}>
-      {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-        const isFocused = state.index === index;
+    <View style={styles.container}>
+      <View style={styles.tabBar}>
+        {state.routes.map((route: any, index: number) => {
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel ?? options.title ?? route.name;
+          const isFocused = state.index === index;
 
-        const onPress = async () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+          // Check if this is the center tab (Cart)
+          const isCenterTab = index === 2; // Cart is at index 2
 
-          if (!isFocused && !event.defaultPrevented) {
-            try {
-              if (route.name == 'Account') {
-                navigation.openDrawer();
-              } else {
-                navigation.navigate(route.state.routeNames[0]);
-              }
-            } catch {
+          const onPress = async () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              // if (route.name === 'Profile' || route.name === 'Login') {
+              //   navigation.openDrawer();
+              // } else {
               navigation.navigate(route.name);
+              // }
             }
-          }
-        };
+          };
 
-        const CartStateValue = CartState?.filter(
-          item => item?.desigin_type != 4,
-        );
+          // For center cart tab
+          if (isCenterTab) {
+            return (
+              <TouchableOpacity
+                key={index}
+                activeOpacity={0.9}
+                onPress={onPress}
+                style={styles.centerTabButton}
+              >
+                <View style={styles.cartCircle}>
+                  <CartIcon color="#FFFFFF" size={24} />
 
-        return (
-          <TouchableOpacity
-            activeOpacity={0.9}
-            key={index}
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            style={{ flex: 1, paddingVertical: 7 }}
-          >
-            <View
-              style={[
-                tailwind('flex   items-center justify-center  py-1.5'),
-                {
-                  backgroundColor: isFocused ? '#80C659' : 'transparent',
-                  borderTopLeftRadius: 20,
-                  borderBottomRightRadius: 20,
-                },
-              ]}
-            >
-              {/* {index === 2 && CartStateValue?.length > 0 && (
-                <View
-                  style={[
-                    tailwind(
-                      'absolute rounded-full items-center justify-center z-10',
-                    ),
-                    {
-                      top: -5,
-                      right: -5,
-                      height: 18,
-                      width: 18,
-                      backgroundColor: 'red',
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      tailwind('font-bold font-10 text-center'),
-                      { color: 'white' },
-                    ]}
-                  >
-                    {CartStateValue?.length}
-                  </Text>
+                  {/* Cart Badge */}
+                  {cartItemCount > 0 && (
+                    <View style={styles.cartBadge}>
+                      <Text style={styles.cartBadgeText}>
+                        {cartItemCount > 9 ? '9+' : cartItemCount}
+                      </Text>
+                    </View>
+                  )}
                 </View>
-              )} */}
-              <View style={tailwind('')}>
-                {index === 0 ? (
-                  <DashboardIcon color={isFocused ? 'white' : '#666666'} />
-                ) : index === 1 ? (
-                  <SubscriptionIcontab
-                    color={isFocused ? 'white' : '#666666'}
-                  />
-                ) : index === 2 ? (
-                  <CalenderIconTab color={isFocused ? 'white' : '#666666'} />
-                ) : (
-                  <AccoundIcon color={isFocused ? 'white' : '#666666'} />
-                )}
-              </View>
-              {isFocused && (
-                <Text
-                  style={[
-                    tailwind('font-14  font-bold'),
-                    {
-                      color: isFocused ? 'white' : '#666666',
-                    },
-                  ]}
-                >
+                {/* <Text style={[
+                  styles.centerTabLabel,
+                  isFocused ? styles.centerTabLabelActive : styles.centerTabLabelInactive
+                ]}>
                   {label}
-                </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        );
-      })}
+                </Text> */}
+              </TouchableOpacity>
+            );
+          }
+
+          // For regular tabs (non-center)
+          return (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={0.9}
+              onPress={onPress}
+              style={styles.tabButton}
+            >
+              <View
+                style={[
+                  styles.iconContainer,
+                  isFocused && styles.activeIconContainer,
+                ]}
+              >
+                {getTabIcon(index, isFocused)}
+              </View>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  isFocused ? styles.tabLabelActive : styles.tabLabelInactive,
+                ]}
+              >
+                {label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 }
+
+// Helper function to get icons for regular tabs
+const getTabIcon = (index: number, isFocused: boolean) => {
+  const color = isFocused ? '#80C659' : '#666666';
+
+  switch (index) {
+    case 0:
+      return <DashboardIcon color={color} />;
+    case 1:
+      return <SubscriptionIcontab color={color} />;
+    case 3:
+      return <CalenderIconTab color={color} />;
+    case 4:
+      return <AccoundIcon color={color} />;
+    default:
+      return null;
+  }
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+    paddingTop: 3,
+    paddingBottom: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  tabBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingHorizontal: 4,
+  },
+  tabButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    // paddingVertical: 4,
+  },
+  centerTabButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    // paddingVertical: 4,
+    // marginTop:-60,
+  },
+  iconContainer: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  activeIconContainer: {
+    backgroundColor: 'rgba(128, 198, 89, 0.1)',
+    borderRadius: 12,
+    width: 40,
+    height: 40,
+  },
+  cartCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#80C659',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
+    borderWidth: 4,
+    borderColor: '#FFFFFF',
+  },
+  cartBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#EF4444',
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  cartBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+    paddingHorizontal: 4,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  tabLabelActive: {
+    color: '#80C659',
+  },
+  tabLabelInactive: {
+    color: '#666666',
+  },
+  centerTabLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  centerTabLabelActive: {
+    color: '#80C659',
+  },
+  centerTabLabelInactive: {
+    color: '#666666',
+  },
+});

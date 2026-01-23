@@ -30,6 +30,7 @@ import { FailureScreen, SuccessScreen } from '../screens/SuccessScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import SubscritionSuccess from '../screens/SubscritionSuccess';
+import CalendarScreen from '../screens/CalenderScreeen/CalenderScreeen';
 const RootNavigator = createNativeStackNavigator();
 
 const StackConfig = { headerShown: false };
@@ -157,6 +158,12 @@ export default function RootNavigation() {
               component={SubscritionSuccess}
               name="SubscritionSuccess"
             />
+
+        <RootNavigator.Screen
+              component={CalendarScreen}
+              name="CalendarScreen"
+            />
+
           </RootNavigator.Navigator>
         </Host>
       </NavigationContainer>

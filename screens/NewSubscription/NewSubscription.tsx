@@ -661,7 +661,7 @@ export default function NewSubscription() {
             >
               <Text
                 style={[
-                  tailwind('font-semibold text-white'),
+                  tailwind('font-semi text-white'),
                   { fontSize: scaleFont(14) },
                 ]}
               >

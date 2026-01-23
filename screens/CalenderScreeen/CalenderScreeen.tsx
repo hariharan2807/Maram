@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ImageBackground,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Calendar } from 'react-native-calendars';
@@ -143,140 +144,150 @@ export default function CalendarScreen() {
   return (
     <View style={styles.container}>
       <Topbar title="Calendar" type={3} />
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
       >
-        <View style={styles.calendarHeader}></View>
-        <View style={styles.calendarContainer}>
-          <Calendar
-            current={getToday()} // Shows current month by default
-            minDate={getCurrentMonthRange().start}
-            maxDate={getCurrentMonthRange().end}
-            hideExtraDays
-            enableSwipeMonths={true}
-            markedDates={markedDates}
-            onDayPress={onDayPress}
-            theme={{
-              backgroundColor: '#ffffff',
-              calendarBackground: '#ffffff',
-              textSectionTitleColor: '#6B7280',
-              selectedDayBackgroundColor: '#80C659',
-              selectedDayTextColor: '#ffffff',
-              todayTextColor: '#80C659',
-              dayTextColor: '#1F2937',
-              textDisabledColor: '#D1D5DB',
-              dotColor: '#80C659',
-              selectedDotColor: '#ffffff',
-              arrowColor: '#80C659',
-              monthTextColor: '#1F2937',
-              textDayFontWeight: '500',
-              textMonthFontWeight: 'bold',
-              textDayHeaderFontWeight: '600',
-              textDayFontSize: 16,
-              textMonthFontSize: 18,
-              textDayHeaderFontSize: 14,
-            }}
-          />
-        </View>
-        {ProductData?.length ? (
-          <View style={[tailwind('px-3')]}>
-            <View  style={[tailwind('flex-row px-3 items-center')]}>
-              <CalenderIconSubscription/>
-               <Text style={[tailwind('font-bold px-2 py-3 text-black font-16')]}>
-              Subscription Items
-            </Text>
-            </View>
-           
-            {ProductData?.map((item: any, index: any) => {
-              return (
-                <View
-                  key={index}
-                  style={[
-                    tailwind('flex-row items-center rounded-xl mx-2 my-2 p-3'),
-                    {
-                      backgroundColor: 'white',
-                      // width: '80%',
-                      elevation: 3,
-                      shadowColor: '#000',
-                      shadowOpacity: 0.1,
-                      shadowRadius: 5,
-                      shadowOffset: { width: 0, height: 2 },
-                    },
-                  ]}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.calendarHeader}></View>
+          <View style={styles.calendarContainer}>
+            <Calendar
+              current={getToday()} // Shows current month by default
+              minDate={getCurrentMonthRange().start}
+              maxDate={getCurrentMonthRange().end}
+              hideExtraDays
+              enableSwipeMonths={true}
+              markedDates={markedDates}
+              onDayPress={onDayPress}
+              theme={{
+                backgroundColor: '#ffffff',
+                calendarBackground: '#ffffff',
+                textSectionTitleColor: '#6B7280',
+                selectedDayBackgroundColor: '#80C659',
+                selectedDayTextColor: '#ffffff',
+                todayTextColor: '#80C659',
+                dayTextColor: '#1F2937',
+                textDisabledColor: '#D1D5DB',
+                dotColor: '#80C659',
+                selectedDotColor: '#ffffff',
+                arrowColor: '#80C659',
+                monthTextColor: '#1F2937',
+                textDayFontWeight: '500',
+                textMonthFontWeight: 'bold',
+                textDayHeaderFontWeight: '600',
+                textDayFontSize: 16,
+                textMonthFontSize: 18,
+                textDayHeaderFontSize: 14,
+              }}
+            />
+          </View>
+          {ProductData?.length ? (
+            <View style={[tailwind('px-3')]}>
+              <View style={[tailwind('flex-row px-3 items-center')]}>
+                <CalenderIconSubscription />
+                <Text
+                  style={[tailwind('font-bold px-2 py-3 text-black font-16')]}
                 >
-                  {/* IMAGE */}
-                  <TouchableOpacity
-                    style={[tailwind(''), { width: '20%' }]}
-                    activeOpacity={0.9}
-                    // onPress={() => ImageOnlyView?.current?.open()}
-                  >
-                    <Image
-                      source={item?.product_image}
-                      defaultSource={assets_manifest?.placeholder}
-                      resizeMode="contain"
-                      style={{
-                        width: '100%',
-                        height: 80,
-                        borderRadius: 10,
-                      }}
-                    />
-                  </TouchableOpacity>
+                  Subscription Items
+                </Text>
+              </View>
 
-                  {/* DETAILS */}
-                  <View style={{ width: '80%', marginLeft: 12 }}>
-                    <Text
-                      numberOfLines={1}
-                      style={tailwind('font-15 font-bold text-gray-900')}
+              {ProductData?.map((item: any, index: any) => {
+                return (
+                  <View
+                    key={index}
+                    style={[
+                      tailwind(
+                        'flex-row items-center rounded-xl mx-2 my-2 p-3',
+                      ),
+                      {
+                        backgroundColor: 'white',
+                        // width: '80%',
+                        elevation: 3,
+                        shadowColor: '#000',
+                        shadowOpacity: 0.1,
+                        shadowRadius: 5,
+                        shadowOffset: { width: 0, height: 2 },
+                      },
+                    ]}
+                  >
+                    {/* IMAGE */}
+                    <TouchableOpacity
+                      style={[tailwind(''), { width: '20%' }]}
+                      activeOpacity={0.9}
+                      // onPress={() => ImageOnlyView?.current?.open()}
                     >
-                      {item?.product_name}
-                    </Text>
-                    <View style={[tailwind('flex-row items-center my-1')]}>
-                      <Text style={tailwind('font-12 text-gray-600')}>
-                        {item?.product_price?.product_variation}{' '}
-                        {item?.product_price?.product_unit} /
-                      </Text>
+                      <Image
+                        source={item?.product_image}
+                        defaultSource={assets_manifest?.placeholder}
+                        resizeMode="contain"
+                        style={{
+                          width: '100%',
+                          height: 80,
+                          borderRadius: 10,
+                        }}
+                      />
+                    </TouchableOpacity>
+
+                    {/* DETAILS */}
+                    <View style={{ width: '80%', marginLeft: 12 }}>
                       <Text
-                        style={[
-                          tailwind('font-12 text-gray-600'),
-                          { color: '#F39F3E' },
-                        ]}
+                        numberOfLines={1}
+                        style={tailwind('font-15 font-bold text-gray-900')}
                       >
-                        {''} {item?.order_type}
+                        {item?.product_name}
                       </Text>
-                    </View>
-                    <View style={[tailwind('flex-row')]}>
-                      <View style={tailwind('flex-row items-center mt-2')}>
+                      <View style={[tailwind('flex-row items-center my-1')]}>
+                        <Text style={tailwind('font-12 text-gray-600')}>
+                          {item?.product_price?.product_variation}{' '}
+                          {item?.product_price?.product_unit} /
+                        </Text>
                         <Text
                           style={[
-                            tailwind('font-16 font-bold'),
+                            tailwind('font-12 text-gray-600'),
                             { color: '#F39F3E' },
                           ]}
                         >
-                          ₹{item?.product_price?.product_price}
+                          {''} {item?.order_type}
                         </Text>
-
-                        {item?.product_variation?.mrp_price && (
-                          <Text
-                            style={tailwind(
-                              'font-13 ml-2 text-gray-400 line-through',
-                            )}
-                          >
-                            ₹{item?.product_variation?.mrp_price}
-                          </Text>
-                        )}
                       </View>
-                      <View style={[tailwind('mr-3'), { marginLeft: 'auto' }]}>
+                      <View style={[tailwind('flex-row')]}>
+                        <View style={tailwind('flex-row items-center mt-2')}>
+                          <Text
+                            style={[
+                              tailwind('font-16 font-bold'),
+                              { color: '#F39F3E' },
+                            ]}
+                          >
+                            ₹{item?.product_price?.product_price}
+                          </Text>
+
+                          {item?.product_variation?.mrp_price && (
+                            <Text
+                              style={tailwind(
+                                'font-13 ml-2 text-gray-400 line-through',
+                              )}
+                            >
+                              ₹{item?.product_variation?.mrp_price}
+                            </Text>
+                          )}
+                        </View>
+                        <View
+                          style={[tailwind('mr-3'), { marginLeft: 'auto' }]}
+                        ></View>
                       </View>
                     </View>
                   </View>
-                </View>
-              );
-            })}
-          </View>
-        ) : null}
-      </ScrollView>
+                );
+              })}
+            </View>
+          ) : null}
+        </ScrollView>
+        <View  style={[tailwind('h-20')]}/>
+      </ImageBackground>
     </View>
   );
 }

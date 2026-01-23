@@ -120,7 +120,7 @@ export default function CheckoutScreen() {
   const OnlinePayment = async (payment: string) => {
     const Razorpay = await get_Razorpay({
       amount: Payload?.total_amount,
-      order_id: payment,
+      // order_id: payment,
     });
     if (Razorpay?.GTS?.id) {
       let rzOrder = razorPayObjCreator(

@@ -106,7 +106,7 @@ export default function DashboardScreen() {
     youtube: 'https://www.youtube.com/@BakeryMaharaj',
     tv: 'https://bakerymaharaj.com/',
   };
-  // console.log("BannerBannerBanner",Banner)
+  console.log('BannerBannerBanner', Banner);
   const DailyData = [
     {
       name: 'Farm Fresh Natural Milk',
@@ -405,42 +405,47 @@ export default function DashboardScreen() {
         <Image
           source={assets_manifest?.homeimage}
           resizeMode="contain"
-          style={{ height: 40, width: 100 }}
+          style={{ height: 40, width: 40 }}
         />
         <View style={tailwind('flex-1')} />
-        {
-          CartStateValue?.length?  <TouchableOpacity style={[tailwind('mr-2')]}>
-          <CartIcon />
-          <View
-            style={[
-              tailwind(
-                'absolute rounded-full items-center justify-center z-10',
-              ),
-              {
-                top: -5,
-                right: -5,
-                height: 18,
-                width: 18,
-                backgroundColor: 'red',
-              },
-            ]}
+        {CartStateValue?.length ? (
+          <TouchableOpacity
+            style={[tailwind('mr-2')]}
+            onPress={() => {
+              navigation?.navigate('Cart');
+            }}
           >
-            <Text
+            <CartIcon />
+            <View
               style={[
-                tailwind('font-bold font-10 text-center'),
-                { color: 'white' },
+                tailwind(
+                  'absolute rounded-full items-center justify-center z-10',
+                ),
+                {
+                  top: -5,
+                  right: -5,
+                  height: 18,
+                  width: 18,
+                  backgroundColor: 'red',
+                },
               ]}
             >
-              {CartStateValue?.length}
-            </Text>
-          </View>
-        </TouchableOpacity>:
-         <TouchableOpacity style={[tailwind('mr-2')]}>
-          <CartIcon />
-         
-        </TouchableOpacity>
-        }
-       
+              <Text
+                style={[
+                  tailwind('font-bold font-10 text-center'),
+                  { color: 'white' },
+                ]}
+              >
+                {CartStateValue?.length}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={[tailwind('mr-2')]} disabled>
+            <CartIcon />
+          </TouchableOpacity>
+        )}
+
         {getdata?.length ? (
           <TouchableOpacity
             activeOpacity={0.7}
@@ -476,25 +481,27 @@ export default function DashboardScreen() {
           </TouchableOpacity>
         )}
       </View>
-
-      <ScrollView
-        style={{ backgroundColor: '#FAFAFA' }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#F39F3E']}
-            tintColor="#F39F3E"
-          />
-        }
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
       >
-        <ImageBackground
-          style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
-          source={assets_manifest?.background}
+        <ScrollView
+          style={{}}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#F39F3E']}
+              tintColor="#F39F3E"
+            />
+          }
         >
           <View style={tailwind('px-4 py-5')}>
             <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('SearchScreen');
+              }}
               style={[
                 tailwind(
                   'flex-row items-center white-shadow px-4 py-3 rounded-full',
@@ -545,9 +552,9 @@ export default function DashboardScreen() {
                     activeOpacity={0.9}
                     disabled={!items?.category_id}
                     onPress={() => {
-                      // navigation?.navigate('CategoryScreen', {
-                      //   id: items?.category_id,
-                      // });
+                      navigation?.navigate('CategoryScreen', {
+                        items: items,
+                      });
                     }}
                     style={[tailwind(''), { padding: 5 }]}
                   >
@@ -741,15 +748,16 @@ export default function DashboardScreen() {
             </View>
           )}
           <View style={tailwind('h-24')} />
-        </ImageBackground>
-      </ScrollView>
-      {CartStateValue.length > 0 && (
+        </ScrollView>
+      </ImageBackground>
+
+      {/* {CartStateValue.length > 0 && (
         <CheckOutButton
           CartState={CartStateValue}
           totalQuantity={totalQuantity}
           navigation={navigation}
         />
-      )}
+      )} */}
     </View>
     // </ImageBackground>
   );

@@ -70,9 +70,11 @@ import SubscriptionIcon1 from './SvgIcons/SubscriptionIcon1';
 import ExtraProductIcon from './SvgIcons/ExtraProductIcon';
 import CalenderIconSubscription from './SvgIcons/CalenderIconSubscription';
 import CartIcon from './SvgIcons/CartIcon';
+import WalletIcon from './SvgIcons/WalletIcon';
 export {
   CartIcon,
   AddressIcon,
+  WalletIcon,
   SubscriptionIcon1,
   ExtraProductIcon,
   PendingIcon,

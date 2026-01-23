@@ -8,13 +8,14 @@ import {
   Alert,
   Platform,
   Linking,
+  ImageBackground,
 } from 'react-native';
 import React, { useCallback, useState, useMemo } from 'react';
-import { FullScreenLoading, Topbar } from '@Component';
+import { CheckOutButton, FullScreenLoading, Topbar } from '@Component';
 import { ProductCart } from '../../Component/ProductCart';
 import { decrementAction, incrementAction } from '@actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { BagColor, SearchIcon } from '../../assets/icons';
+import { BagColor, SearchIcon, SearchIcons } from '../../assets/icons';
 import { useQuery } from 'react-query';
 import { get_CheckBranch, get_Get_all_Product } from '@remote/userRemote';
 import Feather from 'react-native-vector-icons/Feather';
@@ -27,6 +28,7 @@ import {
   isBranchOpen,
 } from '../../workers/utils';
 import { saveBranchction, saveLocationAction } from '@actions/appActions';
+import assets_manifest from '@assets';
 export default function SearchScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -37,6 +39,8 @@ export default function SearchScreen() {
   const Branch = useSelector((state: any) => state.app.branch);
 
   const CartState = useSelector((state: any) => state.user.cart);
+  const CartStateValue = CartState?.filter(item => item?.desigin_type != 4);
+
   const totalQuantity = CartState.reduce(
     (sum, item) => sum + item.product_price * item.quantity,
     0,
@@ -63,29 +67,29 @@ export default function SearchScreen() {
       { cancelable: false },
     );
   };
-  
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-  
+
       const requestPermission = async () => {
         const permission = await acquireGPSPermission();
-  
+
         if (!isActive) return;
-  
+
         if (permission?.status) {
           setPermission(true);
-  
+
           const locationCoords = await getLocationCoords();
-  
+
           if (locationCoords) {
             dispatch(saveLocationAction(locationCoords));
-  
+
             const CheckBranch = await get_CheckBranch({
               latitude: locationCoords.latitude,
               longitude: locationCoords.longitude,
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
@@ -94,23 +98,23 @@ export default function SearchScreen() {
               latitude: '0.0',
               longitude: '0.0',
             });
-  
+
             if (CheckBranch?.branch) {
               dispatch(saveBranchction(CheckBranch.branch));
             }
           }
         } else {
           setPermission(false);
-          
+
           // 🚨 If permanently denied → open App Settings
           // if (permission?.isBlocked || permission?.neverAskAgain) {
-            openAppSettings();
+          openAppSettings();
           // }
         }
       };
-  
+
       requestPermission();
-  
+
       return () => {
         isActive = false;
       };
@@ -143,123 +147,88 @@ export default function SearchScreen() {
   return (
     <View style={[tailwind('h-full bg-secondary')]}>
       <Topbar title="Search" type={3} />
-      <View style={[tailwind('bg-primary')]}>
-        <View
-          style={[
-            tailwind(
-              'mx-3 px-3 my-3 items-center border bg-white flex-row rounded-xl ',
-            ),
-            { borderColor: 'silver' },
-          ]}
-        >
-          <SearchIcon />
-          <TextInput
-            placeholder="Search Product.."
-            placeholderTextColor={'gray'}
-            value={searchText}
-            onChangeText={setSearchText}
-            style={[
-              tailwind('font-15 ml-1 py-3 flex-1 font-semi text-gray'),
-              { color: 'black' },
-            ]}
-          />
-          {searchText?.length >= 1 && (
-            <TouchableOpacity
-              onPress={() => {
-                setSearchText('');
-              }}
-            >
-              <Ionicons name="close" size={20} color={'black'} />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-
-      <FlatList
-        data={filteredData}
-        keyExtractor={item => item?.product_id}
-        ListEmptyComponent={
-          <View style={[tailwind('items-center'), { marginTop: '50%' }]}>
-            <Feather color={'black'} size={30} name="search" />
-            <Text
-              style={[tailwind('text-center font-bold text-gray-500 mt-2')]}
-            >
-              No Items Available Now
-            </Text>
-          </View>
-        }
-        renderItem={({ item, index }) => (
-          <ProductCart
-            type={1}
-            desigin_type={1}
-            id={item?.product_id}
-            img={item?.product_image}
-            name={item?.product_name}
-            key={`${item?.product_id}_${index}`}
-            increment={increment}
-            decrement={decrement}
-            product_price={item?.product_price}
-            is_favourite={item?.is_favourite}
-            product_type={item?.product_type === '0'}
-            refreshData={Response}
-            isOpen={isOpen}
-            product_percentage={item?.product_percentage}
-            product_offer={item?.product_offer}
-
-          />
-        )}
-        ListFooterComponent={<View style={[tailwind('h-40')]} />}
-      />
-      {CartState.length > 0 && (
-        <View
-          style={[tailwind(' mx-4 mb-4'), { position: 'absolute', bottom: 0 }]}
-        >
+      <ImageBackground
+        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+        source={assets_manifest?.background}
+      >
+        <View style={[tailwind('bg-white')]}>
           <View
             style={[
               tailwind(
-                'flex-row justify-between bg-primary rounded-xl items-center px-4 py-3 w-full',
+                'mx-3 px-3 my-3 items-center border bg-white flex-row rounded-xl ',
               ),
-              {
-                // backgroundColor: '#24661E',
-                borderRadius: 18,
-              },
+              { borderColor: 'silver' },
             ]}
           >
-            <View style={[tailwind('flex-1 flex-row items-center')]}>
-              <Text style={tailwind('font-bold text-white text-base')}>
-                {CartState?.length} Item{CartState?.length > 1 ? 's' : ''}
-                {' | '}
-              </Text>
-              <View
-                style={[
-                  tailwind(''),
-                  { height: '100%', width: 2, backgroundColor: 'red' },
-                ]}
-              />
-              <Text style={tailwind(' font-bold text-white text-base')}>
-                ₹ {totalQuantity}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation?.navigate('Cart');
-              }}
-              activeOpacity={0.7}
+            <SearchIcon />
+            <TextInput
+              placeholder="Search Product.."
+              placeholderTextColor={'gray'}
+              value={searchText}
+              onChangeText={setSearchText}
               style={[
-                tailwind('border  flex-row items-center rounded-xl  py-1'),
-                { borderWidth: 2, backgroundColor: '#FFCC01' },
+                tailwind('font-15 ml-1 py-3 flex-1 font-semi text-gray'),
+                { color: 'black' },
               ]}
-            >
-              <Text style={tailwind('text-primary flex font-bold ml-4')}>
-                VIEW CART
-              </Text>
-              <View style={[tailwind('px-2'), { marginLeft: 'auto' }]}>
-                <BagColor color={'black'} />
-              </View>
-            </TouchableOpacity>
+            />
+            {searchText?.length >= 1 && (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                }}
+              >
+                <Text> X </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-      )}
+
+        <FlatList
+          data={filteredData}
+          keyExtractor={item => item?.product_id}
+          ListEmptyComponent={
+            <View style={[tailwind('items-center'), { marginTop: '50%' }]}>
+              {/* <SearchIcons /> */}
+              <SearchIcons color={'black'} />
+
+              {/* <Feather color={'black'} size={30} name="search" /> */}
+              <Text
+                style={[tailwind('text-center font-bold text-gray-500 mt-2')]}
+              >
+                No Items Available Now
+              </Text>
+            </View>
+          }
+          renderItem={({ item, index }) => (
+            <ProductCart
+              type={1}
+              desigin_type={5}
+              id={item?.product_id}
+              img={item?.product_image}
+              name={item?.product_name}
+              key={`${item?.product_id}_${index}`}
+              increment={increment}
+              decrement={decrement}
+              product_price={item?.product_price}
+              is_favourite={item?.is_favourite}
+              product_type={item?.product_type === '0'}
+              refreshData={Response}
+              isOpen={isOpen}
+              product_percentage={item?.product_percentage}
+              product_offer={item?.product_offer}
+            />
+          )}
+          ListFooterComponent={<View style={[tailwind('h-40')]} />}
+        />
+
+        {CartStateValue.length > 0 && (
+          <CheckOutButton
+            CartState={CartStateValue}
+            totalQuantity={totalQuantity}
+            navigation={navigation}
+          />
+        )}
+      </ImageBackground>
     </View>
   );
 }

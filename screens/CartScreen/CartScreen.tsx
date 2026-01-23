@@ -351,128 +351,182 @@ export default function CartScreen() {
 
       {CartState?.length > 0 ? (
         <View style={tailwind('flex-1')}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={tailwind('pb-32')}
+          <ImageBackground
+            style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
+            source={assets_manifest?.background}
           >
-            {/* Cart Items Card */}
-            <View
-              style={[
-                tailwind('mx-4 mt-4 bg-white rounded-2xl'),
-                styles.cardShadow,
-              ]}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={tailwind('pb-32')}
             >
-              {/* Header */}
-              <View
-                style={tailwind(
-                  'flex-row justify-between items-center px-5 py-4 border-b border-gray-100',
-                )}
-              >
-                <Text
-                  style={[
-                    tailwind('font-bold text-gray-800'),
-                    { fontSize: scaleFont(18) },
-                  ]}
-                >
-                  Cart Items
-                </Text>
-                <View
-                  style={[
-                    tailwind('px-3 py-1 rounded-full'),
-                    { backgroundColor: '#F3F4F6' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      tailwind('font-semibold'),
-                      { fontSize: scaleFont(13), color: '#6B7280' },
-                    ]}
-                  >
-                    {CartState.length}{' '}
-                    {CartState.length === 1 ? 'Item' : 'Items'}
-                  </Text>
-                </View>
-              </View>
-
-              {/* Cart Items */}
-              <View style={tailwind('px-4 py-2')}>
-                {CartState?.map((item, index) => (
-                  <View
-                    key={`${item?.product_id}_${index}`}
-                    style={[
-                      tailwind('my-2'),
-                      index < CartState.length - 1 &&
-                        tailwind('border-b border-gray-50 pb-4'),
-                    ]}
-                  >
-                    <CartComponent
-                      isVeg={item.eggless === 0 || item.eggless === 1}
-                      veg={item.eggless === 0}
-                      quantity={item?.quantity}
-                      image={item.image}
-                      product_name={item?.product_name}
-                      price={200}
-                      id={item?.product_id}
-                      offer={item?.offer}
-                      is_favourite={item?.is_favourite}
-                      description={item?.description}
-                      product_image={item?.product_image}
-                      variation={item?.variation}
-                      increment={increment}
-                      decrement={decrement}
-                      color_variation={item.product_color_var}
-                      item={item}
-                      product_price={item?.product_price}
-                      type={2}
-                    />
-                  </View>
-                ))}
-              </View>
-
-              {/* Order Total */}
-              {totalQuantity && (
-                <View
-                  style={[
-                    tailwind('px-5 py-4 border-t border-gray-100'),
-                    { backgroundColor: '#FAFAFA' },
-                  ]}
-                >
-                  <View
-                    style={tailwind('flex-row justify-between items-center')}
-                  >
-                    <Text
-                      style={[
-                        tailwind('font-bold text-gray-700'),
-                        { fontSize: scaleFont(16) },
-                      ]}
-                    >
-                      Subtotal
-                    </Text>
-                    <Text
-                      style={[
-                        tailwind('font-bold'),
-                        { fontSize: scaleFont(18), color: '#F39F3E' },
-                      ]}
-                    >
-                      ₹{totalQuantity}
-                    </Text>
-                  </View>
-                </View>
-              )}
-            </View>
-
-            {/* Delivery Address Card */}
-            {Address?.length > 0 ? (
+              {/* Cart Items Card */}
               <View
                 style={[
-                  tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
+                  tailwind('mx-4 mt-4 bg-white rounded-2xl'),
                   styles.cardShadow,
                 ]}
               >
+                {/* Header */}
                 <View
-                  style={tailwind('flex-row justify-between items-center mb-3')}
+                  style={tailwind(
+                    'flex-row justify-between items-center px-5 py-4 border-b border-gray-100',
+                  )}
                 >
-                  <View style={tailwind('flex-row items-center')}>
+                  <Text
+                    style={[
+                      tailwind('font-bold text-gray-800'),
+                      { fontSize: scaleFont(18) },
+                    ]}
+                  >
+                    Cart Items
+                  </Text>
+                  <View
+                    style={[
+                      tailwind('px-3 py-1 rounded-full'),
+                      { backgroundColor: '#F3F4F6' },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        tailwind('font-semi'),
+                        { fontSize: scaleFont(13), color: '#6B7280' },
+                      ]}
+                    >
+                      {CartState.length}{' '}
+                      {CartState.length === 1 ? 'Item' : 'Items'}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Cart Items */}
+                <View style={tailwind('px-4 py-2')}>
+                  {CartState?.map((item, index) => (
+                    <View
+                      key={`${item?.product_id}_${index}`}
+                      style={[
+                        tailwind('my-2'),
+                        index < CartState.length - 1 &&
+                          tailwind('border-b border-gray-50 pb-4'),
+                      ]}
+                    >
+                      <CartComponent
+                        isVeg={item.eggless === 0 || item.eggless === 1}
+                        veg={item.eggless === 0}
+                        quantity={item?.quantity}
+                        image={item.image}
+                        product_name={item?.product_name}
+                        price={200}
+                        id={item?.product_id}
+                        offer={item?.offer}
+                        is_favourite={item?.is_favourite}
+                        description={item?.description}
+                        product_image={item?.product_image}
+                        variation={item?.variation}
+                        increment={increment}
+                        decrement={decrement}
+                        color_variation={item.product_color_var}
+                        item={item}
+                        product_price={item?.product_price}
+                        type={2}
+                      />
+                    </View>
+                  ))}
+                </View>
+
+                {/* Order Total */}
+                {totalQuantity && (
+                  <View
+                    style={[
+                      tailwind('px-5 py-4 border-t border-gray-100'),
+                      { backgroundColor: '#FAFAFA' },
+                    ]}
+                  >
+                    <View
+                      style={tailwind('flex-row justify-between items-center')}
+                    >
+                      <Text
+                        style={[
+                          tailwind('font-bold text-gray-700'),
+                          { fontSize: scaleFont(16) },
+                        ]}
+                      >
+                        Subtotal
+                      </Text>
+                      <Text
+                        style={[
+                          tailwind('font-bold'),
+                          { fontSize: scaleFont(18), color: '#F39F3E' },
+                        ]}
+                      >
+                        ₹{totalQuantity}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Delivery Address Card */}
+              {Address?.length > 0 ? (
+                <View
+                  style={[
+                    tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
+                    styles.cardShadow,
+                  ]}
+                >
+                  <View
+                    style={tailwind(
+                      'flex-row justify-between items-center mb-3',
+                    )}
+                  >
+                    <View style={tailwind('flex-row items-center')}>
+                      <LocationICon1 />
+                      <Text
+                        style={[
+                          tailwind('ml-2 font-bold text-gray-800'),
+                          { fontSize: scaleFont(16) },
+                        ]}
+                      >
+                        Delivery Address
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => addressSheetRef?.current?.open()}
+                    >
+                      <Text
+                        style={[
+                          tailwind('font-semi'),
+                          { color: '#80C659', fontSize: scaleFont(14) },
+                        ]}
+                      >
+                        Change
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View
+                    style={[
+                      tailwind('rounded-xl p-4 mt-2'),
+                      { backgroundColor: '#F9FAFB' },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        tailwind('font-medium text-gray-700'),
+                        { fontSize: scaleFont(14), lineHeight: 20 },
+                      ]}
+                    >
+                      {Address?.[0]?.user_address_details}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={[
+                    tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
+                    styles.cardShadow,
+                  ]}
+                >
+                  <View style={tailwind('flex-row items-center mb-3')}>
                     <LocationICon1 />
                     <Text
                       style={[
@@ -484,72 +538,25 @@ export default function CartScreen() {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => addressSheetRef?.current?.open()}
+                    onPress={() => navigation?.navigate('AddAddressScreen')}
+                    style={[
+                      tailwind('border-2 rounded-xl py-4 mt-2'),
+                      { borderColor: '#80C659', borderStyle: 'dashed' },
+                    ]}
                   >
                     <Text
                       style={[
-                        tailwind('font-semibold'),
-                        { color: '#80C659', fontSize: scaleFont(14) },
+                        tailwind('text-center font-semi'),
+                        { fontSize: scaleFont(15), color: '#80C659' },
                       ]}
                     >
-                      Change
+                      + Add Delivery Address
                     </Text>
                   </TouchableOpacity>
                 </View>
-
-                <View
-                  style={[
-                    tailwind('rounded-xl p-4 mt-2'),
-                    { backgroundColor: '#F9FAFB' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      tailwind('font-medium text-gray-700'),
-                      { fontSize: scaleFont(14), lineHeight: 20 },
-                    ]}
-                  >
-                    {Address?.[0]?.user_address_details}
-                  </Text>
-                </View>
-              </View>
-            ) : (
-              <View
-                style={[
-                  tailwind('mx-4 mt-4 bg-white rounded-2xl p-5'),
-                  styles.cardShadow,
-                ]}
-              >
-                <View style={tailwind('flex-row items-center mb-3')}>
-                  <LocationICon1 />
-                  <Text
-                    style={[
-                      tailwind('ml-2 font-bold text-gray-800'),
-                      { fontSize: scaleFont(16) },
-                    ]}
-                  >
-                    Delivery Address
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => navigation?.navigate('AddAddressScreen')}
-                  style={[
-                    tailwind('border-2 rounded-xl py-4 mt-2'),
-                    { borderColor: '#80C659', borderStyle: 'dashed' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      tailwind('text-center font-semibold'),
-                      { fontSize: scaleFont(15), color: '#80C659' },
-                    ]}
-                  >
-                    + Add Delivery Address
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </ScrollView>
+              )}
+            </ScrollView>
+          </ImageBackground>
 
           {/* Bottom Checkout Bar */}
           <View
@@ -684,7 +691,7 @@ export default function CartScreen() {
             >
               <Text
                 style={[
-                  tailwind('font-semibold text-white'),
+                  tailwind('font-semi text-white'),
                   { fontSize: scaleFont(14) },
                 ]}
               >
@@ -697,7 +704,7 @@ export default function CartScreen() {
         closeOnOverlayTap={true}
       >
         {Address?.length &&
-          selectedAddress &&
+          // selectedAddress &&
           Address?.map((item, index) => (
             <ChangeAddress
               key={`${item?.user_address_id}_${index}`}

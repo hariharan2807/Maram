@@ -21,7 +21,14 @@ export default function CategoryScreen() {
   const dispatch = useDispatch();
   const CartState = useSelector((state: any) => state.user.cart);
   const navigation = useNavigation();
-  const [activeTab, setActiveTab] = useState(route?.params?.items?.category_id);
+  const [activeTab, setActiveTab] = useState(
+    route?.params?.items?.category_id
+      ? route?.params?.items?.category_id == 3 ||
+        route?.params?.items?.category_id == 1
+        ? 1
+        : 2
+      : route?.params?.items?.category_id,
+  );
 
   const Category = [
     {

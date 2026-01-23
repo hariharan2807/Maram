@@ -43,7 +43,7 @@ export default function SubscritionSuccess() {
             style={[
               tailwind('rounded-full py-4 items-center justify-center'),
               {
-                // backgroundColor: '',
+                backgroundColor: '#10B981',
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.1,
@@ -56,7 +56,7 @@ export default function SubscritionSuccess() {
             activeOpacity={0.8}
           >
             <Text
-              style={[tailwind(' font-bold text-lg'), { color: '#10B981' }]}
+              style={[tailwind(' font-bold text-lg text-white'), ]}
             >
               {/* Continue */}
               Pay Now

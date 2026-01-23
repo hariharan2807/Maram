@@ -16,8 +16,10 @@ import OrderListComponent from './OrderListComponent';
 import OrderStatusCard from './OrderStatusCard';
 import AddressTitleOptions from './AddressTitleOptions';
 import FullScreenLoading1 from './FullScreenLoading1';
+import RazorpayModal from './RazorpayModal';
 export {
   QuantityActions,
+  RazorpayModal,
   GlobalDialogModal1,
   AddressTitleOptions,
   FullScreenLoading1,
