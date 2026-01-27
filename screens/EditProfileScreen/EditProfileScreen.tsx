@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser_id } from '../../workers/localStorage';
@@ -86,26 +87,33 @@ const EditProfileScreen = () => {
     }
   };
   return (
-    <View style={tailwind('flex-1 bg-white')}>
+    <View style={tailwind('flex-1 bg-gray-50')}>
       <Topbar title="Edit Profile" type={3} />
-      <ImageBackground
-        style={[tailwind('flex-1'), { height: '100%', width: '100%' }]}
-        source={assets_manifest?.background}
-      >
-        <View style={tailwind('flex-1 px-6')}>
-          <View style={tailwind('items-center  mt-10')}>
+
+      <ScrollView style={tailwind('flex-1')}>
+        {/* Profile Picture Section */}
+        <View style={tailwind('items-center py-8')}>
+          <View style={tailwind('relative')}>
             <Image
               style={{ width: 200, height: 200, marginTop: 20 }}
-              source={require('../../assets/images/img_login.png')}
+              source={require('../../assets/images/homeimage.png')}
               resizeMode="contain"
             />
           </View>
-          <View style={tailwind('pt-8')}>
+        </View>
+
+        {/* Form Container */}
+        <View style={tailwind('px-5')}>
+          {/* Form Fields Container */}
+          <View style={tailwind('bg-white rounded-2xl p-5 mb-6 ')}>
             {/* Name Field */}
-            <View style={tailwind('mb-3')}>
+            <View style={tailwind('mb-4')}>
+              <Text style={tailwind('text-gray-600 text-sm font-medium mb-1')}>
+                Name
+              </Text>
               <TextInput
                 style={tailwind(
-                  'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 ',
+                  'border border-gray-200 rounded-xl px-4 py-3 text-gray-900',
                 )}
                 placeholder="Your name"
                 placeholderTextColor="#9CA3AF"
@@ -113,19 +121,21 @@ const EditProfileScreen = () => {
                 onChangeText={setName}
               />
             </View>
-            <View style={tailwind('mb-3')}>
+
+            {/* Alternate Mobile Field */}
+            <View style={tailwind('mb-4')}>
+              <Text style={tailwind('text-gray-600 text-sm font-medium mb-1')}>
+                Alternate Mobile
+              </Text>
               <View
                 style={tailwind(
-                  'flex-row items-center border border-gray-300 rounded-full bg-white pl-4 pr-5',
+                  'flex-row items-center border border-gray-200 rounded-xl px-4 py-3',
                 )}
               >
-                <Text style={tailwind('text-black font-bold text-lg')}>
-                  +91
-                </Text>
-                <View style={tailwind('w-px h-6 bg-gray-300 mx-3')} />
+                <Text style={tailwind('text-gray-700 font-medium')}>+91</Text>
                 <TextInput
-                  style={tailwind('flex-1 py-3 text-black text-base')}
-                  placeholder="Alternative Mobile Number"
+                  style={tailwind('flex-1 ml-3 text-gray-900')}
+                  placeholder="Mobile number"
                   placeholderTextColor="#9CA3AF"
                   value={alternateMobile}
                   onChangeText={setAlternateMobile}
@@ -134,47 +144,46 @@ const EditProfileScreen = () => {
                 />
               </View>
             </View>
+
             {/* Email Field */}
-            <View style={tailwind('mb-3')}>
+            <View style={tailwind('mb-2')}>
+              <Text style={tailwind('text-gray-600 text-sm font-medium mb-1')}>
+                Email Address
+              </Text>
               <TextInput
                 style={tailwind(
-                  'border border-gray-300 rounded-full bg-white text-black px-5 py-3 text-gray-900 ',
+                  'border border-gray-200 rounded-xl px-4 py-3 text-gray-900',
                 )}
-                placeholder="Your Email Address"
+                placeholder="Your email"
                 placeholderTextColor="#9CA3AF"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
               />
             </View>
+          </View>
 
-            {/* Alternate Mobile */}
-
-            {/* Continue Button */}
+          {/* Action Buttons */}
+          <View style={tailwind('')}>
             <TouchableOpacity
-              onPress={() => {
-                Edit();
-              }}
-              disabled={loading ? true : false}
-              style={tailwind('bg-green rounded-full py-4 items-center mt-3')}
-              activeOpacity={0.8}
+              onPress={Edit}
+              disabled={loading}
+              style={[
+                tailwind('rounded-xl py-4 items-center'),
+                loading ? tailwind('bg-gray-300') : tailwind('bg-green'),
+              ]}
             >
               {loading ? (
-                <ActivityIndicator size={'small'} color={'#45302B'} />
+                <ActivityIndicator color="#45302B" />
               ) : (
-                <Text
-                  style={[
-                    tailwind('text-white font-18 font-bold'),
-                    { textTransform: 'uppercase' },
-                  ]}
-                >
-                  Save
+                <Text style={tailwind('text-white font-semi text-lg')}>
+                  Save Profile
                 </Text>
               )}
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
+      </ScrollView>
     </View>
   );
 };

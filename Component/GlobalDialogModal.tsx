@@ -58,7 +58,7 @@ export default function GlobalDialogModal(props: PropTypes) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={props.action}
-            style={[tailwind('p-3 flex-grow bg-primary')]}
+            style={[tailwind('p-3 flex-grow bg-green')]}
           >
             <Text style={[tailwind('text-center font-bold text-white')]}>
               OK

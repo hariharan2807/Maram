@@ -42,7 +42,7 @@ const LoginScreen = () => {
       if (response?.status) {
         navigation.navigate('OtpScreen', {
           user_id: response?.user_id,
-          mobileNumber,
+          mobileNumber:mobileNumber,
         });
       } else {
         errorBox(response?.res?.data?.message || 'Login failed');
@@ -60,7 +60,7 @@ const LoginScreen = () => {
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
@@ -69,7 +69,7 @@ const LoginScreen = () => {
         >
           <Image
             source={require('../../assets/icons/common/Login1.png')}
-            style={[tailwind(''), { width: '100%', height: height /1.8 }]}
+            style={[tailwind(''), { width: '100%', height: height / 1.8 }]}
             // style={styles.loginImage}
             resizeMode="cover"
           />
@@ -121,6 +121,7 @@ const LoginScreen = () => {
             </Text>
           </View>
         </ScrollView>
+        <View style={[tailwind('h-20')]} />
       </KeyboardAvoidingView>
     </View>
   );

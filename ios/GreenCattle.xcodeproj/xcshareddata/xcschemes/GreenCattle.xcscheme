@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "BakeryMaharaj.app"
-               BlueprintName = "BakeryMaharaj"
-               ReferencedContainer = "container:BakeryMaharaj.xcodeproj">
+               BuildableName = "GreenCattle.app"
+               BlueprintName = "GreenCattle"
+               ReferencedContainer = "container:GreenCattle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BakeryMaharajTests.xctest"
-               BlueprintName = "BakeryMaharajTests"
-               ReferencedContainer = "container:BakeryMaharaj.xcodeproj">
+               BuildableName = "GreenCattleTests.xctest"
+               BlueprintName = "GreenCattleTests"
+               ReferencedContainer = "container:GreenCattle.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BakeryMaharaj.app"
-            BlueprintName = "BakeryMaharaj"
-            ReferencedContainer = "container:BakeryMaharaj.xcodeproj">
+            BuildableName = "GreenCattle.app"
+            BlueprintName = "GreenCattle"
+            ReferencedContainer = "container:GreenCattle.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BakeryMaharaj.app"
-            BlueprintName = "BakeryMaharaj"
-            ReferencedContainer = "container:BakeryMaharaj.xcodeproj">
+            BuildableName = "GreenCattle.app"
+            BlueprintName = "GreenCattle"
+            ReferencedContainer = "container:GreenCattle.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

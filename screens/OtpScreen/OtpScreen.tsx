@@ -41,7 +41,7 @@ const OtpScreen = () => {
   const [loading, setLoading] = useState(false);
   const screenWidth = Dimensions.get('window').width;
   const { height } = useWindowDimensions();
-
+  console?.log('otp=-=-==-=', otp);
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -111,7 +111,7 @@ const OtpScreen = () => {
       otp: enteredOtp, // Send as string: "5800" (if all digits filled)
       user_id: route?.params?.user_id,
     });
-    console.log("ResponseData",response)
+    console.log('ResponseData', response);
     if (response?.status) {
       setLoading(false);
 
@@ -151,7 +151,12 @@ const OtpScreen = () => {
 
   // Check if all 4 digits are filled
   const isOtpComplete = otp.join('').length === 4;
-
+  const getMaskedNumber = phoneNumber => {
+    if (!phoneNumber) return '';
+    const str = String(phoneNumber);
+    if (str.length <= 4) return str;
+    return `******${str.slice(-4)}`;
+  };
   return (
     <View style={styles.container}>
       {/* <Topbar title="OTP" type={3} /> */}
@@ -192,7 +197,8 @@ const OtpScreen = () => {
                 Verfiy OTP
               </Text>
               <Text style={[tailwind('font-13 font-bold py-3 px-5')]}>
-                Enter OTP Sent To Your Phone Number +91 784 253 ****
+                Enter OTP Sent To Your Phone Number{' '}
+                {getMaskedNumber(route?.params?.mobileNumber)}
               </Text>
               {/* <Text style={styles.subtitle}>Enter the 4-digit code sent to your mobile</Text> */}
             </View>
@@ -222,9 +228,12 @@ const OtpScreen = () => {
                 tailwind('rounded-full'),
                 styles.verifyButton,
                 styles.buttonActive,
+                otp.every(digit => digit !== '')
+                  ? styles.buttonActive
+                  : styles.buttonInactive,
               ]}
               onPress={handleVerifyOtp}
-              disabled={loading}
+              disabled={!otp.every(digit => digit !== '') || loading}
             >
               {loading ? (
                 <ActivityIndicator color={'white'} size={'small'} />
@@ -266,6 +275,7 @@ const OtpScreen = () => {
             </View> */}
           </View>
         </ScrollView>
+        <View style={[tailwind('h-20')]} />
       </KeyboardAvoidingView>
     </View>
   );

@@ -410,6 +410,7 @@ export default function UserProfileScreen() {
         setAlertModal={setDeactivityModal}
         action={deactivateAction}
       />
+      <View  style={[tailwind('h-20')]}/>
       </ImageBackground>
     </View>
   );

@@ -62,7 +62,7 @@ export default function BottomTabNavigation(props: any) {
       type="DOWN"
       style={styles.bottomBar}
       shadowStyle={styles.shadow}
-      height={50}
+      height={70}
       circleWidth={50}
       bgColor="white"
       initialRouteName="Home"
@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // paddingVertical: 8,
+    paddingVertical: 10,
+    // marginBottom:10
   },
   iconContainer: {
     width: 40,
